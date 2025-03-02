@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Pup Finder</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            background-color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        select:hover {
+            border-color: var(--primary);
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .multi-select-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .multi-select-item {
+            padding: 8px 15px;
+            background-color: var(--light);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .multi-select-item:hover {
+            background-color: #d6dbdf;
+        }
+        
+        .multi-select-item.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: block;
+            margin: 30px auto;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+            margin-top: 20px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d6dbdf;
+        }
+        
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .breed-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .breed-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .breed-image {
+            height: 200px;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .breed-info {
+            padding: 20px;
+        }
+        
+        .breed-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .match-score {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .breed-traits {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .trait {
+            background-color: var(--light);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .dog-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .match-reason {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f9ff;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .caution-reason {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff9f0;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            border-left: 4px solid var(--warning);
+        }
+
+        .reason-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .caution-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--warning);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .paw-print {
+            font-size: 1.2rem;
+            display: inline-block;
+            transform: rotate(10deg);
+            margin: 0 5px;
+        }
+        
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-to-top:hover {
+            background-color: #2980b9;
+        }
+        
+        .layout {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        @media (min-width: 992px) {
+            .layout {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            
+            .quiz-panel {
+                width: 40%;
+                position: sticky;
+                top: 20px;
+            }
+            
+            .results-panel {
+                width: 60%;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .layout {
+                flex-direction: column;
+            }
+            
+            .quiz-panel, .results-panel {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .results-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐶 Perfect Pup Finder</h1>
+            <p class="tagline">Find your ideal canine companion based on your lifestyle and preferences</p>
+        </header>
+        
+        <div class="layout">
+            <div class="quiz-panel">
+                <div class="card" id="quiz-container">
+                    <section class="section">
+                        <h2>Your Living Situation</h2>
+                        
+                        <div class="form-group">
+                            <label for="home-type">What type of home do you live in?</label>
+                            <select id="home-type" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="house-small">Small House</option>
+                                <option value="house-large">Large House</option>
+                                <option value="farm">Farm/Lot of Land</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="yard-size">Do you have outdoor space?</label>
+                            <select id="yard-size" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="none">No Yard</option>
+                                <option value="small">Small Yard</option>
+                                <option value="medium">Medium Yard</option>
+                                <option value="large">Large Yard</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="noise-restrictions">Do you have any noise restrictions?</label>
+                            <select id="noise-restrictions" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="strict">Very Strict</option>
+                                <option value="moderate">Somewhat Strict</option>
+                                <option value="lenient">Not Too Strict</option>
+                                <option value="none">No Restrictions</option>
+                            </select>
+                        </div>
+                    </section>
+                    
+                    <section class="section">
+                        <h2>Your Lifestyle</h2>
+                        
+                        <div class="form-group">
+                            <label for="activity-level">How active is your lifestyle?</label>
+                            <select id="activity-level" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="sedentary">Sedentary</option>
+                                <option value="somewhat-active">Somewhat Active</option>
+                                <option value="active">Active</option>
+                                <option value="very-active">Very Active</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exercise-time">How much time can you dedicate to exercise with your dog daily?</label>
+                            <select id="exercise-time" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="minimal">Less than 30 minutes</option>
+                                <option value="moderate">30-60 minutes</option>
+                                <option value="significant">1-2 hours</option>
+                                <option value="extensive">2+ hours</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="alone-time">How much time will the dog be alone on a typical day?</label>
+                            <select id="alone-time" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="rarely">Rarely Alone</option>
+                                <option value="few-hours">Few Hours</option>
+                                <option value="work-day">Work Day (8 hours)</option>
+                                <option value="long-periods">Long Periods</option>
+                            </select>
+                        </div>
+                    </section>
+                    
+                    <section class="section">
+                        <h2>Your Household</h2>
+                        
+                        <div class="form-group">
+                            <label for="children">Do you have children?</label>
+                            <select id="children" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="no-children">No Children</option>
+                                <option value="older-children">Older Children (8+)</option>
+                                <option value="young-children">Young Children</option>
+                                <option value="babies">Babies/Toddlers</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="other-pets">Do you have other pets?</label>
+                            <select id="other-pets" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="no-pets">No Other Pets</option>
+                                <option value="cats">Cats</option>
+                                <option value="dogs">Other Dogs</option>
+                                <option value="small-animals">Small Animals</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="experience">How experienced are you as a dog owner?</label>
+                            <select id="experience" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="first-time">First Time</option>
+                                <option value="some-experience">Some Experience</option>
+                                <option value="experienced">Experienced</option>
+                                <option value="professional">Professional/Trainer</option>
+                            </select>
+                        </div>
+                    </section>
+                    
+                    <section class="section">
+                        <h2>Your Preferences</h2>
+                        
+                        <div class="form-group">
+                            <label for="dog-size">What size dog do you prefer?</label>
+                            <select id="dog-size" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="small">Small (under 20 lbs)</option>
+                                <option value="medium">Medium (20-50 lbs)</option>
+                                <option value="large">Large (50-90 lbs)</option>
+                                <option value="xl">Extra Large (90+ lbs)</option>
+                                <option value="any-size">No Preference</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="shedding">How much shedding can you tolerate?</label>
+                            <select id="shedding" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="minimal">Minimal Shedding</option>
+                                <option value="moderate">Moderate Shedding</option>
+                                <option value="heavy">Heavy Shedding</option>
+                                <option value="any-shedding">No Preference</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="grooming">How much grooming are you willing to do?</label>
+                            <select id="grooming" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="minimal">Minimal</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="high">High Maintenance</option>
+                                <option value="any-grooming">No Preference</option>
+                            </select>
+                        </div>
+                    </section>
+                    
+                    <section class="section">
+                        <h2>Temperament Preferences</h2>
+                        
+                        <div class="form-group">
+                            <label for="energy-level">What energy level do you prefer?</label>
+                            <select id="energy-level" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="low">Low Energy</option>
+                                <option value="medium">Medium Energy</option>
+                                <option value="high">High Energy</option>
+                                <option value="any-energy">No Preference</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trainability">How trainable would you like your dog to be?</label>
+                            <select id="trainability" class="preference-select">
+                                <option value="">Select an option</option>
+                                <option value="easy">Easily Trainable</option>
+                                <option value="moderate">Moderately Trainable</option>
+                                <option value="challenging">Challenging but Rewarding</option>
+                                <option value="any-trainability">No Preference</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>What's most important to you in a dog? (Select up to 2)</label>
+                            <div class="multi-select-container">
+                                <div class="multi-select-item" data-value="loyal">Loyalty</div>
+                                <div class="multi-select-item" data-value="playful">Playfulness</div>
+                                <div class="multi-select-item" data-value="calm">Calmness</div>
+                                <div class="multi-select-item" data-value="intelligent">Intelligence</div>
+                                <div class="multi-select-item" data-value="protective">Protective</div>
+                                <div class="multi-select-item" data-value="affectionate">Affectionate</div>
+                                <div class="multi-select-item" data-value="independent">Independent</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            
+            <div class="results-panel">
+                <div class="card" id="results-section">
+                    <h2>Your Top Dog Breed Matches</h2>
+                    <p>Complete your preferences to see which breeds match your lifestyle best</p>
+                    
+                    <div id="loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <p>Calculating your perfect matches...</p>
+                    </div>
+                    
+                    <div id="placeholder-message">
+                        <p style="text-align: center; margin: 40px 0; color: #7f8c8d;">
+                            Your breed matches will appear here once you've selected your preferences
+                        </p>
+                    </div>
+                    
+                    <div id="results-container" class="results-container hidden">
+                        <!-- Breed cards will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-to-top" id="scroll-btn">↑</div>
+        
+        <footer>
+            <p><span class="paw-print">🐾</span> Perfect Pup Finder <span class="paw-print">🐾</span></p>
+            <p>Find your ideal canine companion with our personalized breed matcher.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Dog breed database with characteristics
+        const dogBreeds = [
+            {
+                name: "Labrador Retriever",
+                image: "https://images.unsplash.com/photo-1544568655-7a12bd727613",
+                size: "large",
+                energy: "high",
+                shedding: "moderate",
+                trainability: "easy",
+                withChildren: "excellent",
+                withPets: "good",
+                apartmentFriendly: "moderate",
+                barking: "low",
+                exercise: "high",
+                grooming: "low",
+                alone: "moderate",
+                traits: ["loyal", "playful", "intelligent", "affectionate"],
+                description: "America's favorite dog for good reason. Labs are friendly, outgoing, and high-spirited companions who have more than enough affection to go around.",
+                downsides: ["Heavy shedding twice a year", "Lots of energy requiring regular exercise", "Can be destructive if bored", "Slow to mature, puppy-like behavior for 3+ years"]
+            },
+            {
+                name: "German Shepherd",
+                image: "https://images.unsplash.com/photo-1589941013453-ec89f98c8d72",
+                size: "large",
+                energy: "high",
+                shedding: "heavy",
+                trainability: "easy",
+                withChildren: "good",
+                withPets: "moderate",
+                apartmentFriendly: "low",
+                barking: "moderate",
+                exercise: "high",
+                grooming: "moderate",
+                alone: "moderate",
+                traits: ["loyal", "intelligent", "protective", "confident"],
+                description: "The German Shepherd is a dog of noble character and high intelligence. Loyal, confident, courageous, and steady, they're among the most popular breeds in the world.",
+                downsides: ["Heavy shedders year-round", "Require lots of mental and physical exercise", "Can be aloof with strangers", "Prone to several health issues including hip dysplasia"]
+            },
+            {
+                name: "Golden Retriever",
+                image: "https://images.unsplash.com/photo-1612774412771-005aa26192fb",
+                size: "large",
+                energy: "high",
+                shedding: "heavy",
+                trainability: "easy",
+                withChildren: "excellent",
+                withPets: "excellent",
+                apartmentFriendly: "moderate",
+                barking: "low",
+                exercise: "high",
+                grooming: "moderate",
+                alone: "low",
+                traits: ["friendly", "intelligent", "devoted", "affectionate"],
+                description: "The Golden Retriever is a friendly, intelligent, and devoted breed. They're outgoing, trustworthy, and eager-to-please family dogs, and relatively easy to train.",
+                downsides: ["Heavy shedding requiring regular brushing", "Need substantial daily exercise", "Can suffer from separation anxiety", "Prone to certain cancers and joint problems"]
+            },
+            {
+                name: "French Bulldog",
+                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e",
+                size: "small",
+                energy: "low",
+                shedding: "moderate",
+                trainability: "moderate",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "excellent",
+                barking: "low",
+                exercise: "low",
+                grooming: "low",
+                alone: "moderate",
+                traits: ["playful", "alert", "affectionate", "sociable"],
+                description: "The French Bulldog is a compact breed with a big personality. They're adaptable, playful, and smart, but also perfectly content to be a couch potato with their people.",
+                downsides: ["Breathing difficulties due to flat face", "Heat intolerant", "Cannot swim", "Expensive medical issues", "Flatulence problems"]
+            },
+            {
+                name: "Beagle",
+                image: "https://images.unsplash.com/photo-1505628346881-b72b27e84530",
+                size: "medium",
+                energy: "high",
+                shedding: "moderate",
+                trainability: "challenging",
+                withChildren: "excellent",
+                withPets: "good",
+                apartmentFriendly: "moderate",
+                barking: "high",
+                exercise: "high",
+                grooming: "low",
+                alone: "low",
+                traits: ["merry", "friendly", "curious", "playful"],
+                description: "The Beagle is a scent hound with a great sense of smell and a personality that's merry, friendly, and outgoing. They're curious and known for their distinctive bay or howl.",
+                downsides: ["Loud and vocal (howling)", "Strong hunting instinct can lead to running off", "Stubborn and challenging to train", "Not suitable to be left alone"]
+            },
+            {
+                name: "Poodle",
+                image: "https://images.unsplash.com/photo-1508532566027-b2032cd8a715",
+                size: "varies",
+                energy: "high",
+                shedding: "minimal",
+                trainability: "easy",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "good",
+                barking: "moderate",
+                exercise: "high",
+                grooming: "high",
+                alone: "moderate",
+                traits: ["intelligent", "active", "proud", "elegant"],
+                description: "The Poodle is exceptionally smart and athletic despite their elegant appearance. They come in three sizes, and they're hypoallergenic, making them suitable for people with allergies.",
+                downsides: ["High-maintenance grooming needs", "Can be high-strung if not exercised", "Professional grooming costs", "Can be aloof with strangers"]
+            },
+            {
+                name: "Bulldog",
+                image: "https://images.unsplash.com/photo-1612233871430-250e14c17736",
+                size: "medium",
+                energy: "low",
+                shedding: "moderate",
+                trainability: "moderate",
+                withChildren: "good",
+                withPets: "moderate",
+                apartmentFriendly: "excellent",
+                barking: "low",
+                exercise: "low",
+                grooming: "moderate",
+                alone: "moderate",
+                traits: ["calm", "dignified", "friendly", "courageous"],
+                description: "The Bulldog is a calm, dignified, and courageous breed. Despite their sourmug, they're among the gentlest of dogs, and they get along well with other pets and children.",
+                downsides: ["Numerous health problems", "Respiratory issues and snoring", "Heat intolerant", "Drools significantly", "Short lifespan of 8-10 years"]
+            },
+            {
+                name: "Siberian Husky",
+                image: "https://images.unsplash.com/photo-1605568427561-40dd23c2acea",
+                size: "medium",
+                energy: "very high",
+                shedding: "heavy",
+                trainability: "challenging",
+                withChildren: "good",
+                withPets: "moderate",
+                apartmentFriendly: "low",
+                barking: "high",
+                exercise: "very high",
+                grooming: "moderate",
+                alone: "low",
+                traits: ["outgoing", "mischievous", "loyal", "free-spirited"],
+                description: "The Siberian Husky is a beautiful, outgoing, and dignified Northern breed. They're athletic, mischievous, and have a strong prey drive and tendency to roam and escape.",
+                downsides: ["Extreme shedders", "Expert escape artists", "Difficult to train", "Strong prey drive", "Destructive when bored", "Need extensive exercise"]
+            },
+            {
+                name: "Dachshund",
+                image: "https://images.unsplash.com/photo-1563233269-7e86880de475",
+                size: "small",
+                energy: "moderate",
+                shedding: "moderate",
+                trainability: "moderate",
+                withChildren: "moderate",
+                withPets: "moderate",
+                apartmentFriendly: "excellent",
+                barking: "high",
+                exercise: "moderate",
+                grooming: "low",
+                alone: "moderate",
+                traits: ["clever", "stubborn", "curious", "brave"],
+                description: "The Dachshund is clever, lively, and courageous to the point of rashness. They're bred to hunt, which means they can be stubborn, but they're also incredibly loyal companions.",
+                downsides: ["Back problems due to long spine", "Can be stubborn and difficult to housebreak", "Tend to bark a lot", "Can be aggressive toward strangers and other dogs"]
+            },
+            {
+                name: "Shih Tzu",
+                image: "https://images.unsplash.com/photo-1600804340584-c7db2eacf0bf",
+                size: "small",
+                energy: "moderate",
+                shedding: "low",
+                trainability: "moderate",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "excellent",
+                barking: "moderate",
+                exercise: "low",
+                grooming: "high",
+                alone: "moderate",
+                traits: ["affectionate", "playful", "outgoing", "friendly"],
+                description: "The Shih Tzu is an affectionate, outgoing house companion. Their sole purpose through the centuries has been to be a friendly, loving companion, and they excel at it.",
+                downsides: ["Very high maintenance coat", "Difficult to housebreak", "Can have breathing problems", "Eye problems common", "Strong-willed personality"]
+            },
+            {
+                name: "Border Collie",
+                image: "https://images.unsplash.com/photo-1555596873-1916fae19257",
+                size: "medium",
+                energy: "very high",
+                shedding: "moderate",
+                trainability: "easy",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "low",
+                barking: "moderate",
+                exercise: "very high",
+                grooming: "moderate",
+                alone: "low",
+                traits: ["intelligent", "energetic", "alert", "responsive"],
+                description: "The Border Collie is an incredibly intelligent and energetic breed. They excel at learning and need a job to do, be it herding, dog sports, or other activities.",
+                downsides: ["Requires enormous mental and physical stimulation", "Will become destructive if bored", "May herd children and pets", "Can be neurotic without enough exercise", "Not suitable for laid-back households"]
+            },
+            {
+                name: "Boxer",
+                image: "https://images.unsplash.com/photo-1543071293-d91175a68874",
+                size: "large",
+                energy: "high",
+                shedding: "moderate",
+                trainability: "moderate",
+                withChildren: "excellent",
+                withPets: "good",
+                apartmentFriendly: "moderate",
+                barking: "low",
+                exercise: "high",
+                grooming: "low",
+                alone: "low",
+                traits: ["playful", "energetic", "protective", "patient"],
+                description: "The Boxer is a fun-loving, bright, active, and loyal breed. They're protective of their family and can be wary of strangers, but they generally love everyone once introductions are made.",
+                downsides: ["Drools significantly", "Can be hyperactive and jumpy", "Prone to certain cancers", "Sensitive to extreme temperatures", "May snore loudly"]
+            },
+            {
+                name: "Cavalier King Charles Spaniel",
+                image: "https://images.unsplash.com/photo-1591769225440-811ad7d6eab3",
+                size: "small",
+                energy: "moderate",
+                shedding: "moderate",
+                trainability: "easy",
+                withChildren: "excellent",
+                withPets: "excellent",
+                apartmentFriendly: "excellent",
+                barking: "low",
+                exercise: "moderate",
+                grooming: "moderate",
+                alone: "low",
+                traits: ["affectionate", "gentle", "playful", "adaptable"],
+                description: "The Cavalier King Charles Spaniel is an elegant, royal toy spaniel. Affectionate and gentle, they're known for their expressive eyes and sweet temperament.",
+                downsides: ["Serious health problems including heart issues", "Cannot be left alone for long", "Expensive vet bills", "Short lifespan for small dogs (10-12 years)", "Coat needs regular maintenance"]
+            },
+            {
+                name: "Australian Shepherd",
+                image: "https://images.unsplash.com/photo-1594118319842-b72a509a3613",
+                size: "medium",
+                energy: "very high",
+                shedding: "heavy",
+                trainability: "easy",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "low",
+                barking: "moderate",
+                exercise: "high",
+                grooming: "moderate",
+                alone: "low",
+                traits: ["intelligent", "work-oriented", "exuberant", "alert"],
+                description: "The Australian Shepherd is an intelligent, work-oriented breed with strong herding and guarding instincts. They're exuberant, require lots of exercise, and are very loyal to their family.",
+                downsides: ["Extremely high exercise needs", "May herd children by nipping", "Heavy shedders", "Can be suspicious of strangers", "Prone to severe separation anxiety"]
+            },
+            {
+                name: "Chihuahua",
+                image: "https://images.unsplash.com/photo-1605639737470-3299a9d5aad0",
+                size: "small",
+                energy: "moderate",
+                shedding: "moderate",
+                trainability: "moderate",
+                withChildren: "moderate",
+                withPets: "moderate",
+                apartmentFriendly: "excellent",
+                barking: "high",
+                exercise: "low",
+                grooming: "low",
+                alone: "moderate",
+                traits: ["charming", "graceful", "sassy", "devoted"],
+                description: "The Chihuahua is a tiny dog with a huge personality. They're charming, graceful, and sassy, and they form strong bonds with their people, sometimes to the point of being overprotective.",
+                downsides: ["Can be snappy with children", "Difficult to housebreak", "Often don't get along with other dogs", "Fragile and easily injured", "Tendency to bark excessively"]
+            },
+            {
+                name: "Pomeranian",
+                image: "https://images.unsplash.com/photo-1582456891925-a53965520520",
+                size: "small",
+                energy: "moderate",
+                shedding: "heavy",
+                trainability: "moderate",
+                withChildren: "moderate",
+                withPets: "moderate",
+                apartmentFriendly: "excellent",
+                barking: "high",
+                exercise: "low",
+                grooming: "high",
+                alone: "moderate",
+                traits: ["lively", "bold", "curious", "playful"],
+                description: "The Pomeranian is a cocky, animated companion with an extroverted personality. Despite their small size, they're alert and intelligent, and they make excellent watchdogs and agility competitors.",
+                downsides: ["Excessive barking", "Heavy shedding despite small size", "Can be difficult to housebreak", "Too fragile for homes with small children", "Can develop 'small dog syndrome'"]
+            },
+            {
+                name: "Great Dane",
+                image: "https://images.unsplash.com/photo-1591946614720-90a587da4a36",
+                size: "xl",
+                energy: "moderate",
+                shedding: "moderate",
+                trainability: "moderate",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "moderate",
+                barking: "low",
+                exercise: "moderate",
+                grooming: "low",
+                alone: "low",
+                traits: ["friendly", "patient", "dependable", "gentle"],
+                description: "The Great Dane is a gentle giant known for being sweet, affectionate, and good with children. Despite their intimidating size, they're one of the best-natured dogs around.",
+                downsides: ["Short lifespan (7-10 years)", "Risk of bloat", "Enormous food costs", "Takes up a lot of space", "Tail can clear coffee tables", "Significant drooling"]
+            },
+            {
+                name: "Boston Terrier",
+                image: "https://images.unsplash.com/photo-1596797882948-72e5fe4daa88",
+                size: "small",
+                energy: "moderate",
+                shedding: "low",
+                trainability: "moderate",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "excellent",
+                barking: "low",
+                exercise: "moderate",
+                grooming: "low",
+                alone: "moderate",
+                traits: ["friendly", "bright", "amusing", "well-mannered"],
+                description: "The Boston Terrier is a lively, intelligent breed with an excellent disposition. They're compact, clean, and easygoing companions, known for their tuxedo-like coat pattern.",
+                downsides: ["Breathing problems due to flat face", "Sensitive to extreme temperatures", "Can be stubborn to housebreak", "Eye problems common", "Gassy and can snore loudly"]
+            },
+            {
+                name: "Shetland Sheepdog",
+                image: "https://images.unsplash.com/photo-1592424451835-401d29dc7861",
+                size: "small",
+                energy: "high",
+                shedding: "heavy",
+                trainability: "easy",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "moderate",
+                barking: "high",
+                exercise: "high",
+                grooming: "high",
+                alone: "moderate",
+                traits: ["intelligent", "playful", "energetic", "willing-to-please"],
+                description: "The Shetland Sheepdog is an intelligent, quick, and obedient herder from Scotland's remote Shetland Islands. They're known for their beautiful coat, agility, and eagerness to please.",
+                downsides: ["Excessive barking", "Heavy shedding", "High-maintenance coat", "Shy with strangers", "Sensitive to noise and commotion"]
+            },
+            {
+                name: "Greyhound",
+                image: "https://images.unsplash.com/photo-1594374543667-e27a84d933d7",
+                size: "large",
+                energy: "low",
+                shedding: "low",
+                trainability: "moderate",
+                withChildren: "good",
+                withPets: "moderate",
+                apartmentFriendly: "good",
+                barking: "low",
+                exercise: "moderate",
+                grooming: "low",
+                alone: "moderate",
+                traits: ["gentle", "independent", "noble", "athletic"],
+                description: "The Greyhound is gentle, noble, and sweet-tempered. Despite being the fastest dog breed capable of speeds up to 45 mph, they're surprisingly calm and low-energy indoors.",
+                downsides: ["Strong prey drive - will chase small animals", "Cannot be trusted off-leash", "Can be aloof and independent", "Sensitive to cold", "Thin skin easily injured"]
+            },
+            {
+                name: "Corgi",
+                image: "https://images.unsplash.com/photo-1612277627402-593409bddcad",
+                size: "small",
+                energy: "high",
+                shedding: "heavy",
+                trainability: "easy",
+                withChildren: "good",
+                withPets: "good",
+                apartmentFriendly: "good",
+                barking: "high",
+                exercise: "moderate",
+                grooming: "moderate",
+                alone: "moderate",
+                traits: ["affectionate", "intelligent", "alert", "tenacious"],
+                description: "The Pembroke Welsh Corgi is a smart, active breed known for being affectionate and fearless. Despite their short legs, they're athletic and require regular exercise.",
+                downsides: ["Heavy shedding year-round", "Tendency to bark a lot", "May nip at heels due to herding instinct", "Back problems due to long spine", "Stubborn streak"]
+            }
+        ];
+        
+        // Variables to store user selections
+        let userSelections = {
+            homeType: "",
+            yardSize: "",
+            noiseRestrictions: "",
+            activityLevel: "",
+            exerciseTime: "",
+            aloneTime: "",
+            children: "",
+            otherPets: "",
+            experience: "",
+            dogSize: "",
+            shedding: "",
+            grooming: "",
+            energyLevel: "",
+            trainability: "",
+            importantTraits: []
+        };
+        
+        // DOM elements
+        const preferenceSelects = document.querySelectorAll('.preference-select');
+        const multiSelectItems = document.querySelectorAll('.multi-select-item');
+        const resultsContainer = document.getElementById('results-container');
+        const loadingIndicator = document.getElementById('loading');
+        const placeholderMessage = document.getElementById('placeholder-message');
+        const scrollButton = document.getElementById('scroll-btn');
+        
+        // Show/hide scroll button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.add('visible');
+            } else {
+                scrollButton.classList.remove('visible');
+            }
+        });
+        
+        // Scroll to top when button is clicked
+        scrollButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Function to check if enough preferences have been selected
+        function checkPreferencesComplete() {
+            let completedFields = 0;
+            const minFieldsRequired = 5; // Set minimum fields required to show results
+            
+            Object.values(userSelections).forEach(value => {
+                if (value && (typeof value === 'string' && value !== '') || (Array.isArray(value) && value.length > 0)) {
+                    completedFields++;
+                }
+            });
+            
+            return completedFields >= minFieldsRequired;
+        }
+        
+        // Event listeners for select dropdowns
+        preferenceSelects.forEach(select => {
+            select.addEventListener('change', () => {
+                const id = select.id;
+                const value = select.value;
+                
+                // Map the select id to the corresponding property in userSelections
+                switch(id) {
+                    case 'home-type':
+                        userSelections.homeType = value;
+                        break;
+                    case 'yard-size':
+                        userSelections.yardSize = value;
+                        break;
+                    case 'noise-restrictions':
+                        userSelections.noiseRestrictions = value;
+                        break;
+                    case 'activity-level':
+                        userSelections.activityLevel = value;
+                        break;
+                    case 'exercise-time':
+                        userSelections.exerciseTime = value;
+                        break;
+                    case 'alone-time':
+                        userSelections.aloneTime = value;
+                        break;
+                    case 'children':
+                        userSelections.children = value;
+                        break;
+                    case 'other-pets':
+                        userSelections.otherPets = value;
+                        break;
+                    case 'experience':
+                        userSelections.experience = value;
+                        break;
+                    case 'dog-size':
+                        userSelections.dogSize = value;
+                        break;
+                    case 'shedding':
+                        userSelections.shedding = value;
+                        break;
+                    case 'grooming':
+                        userSelections.grooming = value;
+                        break;
+                    case 'energy-level':
+                        userSelections.energyLevel = value;
+                        break;
+                    case 'trainability':
+                        userSelections.trainability = value;
+                        break;
+                }
+                
+                // Check if enough preferences have been selected and calculate matches if so
+                if (checkPreferencesComplete()) {
+                    updateResults();
+                }
+            });
+        });
+        
+        // Event listeners for multi-select options
+        multiSelectItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Toggle selected class
+                item.classList.toggle('selected');
+                
+                // Update the array of selected traits
+                userSelections.importantTraits = [];
+                document.querySelectorAll('.multi-select-item.selected').forEach(selected => {
+                    userSelections.importantTraits.push(selected.dataset.value);
+                });
+                
+                // Limit to 2 selections
+                if (userSelections.importantTraits.length > 2) {
+                    const firstUnselected = document.querySelectorAll('.multi-select-item.selected')[0];
+                    firstUnselected.classList.remove('selected');
+                    userSelections.importantTraits.shift();
+                }
+                
+                // Check if enough preferences have been selected and calculate matches if so
+                if (checkPreferencesComplete()) {
+                    updateResults();
+                }
+            });
+        });
+        
+        // Function to update the results
+        function updateResults() {
+            // Show loading and hide placeholder
+            loadingIndicator.classList.remove('hidden');
+            placeholderMessage.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            
+            // Calculate matches after a short delay to show the loading animation
+            setTimeout(calculateMatches, 500);
+        }
+        
+        // Function to calculate matches
+        function calculateMatches() {
+            // Calculate score for each breed
+            const breedScores = dogBreeds.map(breed => {
+                let score = 0;
+                let matchReasons = [];
+                let cautionReasons = [];
+                
+                // Living situation scoring
+                if (userSelections.homeType === "apartment") {
+                    if (breed.apartmentFriendly === "excellent") score += 10;
+                    else if (breed.apartmentFriendly === "good") score += 7;
+                    else if (breed.apartmentFriendly === "moderate") score += 4;
+                    else score += 1;
+                    
+                    if (breed.apartmentFriendly === "excellent") {
+                        matchReasons.push("Excellent for apartment living");
+                    }
+                    
+                    if (breed.apartmentFriendly === "low") {
+                        cautionReasons.push("Not well-suited for apartment living");
+                    }
+                } else if (userSelections.homeType === "house-small") {
+                    if (breed.size === "small" || breed.size === "medium") score += 8;
+                    else score += 5;
+                    
+                    if (breed.size === "xl") {
+                        cautionReasons.push("May be too large for a small house");
+                    }
+                } else if (userSelections.homeType === "house-large" || userSelections.homeType === "farm") {
+                    if (breed.size === "large" || breed.size === "xl") score += 8;
+                    else score += 5;
+                    
+                    if (breed.size === "large" || breed.size === "xl") {
+                        matchReasons.push("Perfect size for a larger home");
+                    }
+                }
+                
+                // Yard size scoring
+                if (userSelections.yardSize === "none" || userSelections.yardSize === "small") {
+                    if (breed.exercise === "low") score += 10;
+                    else if (breed.exercise === "moderate") score += 5;
+                    else score += 1;
+                    
+                    if (breed.exercise === "low" && (userSelections.yardSize === "none" || userSelections.yardSize === "small")) {
+                        matchReasons.push("Low exercise needs, suitable for limited outdoor space");
+                    }
+                    
+                    if ((breed.exercise === "high" || breed.exercise === "very high") && 
+                        (userSelections.yardSize === "none" || userSelections.yardSize === "small")) {
+                        cautionReasons.push("High exercise needs may be challenging with limited outdoor space");
+                    }
+                } else if (userSelections.yardSize === "medium" || userSelections.yardSize === "large") {
+                    if (breed.exercise === "high" || breed.exercise === "very high") score += 10;
+                    else score += 5;
+                    
+                    if ((breed.exercise === "high" || breed.exercise === "very high") && 
+                        (userSelections.yardSize === "medium" || userSelections.yardSize === "large")) {
+                        matchReasons.push("Can utilize your spacious yard for exercise");
+                    }
+                }
+                
+                // Noise restrictions scoring
+                if (userSelections.noiseRestrictions === "strict" || userSelections.noiseRestrictions === "moderate") {
+                    if (breed.barking === "low") score += 10;
+                    else if (breed.barking === "moderate") score += 4;
+                    else score += 0;
+                    
+                    if (breed.barking === "low" && 
+                        (userSelections.noiseRestrictions === "strict" || userSelections.noiseRestrictions === "moderate")) {
+                        matchReasons.push("Quiet breed that won't disturb neighbors");
+                    }
+                    
+                    if (breed.barking === "high" && 
+                        (userSelections.noiseRestrictions === "strict" || userSelections.noiseRestrictions === "moderate")) {
+                        cautionReasons.push("Tendency to bark may be an issue with your noise restrictions");
+                    }
+                } else {
+                    if (breed.barking === "high") score += 5;
+                    else score += 3;
+                }
+                
+                // Activity level scoring
+                if (userSelections.activityLevel === "sedentary") {
+                    if (breed.energy === "low") score += 10;
+                    else if (breed.energy === "moderate") score += 5;
+                    else score += 0;
+                    
+                    if (breed.energy === "low" && userSelections.activityLevel === "sedentary") {
+                        matchReasons.push("Low energy breed that matches your lifestyle");
+                    }
+                    
+                    if ((breed.energy === "high" || breed.energy === "very high") && 
+                        userSelections.activityLevel === "sedentary") {
+                        cautionReasons.push("High energy level may not match your sedentary lifestyle");
+                    }
+                } else if (userSelections.activityLevel === "somewhat-active") {
+                    if (breed.energy === "moderate") score += 10;
+                    else if (breed.energy === "low" || breed.energy === "high") score += 5;
+                    else score += 2;
+                } else if (userSelections.activityLevel === "active" || userSelections.activityLevel === "very-active") {
+                    if (breed.energy === "high" || breed.energy === "very high") score += 10;
+                    else if (breed.energy === "moderate") score += 5;
+                    else score += 0;
+                    
+                    if ((breed.energy === "high" || breed.energy === "very high") && 
+                        (userSelections.activityLevel === "active" || userSelections.activityLevel === "very-active")) {
+                        matchReasons.push("High energy level to keep up with your active lifestyle");
+                    }
+                    
+                    if (breed.energy === "low" && 
+                        (userSelections.activityLevel === "active" || userSelections.activityLevel === "very-active")) {
+                        cautionReasons.push("May not have enough energy to keep up with your active lifestyle");
+                    }
+                }
+                
+                // Exercise time scoring
+                if (userSelections.exerciseTime === "minimal") {
+                    if (breed.exercise === "low") score += 10;
+                    else if (breed.exercise === "moderate") score += 4;
+                    else score -= 5;
+                    
+                    if (breed.exercise === "low" && userSelections.exerciseTime === "minimal") {
+                        matchReasons.push("Minimal exercise needs fit your schedule");
+                    }
+                    
+                    if ((breed.exercise === "high" || breed.exercise === "very high") && 
+                        userSelections.exerciseTime === "minimal") {
+                        cautionReasons.push("Requires more exercise than you can provide");
+                    }
+                } else if (userSelections.exerciseTime === "moderate") {
+                    if (breed.exercise === "moderate") score += 10;
+                    else if (breed.exercise === "low" || breed.exercise === "high") score += 5;
+                    else score += 0;
+                } else if (userSelections.exerciseTime === "significant" || userSelections.exerciseTime === "extensive") {
+                    if (breed.exercise === "high" || breed.exercise === "very high") score += 10;
+                    else if (breed.exercise === "moderate") score += 5;
+                    else score += 0;
+                    
+                    if ((breed.exercise === "high" || breed.exercise === "very high") && 
+                        (userSelections.exerciseTime === "significant" || userSelections.exerciseTime === "extensive")) {
+                        matchReasons.push("Will thrive with the amount of exercise you can provide");
+                    }
+                }
+                
+                // Alone time scoring
+                if (userSelections.aloneTime === "long-periods" || userSelections.aloneTime === "work-day") {
+                    if (breed.alone === "moderate" || breed.alone === "high") score += 10;
+                    else score -= 5;
+                    
+                    if ((breed.alone === "moderate" || breed.alone === "high") && 
+                        (userSelections.aloneTime === "long-periods" || userSelections.aloneTime === "work-day")) {
+                        matchReasons.push("Can handle being alone during your workday");
+                    }
+                    
+                    if (breed.alone === "low" && 
+                        (userSelections.aloneTime === "long-periods" || userSelections.aloneTime === "work-day")) {
+                        cautionReasons.push("May develop separation anxiety when left alone for long periods");
+                    }
+                } else {
+                    if (breed.alone === "low") score += 5;
+                    else score += 3;
+                }
+                
+                // Children scoring
+                if (userSelections.children === "babies" || userSelections.children === "young-children") {
+                    if (breed.withChildren === "excellent") score += 15;
+                    else if (breed.withChildren === "good") score += 8;
+                    else if (breed.withChildren === "moderate") score += 2;
+                    else score -= 10;
+                    
+                    if (breed.withChildren === "excellent" && 
+                        (userSelections.children === "babies" || userSelections.children === "young-children")) {
+                        matchReasons.push("Excellent with young children");
+                    }
+                    
+                    if (breed.withChildren === "moderate" && 
+                        (userSelections.children === "babies" || userSelections.children === "young-children")) {
+                        cautionReasons.push("May not be ideal with very young children");
+                    }
+                } else if (userSelections.children === "older-children") {
+                    if (breed.withChildren === "excellent" || breed.withChildren === "good") score += 10;
+                    else if (breed.withChildren === "moderate") score += 5;
+                    else score += 0;
+                }
+                
+                // Other pets scoring
+                if (userSelections.otherPets !== "no-pets") {
+                    if (breed.withPets === "excellent") score += 10;
+                    else if (breed.withPets === "good") score += 7;
+                    else if (breed.withPets === "moderate") score += 3;
+                    else score -= 5;
+                    
+                    if (breed.withPets === "excellent" && userSelections.otherPets !== "no-pets") {
+                        matchReasons.push("Gets along well with other pets");
+                    }
+                    
+                    if (breed.withPets === "low" && userSelections.otherPets !== "no-pets") {
+                        cautionReasons.push("May have difficulty getting along with your other pets");
+                    }
+                }
+                
+                // Experience scoring
+                if (userSelections.experience === "first-time") {
+                    if (breed.trainability === "easy") score += 10;
+                    else if (breed.trainability === "moderate") score += 5;
+                    else score -= 5;
+                    
+                    if (breed.trainability === "easy" && userSelections.experience === "first-time") {
+                        matchReasons.push("Easy to train for first-time dog owners");
+                    }
+                    
+                    if (breed.trainability === "challenging" && userSelections.experience === "first-time") {
+                        cautionReasons.push("May be challenging for a first-time dog owner");
+                    }
+                } else if (userSelections.experience === "experienced" || userSelections.experience === "professional") {
+                    if (breed.trainability === "challenging") score += 5;
+                    else score += 0;
+                }
+                
+                // Size preference scoring
+                if (userSelections.dogSize !== "any-size") {
+                    if (breed.size === userSelections.dogSize) score += 10;
+                    else if (
+                        (userSelections.dogSize === "small" && breed.size === "medium") ||
+                        (userSelections.dogSize === "medium" && (breed.size === "small" || breed.size === "large")) ||
+                        (userSelections.dogSize === "large" && (breed.size === "medium" || breed.size === "xl")) ||
+                        (userSelections.dogSize === "xl" && breed.size === "large")
+                    ) {
+                        score += 3;
+                    } else {
+                        score -= 5;
+                    }
+                    
+                    if (breed.size === userSelections.dogSize && userSelections.dogSize !== "any-size") {
+                        matchReasons.push("Matches your size preference perfectly");
+                    }
+                    
+                    if (breed.size !== userSelections.dogSize && userSelections.dogSize !== "any-size" &&
+                        !(
+                            (userSelections.dogSize === "small" && breed.size === "medium") ||
+                            (userSelections.dogSize === "medium" && (breed.size === "small" || breed.size === "large")) ||
+                            (userSelections.dogSize === "large" && (breed.size === "medium" || breed.size === "xl")) ||
+                            (userSelections.dogSize === "xl" && breed.size === "large")
+                        )) {
+                        cautionReasons.push(`Size (${breed.size}) does not match your preference (${userSelections.dogSize})`);
+                    }
+                }
+                
+                // Shedding preference scoring
+                if (userSelections.shedding === "minimal") {
+                    if (breed.shedding === "minimal") score += 15;
+                    else if (breed.shedding === "moderate") score += 3;
+                    else score -= 10;
+                    
+                    if (breed.shedding === "minimal" && userSelections.shedding === "minimal") {
+                        matchReasons.push("Low shedding breed");
+                    }
+                    
+                    if (breed.shedding === "heavy" && userSelections.shedding === "minimal") {
+                        cautionReasons.push("Heavy shedder may not match your preference for minimal shedding");
+                    }
+                } else if (userSelections.shedding === "moderate") {
+                    if (breed.shedding === "moderate") score += 8;
+                    else if (breed.shedding === "minimal") score += 5;
+                    else score += 0;
+                }
+                
+                // Grooming preference scoring
+                if (userSelections.grooming === "minimal") {
+                    if (breed.grooming === "low") score += 10;
+                    else if (breed.grooming === "moderate") score += 3;
+                    else score -= 5;
+                    
+                    if (breed.grooming === "low" && userSelections.grooming === "minimal") {
+                        matchReasons.push("Low grooming requirements");
+                    }
+                    
+                    if (breed.grooming === "high" && userSelections.grooming === "minimal") {
+                        cautionReasons.push("High grooming needs may be more than you prefer");
+                    }
+                } else if (userSelections.grooming === "moderate") {
+                    if (breed.grooming === "moderate") score += 8;
+                    else if (breed.grooming === "low") score += 5;
+                    else score += 0;
+                } else if (userSelections.grooming === "high") {
+                    if (breed.grooming === "high") score += 5;
+                    else score += 0;
+                }
+                
+                // Energy level preference scoring
+                if (userSelections.energyLevel !== "any-energy") {
+                    if (
+                        (userSelections.energyLevel === "low" && breed.energy === "low") ||
+                        (userSelections.energyLevel === "medium" && breed.energy === "moderate") ||
+                        (userSelections.energyLevel === "high" && (breed.energy === "high" || breed.energy === "very high"))
+                    ) {
+                        score += 10;
+                        
+                        if (userSelections.energyLevel === "low" && breed.energy === "low") {
+                            matchReasons.push("Calm, low-energy temperament");
+                        } else if (userSelections.energyLevel === "high" && 
+                                  (breed.energy === "high" || breed.energy === "very high")) {
+                            matchReasons.push("Energetic and playful temperament");
+                        }
+                    } else if (
+                        (userSelections.energyLevel === "low" && breed.energy === "moderate") ||
+                        (userSelections.energyLevel === "medium" && (breed.energy === "low" || breed.energy === "high")) ||
+                        (userSelections.energyLevel === "high" && breed.energy === "moderate")
+                    ) {
+                        score += 3;
+                    } else {
+                        score -= 5;
+                        
+                        if (userSelections.energyLevel === "low" && (breed.energy === "high" || breed.energy === "very high")) {
+                            cautionReasons.push("High energy level doesn't match your preference for a calm dog");
+                        } else if (userSelections.energyLevel === "high" && breed.energy === "low") {
+                            cautionReasons.push("Low energy level doesn't match your preference for an energetic dog");
+                        }
+                    }
+                }
+                
+                // Trainability preference scoring
+                if (userSelections.trainability !== "any-trainability") {
+                    if (
+                        (userSelections.trainability === "easy" && breed.trainability === "easy") ||
+                        (userSelections.trainability === "moderate" && breed.trainability === "moderate") ||
+                        (userSelections.trainability === "challenging" && breed.trainability === "challenging")
+                    ) {
+                        score += 8;
+                        
+                        if (userSelections.trainability === "easy" && breed.trainability === "easy") {
+                            matchReasons.push("Highly trainable and eager to please");
+                        }
+                    } else {
+                        score += 2;
+                        
+                        if (userSelections.trainability === "easy" && breed.trainability === "challenging") {
+                            cautionReasons.push("May be more challenging to train than you prefer");
+                        }
+                    }
+                }
+                
+                // Important traits scoring
+                let traitsMatched = 0;
+                if (userSelections.importantTraits.length > 0) {
+                    userSelections.importantTraits.forEach(trait => {
+                        if (breed.traits.includes(trait)) {
+                            score += 7;
+                            traitsMatched++;
+                        }
+                    });
+                    
+                    if (traitsMatched > 0) {
+                        matchReasons.push(`Possesses ${traitsMatched} of your desired personality traits`);
+                    }
+                    
+                    if (userSelections.importantTraits.length > 0 && traitsMatched === 0) {
+                        cautionReasons.push("Doesn't have the personality traits you're looking for");
+                    }
+                }
+                
+                // Add a random downside from the breed's downsides if we don't have enough cautions
+                if (cautionReasons.length < 2 && breed.downsides && breed.downsides.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * breed.downsides.length);
+                    cautionReasons.push(breed.downsides[randomIndex]);
+                }
+                
+                // Calculate a percentage score (max score could vary)
+                const maxPossibleScore = 150; // approximate max score
+                const percentage = Math.min(100, Math.round((score / maxPossibleScore) * 100));
+                
+                return {
+                    breed: breed,
+                    score: score,
+                    percentage: percentage,
+                    matchReasons: matchReasons.slice(0, 3), // Limit to top 3 reasons
+                    cautionReasons: cautionReasons.slice(0, 3) // Limit to top 3 cautions
+                };
+            });
+            
+            // Sort breeds by score (highest first)
+            breedScores.sort((a, b) => b.score - a.score);
+            
+            // Get top 6 matches
+            const topMatches = breedScores.slice(0, 6);
+            
+            // Display the results
+            displayResults(topMatches);
+        }
+        
+        // Function to display the results
+        function displayResults(matches) {
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+            
+            // Create a card for each match
+            matches.forEach(match => {
+                const scoreColor = match.percentage >= 85 ? 'var(--success)' : 
+                                  match.percentage >= 70 ? 'var(--primary)' : 
+                                  match.percentage >= 50 ? 'var(--secondary)' : 
+                                  'var(--danger)';
+                
+                const breedCard = document.createElement('div');
+                breedCard.className = 'breed-card';
+                breedCard.innerHTML = `
+                    <div class="breed-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                    <div class="breed-info">
+                        <h3 class="breed-name">${match.breed.name}</h3>
+                        <span class="match-score" style="background-color: ${scoreColor};">${match.percentage}% Match</span>
+                        <p>${match.breed.description}</p>
+                        
+                        <div class="match-reason">
+                            <div class="reason-title">Why This Breed Matches You:</div>
+                            <ul>
+                                ${match.matchReasons.map(reason => `<li>${reason}</li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="caution-reason">
+                            <div class="caution-title">Potential Challenges:</div>
+                            <ul>
+                                ${match.cautionReasons.map(reason => `<li>${reason}</li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="breed-traits">
+                            ${match.breed.traits.map(trait => `<span class="trait">${trait}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                resultsContainer.appendChild(breedCard);
+            });
+            
+            // Hide loading indicator and show results
+            loadingIndicator.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+        }
+        
+        // Check if the page was just loaded with the 'Calculate matches' button missing
+        window.addEventListener('load', () => {
+            // Add event listeners to elements that exist on page load
+            const preferenceSelects = document.querySelectorAll('.preference-select');
+            const multiSelectItems = document.querySelectorAll('.multi-select-item');
+            
+            preferenceSelects.forEach(select => {
+                // Trigger initial check for any pre-selected values
+                if (select.value) {
+                    const event = new Event('change');
+                    select.dispatchEvent(event);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
