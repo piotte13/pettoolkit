@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can My Dog Eat This?</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --danger: #c44536;
+            --success: #5b8c5a;
+            --warning: #e6b89c;
+            --light: #f5f5f5;
+            --dark: #333;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: normal;
+        }
+        
+        .search-container {
+            display: flex;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        #food-input {
+            flex-grow: 1;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: none;
+            outline: none;
+        }
+        
+        #search-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+        
+        #search-btn:hover {
+            background-color: var(--primary);
+        }
+        
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .result-header {
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        
+        .safe {
+            background-color: var(--success);
+        }
+        
+        .unsafe {
+            background-color: var(--danger);
+        }
+        
+        .moderation {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .result-content {
+            padding: 20px;
+        }
+        
+        .verdict {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .explanation {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .serving-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--light);
+            border-radius: 5px;
+        }
+        
+        .serving-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .popular-searches {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .search-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .tag {
+            background-color: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .tag:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .search-container {
+                flex-direction: column;
+            }
+            
+            #search-btn {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Can My Dog Eat This?</h1>
+            <p class="subtitle">Check if foods are safe for your furry friend</p>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" id="food-input" placeholder="Enter a food (e.g., chocolate, apple, cheese)">
+            <button id="search-btn">Check</button>
+        </div>
+        
+        <div id="result" class="result-container">
+            <div class="result-header" id="result-header">
+                <div class="icon" id="result-icon"></div>
+                <h2 id="food-name">Food Name</h2>
+            </div>
+            <div class="result-content">
+                <p class="verdict" id="verdict"></p>
+                <p class="explanation" id="explanation"></p>
+                <div class="serving-info">
+                    <p class="serving-title">Serving Recommendation:</p>
+                    <p id="serving"></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="popular-searches">
+            <h3>Popular Searches</h3>
+            <div class="search-tags">
+                <div class="tag" onclick="checkFood('apple')">Apple</div>
+                <div class="tag" onclick="checkFood('chocolate')">Chocolate</div>
+                <div class="tag" onclick="checkFood('nuts')">Nuts</div>
+                <div class="tag" onclick="checkFood('chicken')">Chicken</div>
+                <div class="tag" onclick="checkFood('grapes')">Grapes</div>
+                <div class="tag" onclick="checkFood('sweet potato')">Sweet Potato</div>
+                <div class="tag" onclick="checkFood('asparagus')">Asparagus</div>
+                <div class="tag" onclick="checkFood('peanut butter')">Peanut Butter</div>
+                <div class="tag" onclick="checkFood('yogurt')">Yogurt</div>
+                <div class="tag" onclick="checkFood('blueberries')">Blueberries</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Always consult with your veterinarian before introducing new foods to your dog's diet.</p>
+            <p>This tool is for informational purposes only and does not replace professional veterinary advice.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Food database
+        const foodDatabase = {
+            'apple': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Apples are safe for dogs and contain vitamins A and C, plus fiber. However, always remove the seeds and core as they contain small amounts of cyanide.',
+                serving: 'Small dogs: 1-2 slices. Medium dogs: 3-4 slices. Large dogs: Up to half an apple. Remove seeds and core before serving. Offer 1-2 times per week.'
+            },
+            'banana': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Bananas are safe for dogs and rich in potassium, vitamins, and fiber. They are also high in sugar, so should be given as an occasional treat.',
+                serving: 'Small dogs: 2-3 small slices. Medium dogs: Half a banana. Large dogs: One small banana. Limit to 1-2 times per week.'
+            },
+            'chocolate': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Chocolate contains theobromine and caffeine, which are toxic to dogs and can cause vomiting, diarrhea, rapid breathing, increased heart rate, and seizures.',
+                serving: 'No amount is safe. Keep all chocolate away from your dog. If ingested, contact your veterinarian immediately.'
+            },
+            'cheese': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Most cheeses are safe for dogs in small amounts. Cheese contains protein and calcium, but it\'s high in fat and some dogs may be lactose intolerant.',
+                serving: 'Small dogs: Pea-sized piece. Medium dogs: Thumb-sized piece. Large dogs: 1-2 tablespoons. Limit to occasional treats. Avoid blue cheese and high-fat varieties.'
+            },
+            'chicken': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Plain, cooked chicken without seasoning is safe and healthy for dogs. It\'s a good source of protein and is often used in commercial dog foods.',
+                serving: 'Small dogs: 1-2 tablespoons of cooked, boneless chicken. Medium dogs: 1/4 cup. Large dogs: 1/3 to 1/2 cup. Can be given daily as part of a balanced diet. Always remove bones and skin.'
+            },
+            'grapes': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Grapes and raisins are highly toxic to dogs and can cause kidney failure. Even small amounts can make a dog seriously ill.',
+                serving: 'No amount is safe. Keep all grapes and raisins away from your dog. If ingested, contact your veterinarian immediately.'
+            },
+            'onion': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Onions contain compounds that can damage dog\'s red blood cells and cause anemia. This applies to all forms: raw, cooked, powdered, or within other foods.',
+                serving: 'No amount is safe. Avoid giving your dog foods containing onions.'
+            },
+            'peanut butter': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Most peanut butter is safe for dogs and provides protein, healthy fats, vitamins B and E. Always check that it does NOT contain xylitol, which is toxic to dogs.',
+                serving: 'Small dogs: 1/2 teaspoon. Medium dogs: 1 teaspoon. Large dogs: 1 tablespoon. Limit to a few times per week. Always check ingredients for xylitol.'
+            },
+            'eggs': {
+                safe: true, 
+                needsModeration: false,
+                explanation: 'Cooked eggs are safe and nutritious for dogs. They\'re an excellent source of protein, fatty acids, vitamins, and minerals.',
+                serving: 'Small dogs: 1/4 egg. Medium dogs: 1/2 egg. Large dogs: 1 whole egg. Can be given a few times per week. Always cook eggs thoroughly and don\'t add seasonings.'
+            },
+            'avocado': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Avocados contain persin, which can cause vomiting and diarrhea in dogs. The pit is also a choking hazard.',
+                serving: 'Not recommended for dogs. Keep avocados and guacamole away from your pet.'
+            },
+            'broccoli': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Broccoli is safe in small amounts and contains vitamins and fiber. However, it can cause gastric irritation if given in large quantities.',
+                serving: 'Small dogs: 1-2 small florets. Medium dogs: 3-4 small florets. Large dogs: 5-6 small florets. Cook or steam before serving. Limit to 10% of daily food intake.'
+            },
+            'carrot': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Carrots are healthy, low-calorie treats for dogs. They contain beta-carotene, fiber, and help clean teeth when given raw.',
+                serving: 'Small dogs: 1-2 baby carrots or 2-3 small slices. Medium dogs: 1 medium carrot or 5-6 slices. Large dogs: 2 medium carrots. Can be given daily as treats.'
+            },
+            'salmon': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Properly cooked salmon is excellent for dogs, rich in omega-3 fatty acids that benefit skin, coat, and immune system. Never feed raw or undercooked salmon.',
+                serving: 'Small dogs: 1 tablespoon. Medium dogs: 2 tablespoons. Large dogs: 1/4 cup. Serve 1-2 times per week. Always fully cook and remove all bones.'
+            },
+            'garlic': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Garlic contains compounds that can damage red blood cells and cause anemia in dogs, similar to onions but more potent.',
+                serving: 'No amount is safe. Avoid feeding your dog anything containing garlic.'
+            },
+            'watermelon': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Watermelon flesh is safe and hydrating for dogs. It contains vitamins A, B6, C and potassium. Always remove seeds and rind which can cause intestinal blockage.',
+                serving: 'Small dogs: 1-2 tablespoons. Medium dogs: 1/4 cup. Large dogs: 1/2 cup. Remove all seeds and rind before serving. Offer occasionally as a treat.'
+            },
+            'strawberry': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Strawberries are safe for dogs and contain antioxidants, fiber, and vitamin C. They also contain an enzyme that can help whiten your dog\'s teeth.',
+                serving: 'Small dogs: 1 small strawberry, sliced. Medium dogs: 1-2 strawberries. Large dogs: 2-3 strawberries. Offer 1-2 times per week as a treat.'
+            },
+            'bread': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Plain white or wheat bread is generally safe for dogs but offers little nutritional value. It should be given sparingly due to calorie content.',
+                serving: 'Small dogs: 1/4 slice. Medium dogs: 1/2 slice. Large dogs: 1 slice. Occasional treat only. Avoid bread with raisins, nuts, or xylitol.'
+            },
+            'popcorn': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Plain, air-popped popcorn without salt, butter, or other toppings is safe for dogs in small amounts. It contains minerals like magnesium and zinc.',
+                serving: 'Small dogs: 1-2 pieces. Medium dogs: 5-10 pieces. Large dogs: Small handful. Occasional treat only. Ensure no unpopped kernels which can be choking hazards.'
+            },
+            'rice': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Plain, cooked white or brown rice is safe for dogs and often recommended for upset stomachs. It\'s easily digestible and can help with diarrhea.',
+                serving: 'Small dogs: 1-2 tablespoons. Medium dogs: 1/4 cup. Large dogs: 1/2 cup. Can be given regularly as part of a balanced diet. Always cook thoroughly without seasoning.'
+            },
+            'tomato': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Ripe tomato fruit is generally safe for dogs, but green parts (stems, leaves) contain solanine which is toxic. Avoid giving unripe tomatoes.',
+                serving: 'Small dogs: 1-2 small pieces. Medium dogs: 1/4 of a small tomato. Large dogs: 1/2 of a small tomato. Occasional treat only. Remove all stems and leaves.'
+            },
+            'nuts': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Most nuts are not recommended for dogs. Macadamia nuts are toxic, while others (almonds, walnuts, pecans) can cause pancreatitis due to high fat content or may pose choking hazards. Peanuts (technically legumes) are safer in moderation.',
+                serving: 'Not recommended. Macadamia nuts are highly toxic and should never be given. Other nuts are too high in fat and may cause stomach upset or pancreatitis. Keep all nuts away from your dog.'
+            },
+            'asparagus': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Asparagus is not toxic to dogs but has limited nutritional benefit when served. Raw asparagus is tough and difficult to digest, while cooking removes many nutrients. May cause mild gas or upset stomach in some dogs.',
+                serving: 'Small dogs: 1-2 small pieces. Medium dogs: 1/2 spear. Large dogs: 1 spear. Always cook thoroughly to soften and cut into small pieces to prevent choking. Offer occasionally as a treat.'
+            },
+            'sweet potato': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Sweet potatoes are highly nutritious for dogs when cooked properly. They contain vitamin A, B6, C, calcium, potassium, and are high in fiber. They support digestive health and are often used in commercial dog foods.',
+                serving: 'Small dogs: 1 tablespoon of cooked, mashed sweet potato. Medium dogs: 2 tablespoons. Large dogs: 1/4 cup. Always serve cooked (boiled, baked, or steamed) without added seasonings, butter, or sugar. Can be given a few times per week.'
+            },
+            'yogurt': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Plain, unsweetened yogurt is safe for most dogs and provides protein, calcium, and probiotics that can aid digestion. Some dogs may be lactose intolerant, so introduce slowly. Never give yogurt with artificial sweeteners, especially xylitol.',
+                serving: 'Small dogs: 1 teaspoon. Medium dogs: 1 tablespoon. Large dogs: 2 tablespoons. Use plain, unsweetened yogurt only. Can be given a few times per week as a treat or food topper.'
+            },
+            'blueberries': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Blueberries are a superfood for dogs, packed with antioxidants, fiber, and vitamins. They support immune system health and cognitive function, and are low in calories.',
+                serving: 'Small dogs: 3-5 berries. Medium dogs: 5-10 berries. Large dogs: 10-20 berries. Can be given daily in these amounts. Fresh or frozen (thawed) are both fine.'
+            },
+            'honey': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Honey is safe for dogs in very small quantities and contains vitamins and minerals. However, it\'s high in sugar and calories, so should be limited. Not recommended for diabetic dogs or puppies under one year old.',
+                serving: 'Small dogs: 1/4 teaspoon. Medium dogs: 1/2 teaspoon. Large dogs: 1 teaspoon. Offer only occasionally as a treat. Never give to diabetic dogs or puppies under one year old.'
+            },
+            'potato': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Plain, cooked potatoes (not green) are safe for dogs. They should always be cooked as raw potatoes contain solanine which is toxic. Avoid giving potato skins, and never feed fried potatoes or chips.',
+                serving: 'Small dogs: 1 tablespoon of plain, cooked potato. Medium dogs: 2 tablespoons. Large dogs: 1/4 cup. Always boil or bake without salt, butter, or seasonings. Occasional treat only.'
+            },
+            'corn': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Corn kernels are safe for dogs in moderation when cooked and removed from the cob. The cob is indigestible and can cause intestinal blockage if swallowed. Corn offers some protein, carbohydrates, and fiber.',
+                serving: 'Small dogs: 1 teaspoon of kernels. Medium dogs: 1 tablespoon. Large dogs: 2 tablespoons. Always remove from cob, serve plain without butter or salt. Occasional treat only.'
+            },
+            'celery': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Celery is safe and healthy for dogs. It\'s low in calories and contains vitamins A, C, and K, plus potassium and folate. It can help freshen breath and is a good crunchy treat.',
+                serving: 'Small dogs: 1-2 small sticks (1-2 inches). Medium dogs: 1 medium stick. Large dogs: 2 medium sticks. Cut into bite-sized pieces to prevent choking. Can be given daily as a healthy treat.'
+            },
+            'cucumber': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Cucumbers are very safe for dogs and make excellent low-calorie treats. They\'re especially good for overweight dogs, as they contain very few carbohydrates, fats, or oils, and have high water content.',
+                serving: 'Small dogs: 1-2 thin slices. Medium dogs: 3-4 slices. Large dogs: 5-6 slices or a few small spears. Can be given daily. Always cut into appropriate sizes to prevent choking.'
+            },
+            'pumpkin': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Plain, cooked pumpkin (not the sugary pie filling) is excellent for dogs. It\'s high in fiber and can help with both diarrhea and constipation. It\'s also rich in vitamins A, E, and C.',
+                serving: 'Small dogs: 1 teaspoon. Medium dogs: 1-2 tablespoons. Large dogs: 2-4 tablespoons. Use plain, canned pumpkin (not pie filling) or cook and mash fresh pumpkin. Can be given daily if needed for digestive issues.'
+            },
+            'coconut': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Coconut meat and oil are generally safe for dogs in small amounts. It contains lauric acid which can help with immune system function and skin conditions. However, it\'s high in fat, which can cause stomach upset or pancreatitis if given in large quantities.',
+                serving: 'Small dogs: 1/4 teaspoon of coconut oil or small piece of meat. Medium dogs: 1/2 teaspoon oil or 1 teaspoon meat. Large dogs: 1 teaspoon oil or 1 tablespoon meat. Occasional treat only. Introduce slowly to avoid digestive upset.'
+            },
+            'xylitol': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Xylitol is extremely toxic to dogs and can be fatal even in small amounts. It causes rapid insulin release, leading to hypoglycemia, seizures, liver failure, and death. It\'s found in sugar-free gum, candies, some peanut butters, baked goods, and oral care products.',
+                serving: 'No amount is safe. Keep all products containing xylitol away from your dog. If ingested, this is a medical emergency - contact your veterinarian immediately.'
+            }
+        };
+
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const food = document.getElementById('food-input').value.toLowerCase().trim();
+            checkFood(food);
+        });
+
+        document.getElementById('food-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const food = document.getElementById('food-input').value.toLowerCase().trim();
+                checkFood(food);
+            }
+        });
+
+        function checkFood(food) {
+            document.getElementById('food-input').value = food;
+            const resultContainer = document.getElementById('result');
+            const foodNameElement = document.getElementById('food-name');
+            const verdictElement = document.getElementById('verdict');
+            const explanationElement = document.getElementById('explanation');
+            const servingElement = document.getElementById('serving');
+            const resultHeader = document.getElementById('result-header');
+            const resultIcon = document.getElementById('result-icon');
+            
+            // Reset classes
+            resultHeader.classList.remove('safe', 'unsafe', 'moderation');
+            
+            if (foodDatabase[food]) {
+                const foodInfo = foodDatabase[food];
+                
+                foodNameElement.textContent = food.charAt(0).toUpperCase() + food.slice(1);
+                
+                if (foodInfo.safe) {
+                    if (foodInfo.needsModeration) {
+                        resultHeader.classList.add('moderation');
+                        verdictElement.textContent = '✓ Safe in Moderation';
+                        resultIcon.textContent = '⚠️';
+                    } else {
+                        resultHeader.classList.add('safe');
+                        verdictElement.textContent = '✓ Safe for Dogs';
+                        resultIcon.textContent = '✅';
+                    }
+                } else {
+                    resultHeader.classList.add('unsafe');
+                    verdictElement.textContent = '✗ Unsafe for Dogs';
+                    resultIcon.textContent = '❌';
+                }
+                
+                explanationElement.textContent = foodInfo.explanation;
+                servingElement.textContent = foodInfo.serving;
+                
+                resultContainer.style.display = 'block';
+                
+                // Scroll to result
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                foodNameElement.textContent = food.charAt(0).toUpperCase() + food.slice(1);
+                resultHeader.classList.add('moderation');
+                verdictElement.textContent = 'Information Not Found';
+                explanationElement.textContent = `We don't have information about "${food}" in our database yet. When in doubt, consult with your veterinarian before feeding new foods to your dog.`;
+                servingElement.textContent = 'Unknown. Please consult with your veterinarian.';
+                resultIcon.textContent = '❓';
+                
+                resultContainer.style.display = 'block';
+                
+                // Scroll to result
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>
