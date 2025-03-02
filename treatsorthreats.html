@@ -6,233 +6,380 @@
     <title>Can My Dog Eat This?</title>
     <style>
         :root {
-            --primary: #4a6fa5;
-            --secondary: #166088;
-            --danger: #c44536;
-            --success: #5b8c5a;
-            --warning: #e6b89c;
-            --light: #f5f5f5;
-            --dark: #333;
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --green-500: #22c55e;
+            --red-500: #ef4444;
+            --yellow-400: #facc15;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --white: #ffffff;
         }
         
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
         body {
-            background-color: #f9f9f9;
-            color: var(--dark);
-            line-height: 1.6;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 40rem;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0.75rem;
         }
         
-        header {
+        @media (min-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+        }
+        
+        .header {
             text-align: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: var(--blue-500);
+            color: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        @media (min-width: 640px) {
+            .header {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        @media (min-width: 640px) {
+            .title {
+                font-size: 1.875rem;
+                margin-bottom: 0.5rem;
+            }
         }
         
         .subtitle {
-            font-size: 1.2rem;
-            font-weight: normal;
+            font-size: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .subtitle {
+                font-size: 1.125rem;
+            }
         }
         
         .search-container {
             display: flex;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
             overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
-        #food-input {
+        @media (min-width: 768px) {
+            .search-container {
+                flex-direction: row;
+            }
+        }
+        
+        .search-input {
             flex-grow: 1;
-            padding: 15px;
-            font-size: 1.1rem;
+            padding: 0.75rem;
+            font-size: 1rem;
             border: none;
             outline: none;
         }
         
-        #search-btn {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: background-color 0.3s;
+        @media (min-width: 640px) {
+            .search-input {
+                padding: 1rem;
+                font-size: 1.125rem;
+            }
         }
         
-        #search-btn:hover {
-            background-color: var(--primary);
+        .search-button {
+            background-color: var(--blue-600);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .search-button {
+                width: auto;
+                padding: 1rem 1.5rem;
+            }
+        }
+        
+        .search-button:hover {
+            background-color: var(--blue-700);
         }
         
         .result-container {
             display: none;
-            background-color: white;
-            border-radius: 10px;
+            background-color: var(--white);
+            border-radius: 0.5rem;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
         }
         
         .result-header {
-            padding: 20px;
-            color: white;
+            padding: 1rem;
             text-align: center;
         }
         
+        @media (min-width: 640px) {
+            .result-header {
+                padding: 1.5rem;
+            }
+        }
+        
+        .result-icon {
+            font-size: 1.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        @media (min-width: 640px) {
+            .result-icon {
+                font-size: 2.25rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+        
+        .result-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        @media (min-width: 640px) {
+            .result-title {
+                font-size: 1.5rem;
+            }
+        }
+        
         .safe {
-            background-color: var(--success);
+            background-color: var(--green-500);
+            color: var(--white);
         }
         
         .unsafe {
-            background-color: var(--danger);
+            background-color: var(--red-500);
+            color: var(--white);
         }
         
         .moderation {
-            background-color: var(--warning);
-            color: var(--dark);
+            background-color: var(--yellow-400);
+            color: var(--gray-800);
         }
         
         .result-content {
-            padding: 20px;
+            padding: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .result-content {
+                padding: 1.5rem;
+            }
         }
         
         .verdict {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            font-weight: bold;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 640px) {
+            .verdict {
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+            }
         }
         
         .explanation {
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+        
+        @media (min-width: 640px) {
+            .explanation {
+                margin-bottom: 1rem;
+                font-size: 1rem;
+            }
         }
         
         .serving-info {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: var(--light);
-            border-radius: 5px;
+            background-color: var(--gray-100);
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+        }
+        
+        @media (min-width: 640px) {
+            .serving-info {
+                padding: 1rem;
+            }
         }
         
         .serving-title {
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        @media (min-width: 640px) {
+            .serving-title {
+                font-size: 1rem;
+            }
+        }
+        
+        .serving-text {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+        
+        @media (min-width: 640px) {
+            .serving-text {
+                font-size: 1rem;
+            }
         }
         
         .popular-searches {
             text-align: center;
-            margin-top: 30px;
+            margin-bottom: 1.5rem;
         }
         
-        .search-tags {
+        .popular-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        @media (min-width: 640px) {
+            .popular-title {
+                font-size: 1.25rem;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        .tags-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 0.25rem;
             justify-content: center;
-            margin-top: 15px;
+        }
+        
+        @media (min-width: 640px) {
+            .tags-container {
+                gap: 0.5rem;
+            }
         }
         
         .tag {
-            background-color: var(--light);
-            padding: 8px 15px;
-            border-radius: 20px;
+            background-color: var(--gray-200);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            touch-action: manipulation;
+        }
+        
+        @media (min-width: 640px) {
+            .tag {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+            }
         }
         
         .tag:hover {
-            background-color: var(--primary);
-            color: white;
+            background-color: var(--blue-500);
+            color: var(--white);
         }
         
-        footer {
+        .footer {
             text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: #777;
-            font-size: 0.9rem;
+            margin-top: 2rem;
+            color: var(--gray-500);
+            font-size: 0.75rem;
         }
         
-        .icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
+        @media (min-width: 640px) {
+            .footer {
+                margin-top: 3rem;
+                font-size: 0.875rem;
+            }
         }
         
-        @media (max-width: 600px) {
-            .search-container {
-                flex-direction: column;
-            }
-            
-            #search-btn {
-                padding: 10px;
-            }
+        .footer p {
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Can My Dog Eat This?</h1>
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">Can My Dog Eat This?</h1>
             <p class="subtitle">Check if foods are safe for your furry friend</p>
         </header>
         
+        <!-- Search Container -->
         <div class="search-container">
-            <input type="text" id="food-input" placeholder="Enter a food (e.g., chocolate, apple, cheese)">
-            <button id="search-btn">Check</button>
+            <input type="text" id="food-input" class="search-input" placeholder="Enter a food (e.g., apple, chocolate)">
+            <button id="search-button" class="search-button">Check</button>
         </div>
         
-        <div id="result" class="result-container">
-            <div class="result-header" id="result-header">
-                <div class="icon" id="result-icon"></div>
-                <h2 id="food-name">Food Name</h2>
+        <!-- Result Container -->
+        <div id="result-container" class="result-container">
+            <div id="result-header" class="result-header">
+                <div id="result-icon" class="result-icon"></div>
+                <h2 id="food-name" class="result-title">Food Name</h2>
             </div>
             <div class="result-content">
-                <p class="verdict" id="verdict"></p>
-                <p class="explanation" id="explanation"></p>
+                <p id="verdict" class="verdict"></p>
+                <p id="explanation" class="explanation"></p>
                 <div class="serving-info">
                     <p class="serving-title">Serving Recommendation:</p>
-                    <p id="serving"></p>
+                    <p id="serving" class="serving-text"></p>
                 </div>
             </div>
         </div>
         
+        <!-- Popular Searches -->
         <div class="popular-searches">
-            <h3>Popular Searches</h3>
-            <div class="search-tags">
-                <div class="tag" onclick="checkFood('apple')">Apple</div>
-                <div class="tag" onclick="checkFood('chocolate')">Chocolate</div>
-                <div class="tag" onclick="checkFood('nuts')">Nuts</div>
-                <div class="tag" onclick="checkFood('chicken')">Chicken</div>
-                <div class="tag" onclick="checkFood('grapes')">Grapes</div>
-                <div class="tag" onclick="checkFood('sweet potato')">Sweet Potato</div>
-                <div class="tag" onclick="checkFood('asparagus')">Asparagus</div>
-                <div class="tag" onclick="checkFood('peanut butter')">Peanut Butter</div>
-                <div class="tag" onclick="checkFood('yogurt')">Yogurt</div>
-                <div class="tag" onclick="checkFood('blueberries')">Blueberries</div>
+            <h3 class="popular-title">Popular Searches</h3>
+            <div id="tags-container" class="tags-container">
+                <!-- Popular searches will be added here by JavaScript -->
             </div>
         </div>
         
-        <footer>
+        <!-- Footer -->
+        <footer class="footer">
             <p>Always consult with your veterinarian before introducing new foods to your dog's diet.</p>
             <p>This tool is for informational purposes only and does not replace professional veterinary advice.</p>
         </footer>
@@ -241,6 +388,48 @@
     <script>
         // Food database
         const foodDatabase = {
+            'orange': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'The flesh of oranges is safe for dogs in small amounts. They contain vitamin C, potassium, and fiber. However, the peel, seeds, leaves, and stems contain oils that can cause irritation.',
+                serving: 'Small dogs: 1-2 small segments. Medium dogs: 2-3 segments. Large dogs: 4-5 segments. Remove all seeds, peel, and white pith. Occasional treat only due to high sugar content.'
+            },
+            'clementine': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Clementines are safe for dogs in small amounts, similar to oranges. They contain vitamin C and fiber but are high in sugar and citric acid which can cause stomach upset in some dogs.',
+                serving: 'Small dogs: 1 segment. Medium dogs: 1-2 segments. Large dogs: 2-3 segments. Remove all seeds and peel. Offer only occasionally as a treat due to high sugar content.'
+            },
+            'pork': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Plain, fully cooked pork is safe for dogs. It is a good source of protein but is relatively high in fat. Raw or undercooked pork carries risk of parasites and should never be given.',
+                serving: 'Small dogs: 1 tablespoon. Medium dogs: 2 tablespoons. Large dogs: 1/4 cup. Always thoroughly cook, remove all bones, fat, and seasonings. Occasional treat only.'
+            },
+            'beef': {
+                safe: true,
+                needsModeration: false,
+                explanation: 'Plain, cooked lean beef is safe and nutritious for dogs. It is an excellent source of protein, vitamins, and minerals including zinc, iron, and B vitamins.',
+                serving: 'Small dogs: 1 tablespoon of lean ground beef or small piece. Medium dogs: 2 tablespoons. Large dogs: 1/4 cup. Always cook thoroughly, drain fat, and avoid seasoning. Can be given regularly as part of a balanced diet.'
+            },
+            'peas': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Fresh or frozen peas are safe for dogs and contain vitamins A, B, and K, along with fiber and protein. However, some studies link peas to heart issues when used as a main ingredient in grain-free dog foods.',
+                serving: 'Small dogs: 1 teaspoon. Medium dogs: 1 tablespoon. Large dogs: 2 tablespoons. Fresh or frozen (thawed) are fine. Canned peas should be low or no sodium. Can be given a few times per week.'
+            },
+            'plastic': {
+                safe: false,
+                needsModeration: false,
+                explanation: 'Plastic is not a food and is dangerous for dogs to consume. It can cause choking, intestinal blockage, and potential toxicity depending on the type of plastic.',
+                serving: 'Keep all plastic items away from your dog. If you suspect your dog has swallowed plastic, contact your veterinarian immediately. Monitor for signs of distress, vomiting, or changes in bowel movements.'
+            },
+            'milk': {
+                safe: true,
+                needsModeration: true,
+                explanation: 'Many adult dogs are lactose intolerant as they produce less lactase enzyme after weaning. Small amounts of milk may be tolerated by some dogs, but others will experience digestive upset including gas, diarrhea, and vomiting.',
+                serving: 'Small dogs: 1-2 teaspoons if tolerated. Medium dogs: 1 tablespoon if tolerated. Large dogs: 2 tablespoons if tolerated. Introduce very gradually to test tolerance. Consider lactose-free alternatives or specially formulated dog milk.'
+            },
             'apple': {
                 safe: true,
                 needsModeration: true,
@@ -262,13 +451,13 @@
             'cheese': {
                 safe: true,
                 needsModeration: true,
-                explanation: 'Most cheeses are safe for dogs in small amounts. Cheese contains protein and calcium, but it\'s high in fat and some dogs may be lactose intolerant.',
+                explanation: 'Most cheeses are safe for dogs in small amounts. Cheese contains protein and calcium, but it is high in fat and some dogs may be lactose intolerant.',
                 serving: 'Small dogs: Pea-sized piece. Medium dogs: Thumb-sized piece. Large dogs: 1-2 tablespoons. Limit to occasional treats. Avoid blue cheese and high-fat varieties.'
             },
             'chicken': {
                 safe: true,
                 needsModeration: false,
-                explanation: 'Plain, cooked chicken without seasoning is safe and healthy for dogs. It\'s a good source of protein and is often used in commercial dog foods.',
+                explanation: 'Plain, cooked chicken without seasoning is safe and healthy for dogs. It is a good source of protein and is often used in commercial dog foods.',
                 serving: 'Small dogs: 1-2 tablespoons of cooked, boneless chicken. Medium dogs: 1/4 cup. Large dogs: 1/3 to 1/2 cup. Can be given daily as part of a balanced diet. Always remove bones and skin.'
             },
             'grapes': {
@@ -292,7 +481,7 @@
             'eggs': {
                 safe: true, 
                 needsModeration: false,
-                explanation: 'Cooked eggs are safe and nutritious for dogs. They\'re an excellent source of protein, fatty acids, vitamins, and minerals.',
+                explanation: 'Cooked eggs are safe and nutritious for dogs. They are an excellent source of protein, fatty acids, vitamins, and minerals.',
                 serving: 'Small dogs: 1/4 egg. Medium dogs: 1/2 egg. Large dogs: 1 whole egg. Can be given a few times per week. Always cook eggs thoroughly and don\'t add seasonings.'
             },
             'avocado': {
@@ -352,7 +541,7 @@
             'rice': {
                 safe: true,
                 needsModeration: false,
-                explanation: 'Plain, cooked white or brown rice is safe for dogs and often recommended for upset stomachs. It\'s easily digestible and can help with diarrhea.',
+                explanation: 'Plain, cooked white or brown rice is safe for dogs and often recommended for upset stomachs. It is easily digestible and can help with diarrhea.',
                 serving: 'Small dogs: 1-2 tablespoons. Medium dogs: 1/4 cup. Large dogs: 1/2 cup. Can be given regularly as part of a balanced diet. Always cook thoroughly without seasoning.'
             },
             'tomato': {
@@ -394,7 +583,7 @@
             'honey': {
                 safe: true,
                 needsModeration: true,
-                explanation: 'Honey is safe for dogs in very small quantities and contains vitamins and minerals. However, it\'s high in sugar and calories, so should be limited. Not recommended for diabetic dogs or puppies under one year old.',
+                explanation: 'Honey is safe for dogs in very small quantities and contains vitamins and minerals. However, it is high in sugar and calories, so should be limited. Not recommended for diabetic dogs or puppies under one year old.',
                 serving: 'Small dogs: 1/4 teaspoon. Medium dogs: 1/2 teaspoon. Large dogs: 1 teaspoon. Offer only occasionally as a treat. Never give to diabetic dogs or puppies under one year old.'
             },
             'potato': {
@@ -412,102 +601,120 @@
             'celery': {
                 safe: true,
                 needsModeration: false,
-                explanation: 'Celery is safe and healthy for dogs. It\'s low in calories and contains vitamins A, C, and K, plus potassium and folate. It can help freshen breath and is a good crunchy treat.',
+                explanation: 'Celery is safe and healthy for dogs. It is low in calories and contains vitamins A, C, and K, plus potassium and folate. It can help freshen breath and is a good crunchy treat.',
                 serving: 'Small dogs: 1-2 small sticks (1-2 inches). Medium dogs: 1 medium stick. Large dogs: 2 medium sticks. Cut into bite-sized pieces to prevent choking. Can be given daily as a healthy treat.'
             },
             'cucumber': {
                 safe: true,
                 needsModeration: false,
-                explanation: 'Cucumbers are very safe for dogs and make excellent low-calorie treats. They\'re especially good for overweight dogs, as they contain very few carbohydrates, fats, or oils, and have high water content.',
+                explanation: 'Cucumbers are very safe for dogs and make excellent low-calorie treats. They are especially good for overweight dogs, as they contain very few carbohydrates, fats, or oils, and have high water content.',
                 serving: 'Small dogs: 1-2 thin slices. Medium dogs: 3-4 slices. Large dogs: 5-6 slices or a few small spears. Can be given daily. Always cut into appropriate sizes to prevent choking.'
             },
             'pumpkin': {
                 safe: true,
                 needsModeration: false,
-                explanation: 'Plain, cooked pumpkin (not the sugary pie filling) is excellent for dogs. It\'s high in fiber and can help with both diarrhea and constipation. It\'s also rich in vitamins A, E, and C.',
+                explanation: 'Plain, cooked pumpkin (not the sugary pie filling) is excellent for dogs. It is high in fiber and can help with both diarrhea and constipation. It is also rich in vitamins A, E, and C.',
                 serving: 'Small dogs: 1 teaspoon. Medium dogs: 1-2 tablespoons. Large dogs: 2-4 tablespoons. Use plain, canned pumpkin (not pie filling) or cook and mash fresh pumpkin. Can be given daily if needed for digestive issues.'
             },
             'coconut': {
                 safe: true,
                 needsModeration: true,
-                explanation: 'Coconut meat and oil are generally safe for dogs in small amounts. It contains lauric acid which can help with immune system function and skin conditions. However, it\'s high in fat, which can cause stomach upset or pancreatitis if given in large quantities.',
+                explanation: 'Coconut meat and oil are generally safe for dogs in small amounts. It contains lauric acid which can help with immune system function and skin conditions. However, it is high in fat, which can cause stomach upset or pancreatitis if given in large quantities.',
                 serving: 'Small dogs: 1/4 teaspoon of coconut oil or small piece of meat. Medium dogs: 1/2 teaspoon oil or 1 teaspoon meat. Large dogs: 1 teaspoon oil or 1 tablespoon meat. Occasional treat only. Introduce slowly to avoid digestive upset.'
             },
             'xylitol': {
                 safe: false,
                 needsModeration: false,
-                explanation: 'Xylitol is extremely toxic to dogs and can be fatal even in small amounts. It causes rapid insulin release, leading to hypoglycemia, seizures, liver failure, and death. It\'s found in sugar-free gum, candies, some peanut butters, baked goods, and oral care products.',
+                explanation: 'Xylitol is extremely toxic to dogs and can be fatal even in small amounts. It causes rapid insulin release, leading to hypoglycemia, seizures, liver failure, and death. It is found in sugar-free gum, candies, some peanut butters, baked goods, and oral care products.',
                 serving: 'No amount is safe. Keep all products containing xylitol away from your dog. If ingested, this is a medical emergency - contact your veterinarian immediately.'
             }
         };
 
-        document.getElementById('search-btn').addEventListener('click', function() {
-            const food = document.getElementById('food-input').value.toLowerCase().trim();
-            checkFood(food);
-        });
+        // Popular foods to show as tags
+        const popularFoods = [
+            'apple', 'chocolate', 'nuts', 'chicken', 'grapes', 
+            'sweet potato', 'asparagus', 'peanut butter', 'yogurt', 'blueberries'
+        ];
 
-        document.getElementById('food-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const food = document.getElementById('food-input').value.toLowerCase().trim();
+        // DOM elements
+        const foodInput = document.getElementById('food-input');
+        const searchButton = document.getElementById('search-button');
+        const resultContainer = document.getElementById('result-container');
+        const resultHeader = document.getElementById('result-header');
+        const resultIcon = document.getElementById('result-icon');
+        const foodName = document.getElementById('food-name');
+        const verdict = document.getElementById('verdict');
+        const explanation = document.getElementById('explanation');
+        const serving = document.getElementById('serving');
+        const tagsContainer = document.getElementById('tags-container');
+
+        // Generate popular search tags
+        popularFoods.forEach(food => {
+            const tag = document.createElement('div');
+            tag.className = 'tag';
+            tag.textContent = food.charAt(0).toUpperCase() + food.slice(1);
+            tag.addEventListener('click', () => {
                 checkFood(food);
-            }
+            });
+            tagsContainer.appendChild(tag);
         });
 
+        // Check food function
         function checkFood(food) {
-            document.getElementById('food-input').value = food;
-            const resultContainer = document.getElementById('result');
-            const foodNameElement = document.getElementById('food-name');
-            const verdictElement = document.getElementById('verdict');
-            const explanationElement = document.getElementById('explanation');
-            const servingElement = document.getElementById('serving');
-            const resultHeader = document.getElementById('result-header');
-            const resultIcon = document.getElementById('result-icon');
+            const foodTerm = food.toLowerCase().trim();
+            foodInput.value = foodTerm;
             
-            // Reset classes
+            // Reset result header classes
             resultHeader.classList.remove('safe', 'unsafe', 'moderation');
             
-            if (foodDatabase[food]) {
-                const foodInfo = foodDatabase[food];
+            if (foodDatabase[foodTerm]) {
+                const foodInfo = foodDatabase[foodTerm];
                 
-                foodNameElement.textContent = food.charAt(0).toUpperCase() + food.slice(1);
+                foodName.textContent = foodTerm.charAt(0).toUpperCase() + foodTerm.slice(1);
                 
                 if (foodInfo.safe) {
                     if (foodInfo.needsModeration) {
                         resultHeader.classList.add('moderation');
-                        verdictElement.textContent = '✓ Safe in Moderation';
+                        verdict.textContent = '✓ Safe in Moderation';
                         resultIcon.textContent = '⚠️';
                     } else {
                         resultHeader.classList.add('safe');
-                        verdictElement.textContent = '✓ Safe for Dogs';
+                        verdict.textContent = '✓ Safe for Dogs';
                         resultIcon.textContent = '✅';
                     }
                 } else {
                     resultHeader.classList.add('unsafe');
-                    verdictElement.textContent = '✗ Unsafe for Dogs';
+                    verdict.textContent = '✗ Unsafe for Dogs';
                     resultIcon.textContent = '❌';
                 }
                 
-                explanationElement.textContent = foodInfo.explanation;
-                servingElement.textContent = foodInfo.serving;
-                
-                resultContainer.style.display = 'block';
-                
-                // Scroll to result
-                resultContainer.scrollIntoView({ behavior: 'smooth' });
+                explanation.textContent = foodInfo.explanation;
+                serving.textContent = foodInfo.serving;
             } else {
-                foodNameElement.textContent = food.charAt(0).toUpperCase() + food.slice(1);
+                foodName.textContent = foodTerm.charAt(0).toUpperCase() + foodTerm.slice(1);
                 resultHeader.classList.add('moderation');
-                verdictElement.textContent = 'Information Not Found';
-                explanationElement.textContent = `We don't have information about "${food}" in our database yet. When in doubt, consult with your veterinarian before feeding new foods to your dog.`;
-                servingElement.textContent = 'Unknown. Please consult with your veterinarian.';
+                verdict.textContent = 'Information Not Found';
+                explanation.textContent = "We don't have information about \"" + foodTerm + "\" in our database yet. When in doubt, consult with your veterinarian before feeding new foods to your dog.";
+                serving.textContent = 'Unknown. Please consult with your veterinarian.';
                 resultIcon.textContent = '❓';
-                
-                resultContainer.style.display = 'block';
-                
-                // Scroll to result
-                resultContainer.scrollIntoView({ behavior: 'smooth' });
             }
+            
+            resultContainer.style.display = 'block';
+            
+            // Scroll to result
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
         }
+
+        // Event listeners
+        searchButton.addEventListener('click', () => {
+            checkFood(foodInput.value);
+        });
+
+        foodInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkFood(foodInput.value);
+            }
+        });
     </script>
 </body>
 </html>
