@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dog Name Generator</title>
+  <style>
+    :root {
+      --accent-color: #3B82F6;
+      --accent-hover: #2563EB;
+      --bg-color: #EFF6FF;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #ffffff, var(--bg-color));
+      padding: 2rem 1rem;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    header h1 {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    
+    header h1 span.highlight {
+      color: var(--accent-color);
+      font-weight: 800;
+    }
+    
+    header .divider {
+      width: 4rem;
+      height: 0.25rem;
+      margin: 0.5rem auto;
+      border-radius: 999px;
+      background: linear-gradient(to right, #e5e7eb, #9ca3af);
+    }
+    
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1.25rem;
+      color: #4b5563;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border: 1px solid #f3f4f6;
+      transition: all 0.3s ease;
+    }
+    
+    .card-header {
+      background-color: var(--bg-color);
+      padding: 1.5rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .card-header h2 {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+    }
+    
+    .card-header h2 span {
+      margin-right: 0.5rem;
+    }
+    
+    .card-header p {
+      margin-top: 0.5rem;
+      color: #4b5563;
+    }
+    
+    .card-body {
+      padding: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .select-container {
+      position: relative;
+    }
+    
+    .select-container select {
+      width: 100%;
+      padding: 1rem;
+      padding-right: 2.5rem;
+      font-size: 1.125rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      appearance: none;
+      background-color: white;
+      outline: none;
+    }
+    
+    .select-container select:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+      border-color: var(--accent-color);
+    }
+    
+    .select-container .icon {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #4b5563;
+    }
+    
+    .breed-info {
+      background-color: var(--bg-color);
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      border: 1px solid #e5e7eb;
+      margin-top: 1rem;
+    }
+    
+    .breed-info-header {
+      display: flex;
+      align-items: center;
+    }
+    
+    .breed-badge {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--accent-color);
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      border-radius: 9999px;
+      margin-right: 0.75rem;
+    }
+    
+    .breed-info h3 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #111827;
+    }
+    
+    .breed-info p {
+      margin-top: 0.25rem;
+      color: #4b5563;
+    }
+    
+    .gender-selector {
+      background-color: #f9fafb;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .gender-selector label {
+      display: block;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+    
+    .gender-selector .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .gender-btn {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid #e5e7eb;
+      background-color: white;
+      color: #4b5563;
+    }
+    
+    .gender-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+    }
+    
+    .gender-btn:hover:not(.active) {
+      background-color: #f3f4f6;
+    }
+    
+    .generate-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      background-color: var(--accent-color);
+      color: white;
+      font-weight: 700;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    .generate-btn:hover {
+      background-color: var(--accent-hover);
+      transform: scale(1.02);
+    }
+    
+    .generate-btn svg {
+      margin-right: 0.5rem;
+    }
+    
+    .generate-btn.loading svg {
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .results {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .results-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .results-header h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+    }
+    
+    .results-header .line {
+      flex-grow: 1;
+      height: 1px;
+      background-color: #e5e7eb;
+      margin-left: 0.75rem;
+    }
+    
+    .name-list {
+      list-style: none;
+    }
+    
+    .name-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.2s ease;
+    }
+    
+    .name-item:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .name-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      background-color: var(--accent-color);
+      color: white;
+      font-weight: 700;
+      border-radius: 9999px;
+      margin-right: 0.75rem;
+    }
+    
+    .name-item span {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+    
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    
+    footer div {
+      display: inline-flex;
+      align-items: center;
+      color: #6b7280;
+    }
+    
+    footer span {
+      margin: 0 0.5rem;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    @media (max-width: 640px) {
+      .container {
+        width: 100%;
+      }
+      
+      .card-header, .card-body {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span class="highlight">Woof</span> Name Generator</h1>
+      <div class="divider"></div>
+      <p>Find the perfect name for your furry friend</p>
+    </header>
+    
+    <div class="card">
+      <div class="card-header" id="card-header">
+        <h2><span>🐾</span> Choose Your Dog Breed</h2>
+        <p>Select a breed to get tailored name suggestions</p>
+      </div>
+      
+      <div class="card-body">
+        <div class="form-group">
+          <div class="select-container">
+            <select id="breed-select">
+              <!-- Breed options will be populated by JavaScript -->
+            </select>
+            <div class="icon">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <div class="breed-info" id="breed-info">
+            <div class="breed-info-header">
+              <div class="breed-badge" id="breed-badge">L</div>
+              <div>
+                <h3 id="breed-name">Labrador Retriever</h3>
+                <p id="breed-description">America's most popular dog breed for good reason.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gender-selector">
+          <label>Select Gender</label>
+          <div class="buttons">
+            <button class="gender-btn active" id="male-btn">Male</button>
+            <button class="gender-btn" id="female-btn">Female</button>
+          </div>
+        </div>
+        
+        <button class="generate-btn" id="generate-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+          </svg>
+          Generate Perfect Names
+        </button>
+        
+        <div class="results hidden" id="results">
+          <div class="results-header">
+            <h3 id="results-title">Perfect Names for Your Dog</h3>
+            <div class="line"></div>
+          </div>
+          
+          <ul class="name-list" id="name-list">
+            <!-- Name items will be populated by JavaScript -->
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <div>
+        <span>🐶</span>
+        <span>•</span>
+        <span>Find the perfect companion for your perfect companion</span>
+        <span>•</span>
+        <span>🐾</span>
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Dog breeds data with male and female names
+    const dogBreeds = {
+      'labrador-retriever': {
+        name: 'Labrador Retriever',
+        description: 'Friendly, outgoing, and high-spirited companions.',
+        names: {
+          male: ['Buddy', 'Charlie', 'Cooper', 'Max', 'Bailey', 'Rocky', 'Duke', 'Bear', 'Tucker', 'Jack', 'Bentley', 'Leo', 'Ranger', 'Finn', 'Gus'],
+          female: ['Luna', 'Bella', 'Daisy', 'Lucy', 'Sadie', 'Molly', 'Roxy', 'Maggie', 'Bailey', 'Zoe', 'Stella', 'Lola', 'Lily', 'Ruby', 'Sophie']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#F59E0B'
+      },
+      'french-bulldog': {
+        name: 'French Bulldog',
+        description: 'Playful, smart, adaptable, and completely irresistible.',
+        names: {
+          male: ['Louis', 'Bruno', 'Winston', 'Louie', 'Frank', 'Milo', 'Otis', 'Theo', 'Walter', 'Marcel', 'Finn', 'Gus', 'Hugo', 'Henri', 'Pierre'],
+          female: ['Coco', 'Lola', 'Stella', 'Penny', 'Sophie', 'Bella', 'Rosie', 'Olive', 'Willow', 'Millie', 'Lulu', 'Margot', 'Chanel', 'Fifi', 'Gigi']
+        },
+        bgColor: '#E0E7FF',
+        accentColor: '#6366F1'
+      },
+      'golden-retriever': {
+        name: 'Golden Retriever',
+        description: 'Friendly, intelligent, and devoted family companions.',
+        names: {
+          male: ['Cooper', 'Tucker', 'Murphy', 'Max', 'Riley', 'Charlie', 'Duke', 'Winston', 'Bear', 'Oliver', 'Scout', 'Buddy', 'Bailey', 'Rusty', 'Thor'],
+          female: ['Sunny', 'Honey', 'Goldie', 'Daisy', 'Lucy', 'Sadie', 'Molly', 'Bella', 'Willow', 'Luna', 'Nala', 'Piper', 'Maggie', 'Lily', 'Sophie']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'german-shepherd': {
+        name: 'German Shepherd',
+        description: 'Intelligent, loyal, and highly trainable working dogs.',
+        names: {
+          male: ['Kaiser', 'Rex', 'Thor', 'Blitz', 'Bruno', 'Axel', 'Baron', 'Wolfgang', 'Diesel', 'Max', 'Otto', 'Hans', 'Ajax', 'Gunther', 'Maverick'],
+          female: ['Zara', 'Luna', 'Heidi', 'Sasha', 'Freya', 'Athena', 'Cora', 'Nala', 'Bella', 'Eva', 'Laika', 'Nova', 'Greta', 'Raven', 'Maya']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#92400E'
+      },
+      'poodle': {
+        name: 'Poodle',
+        description: 'Elegant, intelligent, and active companions.',
+        names: {
+          male: ['Pierre', 'Louis', 'Pascal', 'Claude', 'Andre', 'Henri', 'Jacques', 'Sebastien', 'Hugo', 'Marcel', 'Remy', 'Olivier', 'Francois', 'Michel', 'Antoine'],
+          female: ['Coco', 'Bijou', 'Fifi', 'Gigi', 'Paris', 'Chanel', 'Monique', 'Belle', 'Margot', 'Simone', 'Charlotte', 'Eloise', 'Sophie', 'Colette', 'Vivienne']
+        },
+        bgColor: '#F3E8FF',
+        accentColor: '#A855F7'
+      },
+      'bulldog': {
+        name: 'Bulldog',
+        description: 'Gentle, courageous dogs with a distinctive pushed-in nose.',
+        names: {
+          male: ['Winston', 'Tank', 'Bentley', 'Brutus', 'Dozer', 'Otis', 'Mack', 'Diesel', 'Chunk', 'Ozzy', 'Buster', 'Spike', 'Duke', 'Bowser', 'Thurston'],
+          female: ['Lola', 'Ruby', 'Rosie', 'Penelope', 'Betty', 'Bella', 'Daisy', 'Molly', 'Maggie', 'Sadie', 'Penny', 'Luna', 'Stella', 'Lucy', 'Roxy']
+        },
+        bgColor: '#FEE2E2',
+        accentColor: '#EF4444'
+      },
+      'beagle': {
+        name: 'Beagle',
+        description: 'Curious, friendly scent hounds with expressive eyes.',
+        names: {
+          male: ['Snoopy', 'Cooper', 'Scout', 'Charlie', 'Hunter', 'Archie', 'Copper', 'Buddy', 'Tracker', 'Oliver', 'Rusty', 'Toby', 'Barney', 'Louie', 'Max'],
+          female: ['Lucy', 'Daisy', 'Bailey', 'Sadie', 'Lily', 'Molly', 'Bella', 'Sophie', 'Luna', 'Lulu', 'Penny', 'Maggie', 'Ellie', 'Piper', 'Ruby']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'rottweiler': {
+        name: 'Rottweiler',
+        description: 'Loyal, loving, confident guardian dogs with a stoic demeanor.',
+        names: {
+          male: ['Brutus', 'Zeus', 'Thor', 'Diesel', 'Tank', 'Duke', 'Bear', 'Rocky', 'Rex', 'Bruno', 'Jax', 'Gunner', 'Titan', 'Axel', 'King'],
+          female: ['Luna', 'Nala', 'Bella', 'Nova', 'Roxy', 'Athena', 'Zara', 'Freya', 'Maya', 'Ruby', 'Layla', 'Storm', 'Kira', 'Sasha', 'Cleo']
+        },
+        bgColor: '#EEEEEE',
+        accentColor: '#333333'
+      },
+      'dachshund': {
+        name: 'Dachshund',
+        description: 'Clever, spunky dogs with distinctive long bodies.',
+        names: {
+          male: ['Oscar', 'Fritz', 'Pretzel', 'Schnitzel', 'Hans', 'Waldi', 'Franz', 'Otto', 'Hansel', 'Bruno', 'Ludwig', 'Klaus', 'Dieter', 'Felix', 'Max'],
+          female: ['Heidi', 'Penny', 'Gretel', 'Liesel', 'Greta', 'Lina', 'Ava', 'Elsa', 'Mia', 'Zelda', 'Nina', 'Trudy', 'Sasha', 'Fritzi', 'Bella']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#92400E'
+      },
+      'pembroke-welsh-corgi': {
+        name: 'Pembroke Welsh Corgi',
+        description: 'Short-legged herding dogs with big personalities and fox-like appearance.',
+        names: {
+          male: ['Waffles', 'Tater', 'Ein', 'Winston', 'Cheddar', 'Nugget', 'Milo', 'Biscuit', 'Widget', 'Oliver', 'Butters', 'Dobby', 'Porkchop', 'Gimli', 'Radar'],
+          female: ['Pancake', 'Penny', 'Pumpkin', 'Mochi', 'Biscuit', 'Lucy', 'Daisy', 'Honey', 'Cookie', 'Willow', 'Maple', 'Poppy', 'Lulu', 'Gracie', 'Rosie']
+        },
+        bgColor: '#FFEDD5',
+        accentColor: '#F97316'
+      },
+      'australian-shepherd': {
+        name: 'Australian Shepherd',
+        description: 'Athletic, intelligent herding dogs with striking multi-colored coats.',
+        names: {
+          male: ['Ranger', 'Bandit', 'Outback', 'Ozzy', 'Canyon', 'River', 'Denver', 'Phoenix', 'Montana', 'Ryder', 'Remi', 'Ziggy', 'Tucker', 'Cooper', 'Cody'],
+          female: ['Sydney', 'Willow', 'Dakota', 'Aspen', 'Indie', 'Sierra', 'Skye', 'Juniper', 'Luna', 'Piper', 'Nova', 'Ruby', 'Riley', 'Ember', 'Harley']
+        },
+        bgColor: '#EEF2FF',
+        accentColor: '#6366F1'
+      },
+      'yorkshire-terrier': {
+        name: 'Yorkshire Terrier',
+        description: 'Small, feisty terriers with silky coats and big personalities.',
+        names: {
+          male: ['Teddy', 'Bentley', 'Charlie', 'Oscar', 'Gizmo', 'Max', 'Rocky', 'Milo', 'Winston', 'Cooper', 'Bruno', 'Oliver', 'Leo', 'Duke', 'Baxter'],
+          female: ['Bella', 'Sophie', 'Chloe', 'Lola', 'Zoe', 'Coco', 'Daisy', 'Lucy', 'Lily', 'Molly', 'Penny', 'Ruby', 'Maggie', 'Ellie', 'Rosie']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'boxer': {
+        name: 'Boxer',
+        description: 'Fun-loving, bright, active, and loyal companions.',
+        names: {
+          male: ['Rocky', 'Bruno', 'Duke', 'Zeus', 'Tyson', 'Diesel', 'Apollo', 'Max', 'Brutus', 'Rex', 'Tank', 'Bo', 'Cooper', 'Milo', 'Marley'],
+          female: ['Roxy', 'Luna', 'Stella', 'Bella', 'Daisy', 'Layla', 'Maya', 'Nala', 'Ruby', 'Penny', 'Willow', 'Lola', 'Sophie', 'Zoe', 'Piper']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'great-dane': {
+        name: 'Great Dane',
+        description: 'Gentle giants known for their height and friendly demeanor.',
+        names: {
+          male: ['Atlas', 'Thor', 'Apollo', 'Titan', 'Zeus', 'Magnus', 'Duke', 'Odin', 'Goliath', 'Maximus', 'Brutus', 'Mars', 'Maverick', 'Hercules', 'Bruno'],
+          female: ['Athena', 'Nova', 'Freya', 'Luna', 'Juno', 'Olympia', 'Persephone', 'Artemis', 'Diana', 'Cleo', 'Hera', 'Gaia', 'Xena', 'Minerva', 'Pandora']
+        },
+        bgColor: '#F3F4F6',
+        accentColor: '#4B5563'
+      },
+      'siberian-husky': {
+        name: 'Siberian Husky',
+        description: 'Energetic, mischievous sled dogs with striking blue eyes.',
+        names: {
+          male: ['Frost', 'Timber', 'Ghost', 'Storm', 'Nanook', 'Balto', 'Glacier', 'Yukon', 'Blizzard', 'Sitka', 'Koda', 'Wolf', 'Diesel', 'Echo', 'Keno'],
+          female: ['Alaska', 'Luna', 'Nova', 'Denali', 'Skye', 'Mishka', 'Aurora', 'Sierra', 'Nala', 'Nikita', 'Sasha', 'Juneau', 'Aspen', 'Laika', 'Shila']
+        },
+        bgColor: '#F3F4F6',
+        accentColor: '#6B7280'
+      },
+      'cavalier-king-charles-spaniel': {
+        name: 'Cavalier King Charles Spaniel',
+        description: 'Gentle, affectionate companions with beautiful coats.',
+        names: {
+          male: ['Charlie', 'Oliver', 'Bentley', 'Winston', 'Archie', 'Leo', 'Henry', 'Teddy', 'Oscar', 'Milo', 'Cooper', 'Duke', 'George', 'Jasper', 'Chester'],
+          female: ['Lady', 'Charlotte', 'Daisy', 'Lucy', 'Lily', 'Sophie', 'Ruby', 'Molly', 'Bella', 'Lola', 'Rosie', 'Penny', 'Maggie', 'Chloe', 'Sadie']
+        },
+        bgColor: '#FEE2E2',
+        accentColor: '#EF4444'
+      },
+      'doberman-pinscher': {
+        name: 'Doberman Pinscher',
+        description: 'Intelligent, alert, and loyal protective companions.',
+        names: {
+          male: ['Zeus', 'Duke', 'Titan', 'Axel', 'Thor', 'Diesel', 'Rex', 'Kane', 'Bruno', 'Jax', 'Maverick', 'Apollo', 'Gunner', 'Ranger', 'Hunter'],
+          female: ['Luna', 'Athena', 'Nova', 'Roxy', 'Bella', 'Kira', 'Nala', 'Zara', 'Maya', 'Ruby', 'Storm', 'Freya', 'Sasha', 'Layla', 'Willow']
+        },
+        bgColor: '#FECACA',
+        accentColor: '#B91C1C'
+      },
+      'miniature-schnauzer': {
+        name: 'Miniature Schnauzer',
+        description: 'Alert, spirited, friendly dogs with distinctive beards.',
+        names: {
+          male: ['Fritz', 'Oscar', 'Otto', 'Max', 'Walter', 'Gus', 'Winston', 'Charlie', 'Henry', 'Rudy', 'Hans', 'Oliver', 'Dexter', 'Toby', 'Leo'],
+          female: ['Pepper', 'Gretchen', 'Heidi', 'Lola', 'Chloe', 'Maggie', 'Sophie', 'Zoe', 'Lucy', 'Bella', 'Ruby', 'Daisy', 'Molly', 'Lily', 'Sadie']
+        },
+        bgColor: '#F3F4F6',
+        accentColor: '#6B7280'
+      },
+      'shih-tzu': {
+        name: 'Shih Tzu',
+        description: 'Affectionate lapdogs bred for royalty with flowing coats.',
+        names: {
+          male: ['Gizmo', 'Bowie', 'Ming', 'Chewy', 'Yoshi', 'Oreo', 'Teddy', 'Panda', 'Miko', 'Boba', 'Lucky', 'Leo', 'Sushi', 'Louie', 'Oliver'],
+          female: ['Mochi', 'Lulu', 'Zoe', 'Pebbles', 'Chai', 'Coco', 'Kiwi', 'Ginger', 'Muffin', 'Bella', 'Penny', 'Lola', 'Minnie', 'Daisy', 'Trixie']
+        },
+        bgColor: '#FFF7ED',
+        accentColor: '#EA580C'
+      },
+      'boston-terrier': {
+        name: 'Boston Terrier',
+        description: 'Friendly, bright, amusing companions with tuxedo-like markings.',
+        names: {
+          male: ['Buster', 'Otis', 'Walter', 'Gus', 'Milo', 'Finn', 'Winston', 'Bruno', 'Oscar', 'Charlie', 'Cooper', 'Duke', 'Tucker', 'Louie', 'Henry'],
+          female: ['Bella', 'Lola', 'Stella', 'Lucy', 'Daisy', 'Rosie', 'Penny', 'Olive', 'Sophie', 'Sadie', 'Molly', 'Ruby', 'Lily', 'Zoe', 'Chloe']
+        },
+        bgColor: '#F3F4F6',
+        accentColor: '#1F2937'
+      },
+      'bernese-mountain-dog': {
+        name: 'Bernese Mountain Dog',
+        description: 'Good-natured, calm, and strong working dogs from Switzerland.',
+        names: {
+          male: ['Bruno', 'Bear', 'Bauer', 'Aspen', 'Atlas', 'Thor', 'Duke', 'Max', 'Alpine', 'Otto', 'Rocky', 'Moose', 'Goliath', 'Finn', 'Chief'],
+          female: ['Luna', 'Heidi', 'Willow', 'Nala', 'Bella', 'Daisy', 'Ruby', 'Sophie', 'Ellie', 'Sasha', 'Maya', 'Nova', 'Aspen', 'Stella', 'Chloe']
+        },
+        bgColor: '#FECACA',
+        accentColor: '#B91C1C'
+      },
+      'pomeranian': {
+        name: 'Pomeranian',
+        description: 'Lively, bold companion dogs with fox-like expressions.',
+        names: {
+          male: ['Teddy', 'Milo', 'Gizmo', 'Puff', 'Simba', 'Leo', 'Cooper', 'Finn', 'Charlie', 'Benji', 'Loki', 'Max', 'Ollie', 'Oscar', 'Rocky'],
+          female: ['Bella', 'Daisy', 'Coco', 'Lola', 'Lily', 'Rosie', 'Molly', 'Penny', 'Chloe', 'Luna', 'Ginger', 'Zoe', 'Ruby', 'Sophie', 'Piper']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#F59E0B'
+      },
+      'havanese': {
+        name: 'Havanese',
+        description: 'Playful, intelligent, and outgoing companions with silky coats.',
+        names: {
+          male: ['Milo', 'Charlie', 'Buddy', 'Leo', 'Teddy', 'Bentley', 'Winston', 'Cooper', 'Oliver', 'Oscar', 'Finn', 'Tucker', 'Henry', 'Max', 'Toby'],
+          female: ['Luna', 'Bella', 'Sophie', 'Chloe', 'Daisy', 'Lucy', 'Lily', 'Lola', 'Zoey', 'Sadie', 'Ruby', 'Penny', 'Maggie', 'Stella', 'Rosie']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'cane-corso': {
+        name: 'Cane Corso',
+        description: 'Powerful, loyal guardians with a noble appearance.',
+        names: {
+          male: ['Titan', 'Zeus', 'Brutus', 'Caesar', 'Apollo', 'Atlas', 'Thor', 'Diesel', 'Bruno', 'Nero', 'Rex', 'Duke', 'Maverick', 'Bear', 'Kane'],
+          female: ['Luna', 'Athena', 'Nova', 'Roma', 'Bella', 'Nala', 'Freya', 'Maya', 'Kira', 'Ruby', 'Roxy', 'Cleo', 'Xena', 'Willow', 'Layla']
+        },
+        bgColor: '#E7E5E4',
+        accentColor: '#44403C'
+      },
+      'english-springer-spaniel': {
+        name: 'English Springer Spaniel',
+        description: 'Friendly, eager-to-please hunting companions with boundless energy.',
+        names: {
+          male: ['Hunter', 'Scout', 'Ranger', 'Cooper', 'Duke', 'Charlie', 'Max', 'Tucker', 'Bentley', 'Jasper', 'Finn', 'Oliver', 'Jack', 'Henry', 'Winston'],
+          female: ['Lily', 'Daisy', 'Willow', 'Bella', 'Sophie', 'Molly', 'Lucy', 'Ruby', 'Sadie', 'Maggie', 'Luna', 'Lady', 'Penny', 'Lola', 'Ellie']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'shetland-sheepdog': {
+        name: 'Shetland Sheepdog',
+        description: 'Intelligent, playful herding dogs with beautiful coat.',
+        names: {
+          male: ['Scout', 'Rocket', 'Flynn', 'Shadow', 'Charlie', 'Max', 'Cooper', 'Duke', 'Tucker', 'Finn', 'Jasper', 'Theo', 'Oliver', 'Jack', 'Leo'],
+          female: ['Sheltie', 'Lassie', 'Daisy', 'Skyler', 'Bella', 'Luna', 'Sophie', 'Lily', 'Sadie', 'Molly', 'Lucy', 'Willow', 'Maggie', 'Piper', 'Ruby']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'brittany': {
+        name: 'Brittany',
+        description: 'Energetic, friendly hunting companions that make great family pets.',
+        names: {
+          male: ['Hunter', 'Ranger', 'Scout', 'Cooper', 'Duke', 'Tucker', 'Bandit', 'Finn', 'Jack', 'Max', 'Charlie', 'Rusty', 'Jasper', 'Toby', 'Brady'],
+          female: ['Belle', 'Daisy', 'Maggie', 'Sadie', 'Lucy', 'Ruby', 'Sophie', 'Lily', 'Luna', 'Molly', 'Bella', 'Birdie', 'Piper', 'Zoe', 'Scout']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'border-collie': {
+        name: 'Border Collie',
+        description: 'Incredibly smart, energetic herding dogs known for their focus and agility.',
+        names: {
+          male: ['Dash', 'Ace', 'Flint', 'Zip', 'Finn', 'Jett', 'Echo', 'Blue', 'Riley', 'Flash', 'Scout', 'Swift', 'Shadow', 'Jet', 'Merlin'],
+          female: ['Sky', 'Tess', 'Piper', 'Meg', 'Pixel', 'Fly', 'Willow', 'Luna', 'Nala', 'Star', 'Dot', 'Nellie', 'Jade', 'Nova', 'Shep']
+        },
+        bgColor: '#F3F4F6',
+        accentColor: '#1F2937'
+      },
+      'cocker-spaniel': {
+        name: 'Cocker Spaniel',
+        description: 'Gentle, smart, happy companions with beautiful flowing coats.',
+        names: {
+          male: ['Charlie', 'Cooper', 'Max', 'Buddy', 'Oscar', 'Duke', 'Oliver', 'Tucker', 'Jack', 'Henry', 'Leo', 'Bentley', 'Toby', 'Winston', 'Milo'],
+          female: ['Lady', 'Bella', 'Molly', 'Sophie', 'Lucy', 'Daisy', 'Lily', 'Sadie', 'Ruby', 'Maggie', 'Lola', 'Penny', 'Chloe', 'Rosie', 'Willow']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'vizsla': {
+        name: 'Vizsla',
+        description: 'Gentle-mannered, loyal, energetic hunting dogs with a distinctive rust color.',
+        names: {
+          male: ['Rusty', 'Hunter', 'Copper', 'Finn', 'Cooper', 'Scout', 'Tucker', 'Duke', 'Leo', 'Max', 'Charlie', 'Jasper', 'Rex', 'Cash', 'Ranger'],
+          female: ['Ruby', 'Amber', 'Sienna', 'Ginger', 'Penny', 'Luna', 'Autumn', 'Willow', 'Sage', 'Tawny', 'Sadie', 'Maggie', 'Bella', 'Daisy', 'Piper']
+        },
+        bgColor: '#FFEDD5',
+        accentColor: '#C2410C'
+      },
+      'pug': {
+        name: 'Pug',
+        description: 'Charming, mischievous companions with distinctive wrinkled faces.',
+        names: {
+          male: ['Frank', 'Otis', 'Gus', 'Winston', 'Percy', 'Bruno', 'Walter', 'Charlie', 'Milo', 'Louie', 'Ollie', 'Henry', 'Oscar', 'Leo', 'Max'],
+          female: ['Lola', 'Bella', 'Ruby', 'Lucy', 'Stella', 'Daisy', 'Penny', 'Olive', 'Willow', 'Sophie', 'Chloe', 'Molly', 'Lily', 'Millie', 'Zoe']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'basset-hound': {
+        name: 'Basset Hound',
+        description: 'Patient, low-key dogs with long ears and excellent scenting ability.',
+        names: {
+          male: ['Fred', 'Barney', 'Winston', 'Otis', 'Duke', 'Bruno', 'Walter', 'Henry', 'Charlie', 'Cooper', 'Hank', 'Oscar', 'George', 'Louie', 'Felix'],
+          female: ['Daisy', 'Lulu', 'Bella', 'Lucy', 'Sadie', 'Molly', 'Sophie', 'Lady', 'Ruby', 'Rosie', 'Penny', 'Maggie', 'Ellie', 'Willow', 'Lola']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'mastiff': {
+        name: 'Mastiff',
+        description: 'Massive, powerful, but gentle and loyal family companions.',
+        names: {
+          male: ['Titan', 'Thor', 'Brutus', 'Zeus', 'Tank', 'Goliath', 'Duke', 'Bear', 'Atlas', 'Maximus', 'Bruno', 'Diesel', 'Dozer', 'Kong', 'Rex'],
+          female: ['Luna', 'Athena', 'Nala', 'Maya', 'Bella', 'Nova', 'Freya', 'Cleo', 'Willow', 'Ruby', 'Xena', 'Stella', 'Layla', 'Kira', 'Gaia']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'belgian-malinois': {
+        name: 'Belgian Malinois',
+        description: 'Intelligent, confident, hardworking herding dogs with tremendous energy.',
+        names: {
+          male: ['Rex', 'Axel', 'Jax', 'Ranger', 'Gunner', 'Zeus', 'Diesel', 'Thor', 'Bruno', 'Hunter', 'Maverick', 'Duke', 'Kane', 'Odin', 'Blitz'],
+          female: ['Luna', 'Nova', 'Athena', 'Maya', 'Kira', 'Freya', 'Nala', 'Zara', 'Layla', 'Sasha', 'Storm', 'Roxy', 'Willow', 'Jade', 'Ruby']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'chihuahua': {
+        name: 'Chihuahua',
+        description: 'Tiny, sassy dogs with big personalities and loyalty.',
+        names: {
+          male: ['Chico', 'Peanut', 'Taco', 'Tiny', 'Pepito', 'Nacho', 'Rico', 'Bean', 'Churro', 'Chili', 'Pablo', 'Peso', 'Pedro', 'Pepe', 'Miguel'],
+          female: ['Gidget', 'Coco', 'Minnie', 'Lola', 'Pixie', 'Bella', 'Nina', 'Chica', 'Bonita', 'Rosita', 'Ruby', 'Pippa', 'Daisy', 'Sofia', 'Paquita']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'maltese': {
+        name: 'Maltese',
+        description: 'Gentle, playful, and charming companion dogs with silky white coats.',
+        names: {
+          male: ['Max', 'Charlie', 'Buddy', 'Oliver', 'Leo', 'Teddy', 'Milo', 'Bentley', 'Rocky', 'Ollie', 'Oscar', 'Winston', 'Tucker', 'Louie', 'Riley'],
+          female: ['Bella', 'Lily', 'Daisy', 'Sophie', 'Lucy', 'Lola', 'Chloe', 'Molly', 'Stella', 'Luna', 'Ruby', 'Penny', 'Zoe', 'Sadie', 'Rosie']
+        },
+        bgColor: '#F9FAFB',
+        accentColor: '#9CA3AF'
+      },
+      'weimaraner': {
+        name: 'Weimaraner',
+        description: 'Fearless, friendly, and obedient sporting dogs with distinctive gray coats.',
+        names: {
+          male: ['Gray', 'Hunter', 'Duke', 'Gunner', 'Scout', 'Tucker', 'Cooper', 'Ranger', 'Max', 'Blue', 'Zeus', 'Maverick', 'Silver', 'Finn', 'Apollo'],
+          female: ['Luna', 'Shadow', 'Willow', 'Silver', 'Storm', 'Sage', 'Ash', 'Maya', 'Misty', 'Kira', 'Nova', 'Piper', 'Jade', 'Ruby', 'Bella']
+        },
+        bgColor: '#F3F4F6',
+        accentColor: '#6B7280'
+      },
+      'collie': {
+        name: 'Collie',
+        description: 'Devoted, graceful herding dogs with a regal appearance.',
+        names: {
+          male: ['Lassie', 'Scout', 'Cooper', 'Duke', 'Charlie', 'Tucker', 'Max', 'Buddy', 'Oliver', 'Jasper', 'Finn', 'Winston', 'Ranger', 'Leo', 'Jake'],
+          female: ['Lassie', 'Skye', 'Willow', 'Daisy', 'Belle', 'Luna', 'Sadie', 'Molly', 'Lucy', 'Sophie', 'Lily', 'Ruby', 'Maggie', 'Penny', 'Lady']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'newfoundland': {
+        name: 'Newfoundland',
+        description: 'Sweet, patient, gentle giants with water-resistant coats.',
+        names: {
+          male: ['Bear', 'Bruno', 'Moose', 'Thor', 'Atlas', 'Duke', 'Tank', 'Titan', 'Goliath', 'Samson', 'Baloo', 'Max', 'Buddy', 'Henry', 'George'],
+          female: ['Luna', 'Willow', 'Nala', 'Bella', 'Shadow', 'Maya', 'Nova', 'Daisy', 'Ruby', 'Sophie', 'Lucy', 'Sadie', 'Rosie', 'Molly', 'Ellie']
+        },
+        bgColor: '#EEEEEE',
+        accentColor: '#111111'
+      },
+      'rhodesian-ridgeback': {
+        name: 'Rhodesian Ridgeback',
+        description: 'Independent, intelligent dogs with a distinctive ridge along their backs.',
+        names: {
+          male: ['Ridge', 'Leo', 'Hunter', 'Cooper', 'Zeus', 'Duke', 'Simba', 'Ranger', 'Max', 'Tucker', 'Apollo', 'Rex', 'Finn', 'Atlas', 'Axel'],
+          female: ['Luna', 'Nala', 'Willow', 'Athena', 'Ruby', 'Maya', 'Zara', 'Kira', 'Bella', 'Layla', 'Nova', 'Sage', 'Amber', 'Tawny', 'Sheba']
+        },
+        bgColor: '#FFEDD5',
+        accentColor: '#B45309'
+      },
+      'dalmatian': {
+        name: 'Dalmatian',
+        description: 'Dignified, smart, outgoing dogs with distinctive spotted coats.',
+        names: {
+          male: ['Spot', 'Pongo', 'Domino', 'Patch', 'Checkers', 'Duke', 'Cooper', 'Max', 'Rocky', 'Tucker', 'Charlie', 'Pepper', 'Freckles', 'Leo', 'Oreo'],
+          female: ['Perdita', 'Spotty', 'Dot', 'Speckle', 'Dottie', 'Polka', 'Bella', 'Luna', 'Pepper', 'Domino', 'Dallie', 'Piper', 'Ruby', 'Molly', 'Star']
+        },
+        bgColor: '#F9FAFB',
+        accentColor: '#1F2937'
+      },
+      'st-bernard': {
+        name: 'St. Bernard',
+        description: 'Gentle, friendly giants known for their alpine rescue history.',
+        names: {
+          male: ['Bernie', 'Atlas', 'Bruno', 'Thor', 'Tank', 'Moose', 'Goliath', 'Duke', 'Bear', 'Alpine', 'Titan', 'Max', 'Samson', 'Zeus', 'Yogi'],
+          female: ['Belle', 'Luna', 'Daisy', 'Nala', 'Willow', 'Heidi', 'Ruby', 'Maya', 'Bella', 'Sophie', 'Sadie', 'Molly', 'Lucy', 'Alpine', 'Betty']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#92400E'
+      },
+      'west-highland-white-terrier': {
+        name: 'West Highland White Terrier',
+        description: 'Alert, active, independent little dogs with friendly personalities.',
+        names: {
+          male: ['Angus', 'Mac', 'Duffy', 'Wally', 'Cooper', 'Charlie', 'Max', 'Oscar', 'Buddy', 'Rocky', 'Winston', 'Tucker', 'Walter', 'Duke', 'Archie'],
+          female: ['Bonnie', 'Skye', 'Fiona', 'Lucy', 'Maggie', 'Sadie', 'Millie', 'Daisy', 'Molly', 'Sophie', 'Lily', 'Bella', 'Ruby', 'Rosie', 'Piper']
+        },
+        bgColor: '#F9FAFB',
+        accentColor: '#6B7280'
+      },
+      'papillon': {
+        name: 'Papillon',
+        description: 'Happy, alert, friendly dogs with butterfly-like ears.',
+        names: {
+          male: ['Pippin', 'Charlie', 'Leo', 'Max', 'Teddy', 'Milo', 'Oliver', 'Duke', 'Cooper', 'Peanut', 'Oscar', 'Buddy', 'Finn', 'Romeo', 'Henry'],
+          female: ['Papillon', 'Lily', 'Daisy', 'Bella', 'Chloe', 'Luna', 'Sophie', 'Lucy', 'Penny', 'Ruby', 'Zoe', 'Lola', 'Molly', 'Sadie', 'Rosie']
+        },
+        bgColor: '#FEE2E2',
+        accentColor: '#DC2626'
+      },
+      'bichon-frise': {
+        name: 'Bichon Frise',
+        description: 'Playful, curious, peppy white balls of fluff with cheerful temperaments.',
+        names: {
+          male: ['Charlie', 'Buddy', 'Teddy', 'Max', 'Cooper', 'Oliver', 'Milo', 'Bentley', 'Oscar', 'Rocky', 'Leo', 'Tucker', 'Winston', 'Toby', 'Henry'],
+          female: ['Bella', 'Daisy', 'Lily', 'Lucy', 'Sophie', 'Chloe', 'Lola', 'Zoe', 'Molly', 'Sadie', 'Ruby', 'Maggie', 'Rosie', 'Luna', 'Penny']
+        },
+        bgColor: '#F9FAFB',
+        accentColor: '#9CA3AF'
+      },
+      'bull-terrier': {
+        name: 'Bull Terrier',
+        description: 'Mischievous, comical, and energetic dogs with distinctive egg-shaped heads.',
+        names: {
+          male: ['Spuds', 'Rocky', 'Tank', 'Brutus', 'Duke', 'Diesel', 'Otis', 'Mack', 'Spike', 'Bruno', 'Winston', 'Buster', 'Finn', 'Rex', 'Gus'],
+          female: ['Stella', 'Luna', 'Lola', 'Roxy', 'Ruby', 'Daisy', 'Bella', 'Willow', 'Penny', 'Molly', 'Rosie', 'Sadie', 'Nala', 'Maya', 'Piper']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#92400E'
+      },
+      'bloodhound': {
+        name: 'Bloodhound',
+        description: 'Independent, inquisitive scent hounds with amazing tracking abilities.',
+        names: {
+          male: ['Duke', 'Cooper', 'Hank', 'Bruno', 'Scout', 'Tracker', 'Rufus', 'Barney', 'Fred', 'Henry', 'Hunter', 'Otis', 'Tank', 'Watson', 'Sherlock'],
+          female: ['Daisy', 'Lucy', 'Sadie', 'Molly', 'Ruby', 'Lady', 'Maggie', 'Belle', 'Penny', 'Ellie', 'Sophie', 'Dixie', 'Stella', 'Gracie', 'Rosie']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#B45309'
+      },
+      'italian-greyhound': {
+        name: 'Italian Greyhound',
+        description: 'Sensitive, intelligent, and agile miniature sighthounds.',
+        names: {
+          male: ['Leo', 'Enzo', 'Romeo', 'Apollo', 'Finn', 'Atlas', 'Charlie', 'Max', 'Oliver', 'Zephyr', 'Dash', 'Luca', 'Milo', 'Ziggy', 'Oscar'],
+          female: ['Luna', 'Bella', 'Willow', 'Sophie', 'Lily', 'Zoe', 'Stella', 'Aria', 'Nova', 'Chloe', 'Ruby', 'Daisy', 'Piper', 'Lola', 'Penny']
+        },
+        bgColor: '#E0E7FF',
+        accentColor: '#4F46E5'
+      },
+      'akita': {
+        name: 'Akita',
+        description: 'Dignified, courageous, and profoundly loyal dogs originally from Japan.',
+        names: {
+          male: ['Hachiko', 'Kuma', 'Kenji', 'Kota', 'Akio', 'Ronin', 'Thor', 'Duke', 'Bear', 'Kobe', 'Kona', 'Zeus', 'Kai', 'Taro', 'Yuki'],
+          female: ['Kira', 'Suki', 'Mei', 'Lana', 'Luna', 'Nala', 'Akira', 'Yuna', 'Mika', 'Sora', 'Maya', 'Freya', 'Willow', 'Nova', 'Bella']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#D97706'
+      },
+      'chesapeake-bay-retriever': {
+        name: 'Chesapeake Bay Retriever',
+        description: 'Powerful, assertive retrievers with wavy coats and bright, happy dispositions.',
+        names: {
+          male: ['Bay', 'Hunter', 'Duke', 'Chesney', 'Cooper', 'Scout', 'Tucker', 'Max', 'Gunner', 'Ranger', 'Bear', 'Drake', 'Jack', 'Finn', 'Maverick'],
+          female: ['Cove', 'Ruby', 'Amber', 'Willow', 'Daisy', 'Luna', 'Sadie', 'Molly', 'Maggie', 'Lucy', 'Bella', 'Marina', 'Sandy', 'Chessie', 'Roxy']
+        },
+        bgColor: '#FEF3C7',
+        accentColor: '#92400E'
+      }
+    };
+    
+    // DOM elements
+    const breedSelect = document.getElementById('breed-select');
+    const breedInfo = document.getElementById('breed-info');
+    const breedBadge = document.getElementById('breed-badge');
+    const breedName = document.getElementById('breed-name');
+    const breedDescription = document.getElementById('breed-description');
+    const maleBtn = document.getElementById('male-btn');
+    const femaleBtn = document.getElementById('female-btn');
+    const generateBtn = document.getElementById('generate-btn');
+    const results = document.getElementById('results');
+    const resultsTitle = document.getElementById('results-title');
+    const nameList = document.getElementById('name-list');
+    const cardHeader = document.getElementById('card-header');
+    
+    // State
+    let selectedBreed = 'labrador-retriever';
+    let selectedGender = 'male';
+    
+    // Initialize breed options
+    function initBreedOptions() {
+      // Sort breeds alphabetically by name
+      const sortedBreeds = Object.entries(dogBreeds).sort((a, b) => 
+        a[1].name.localeCompare(b[1].name)
+      );
+      
+      // Populate select with options
+      for (const [id, breed] of sortedBreeds) {
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = breed.name;
+        breedSelect.appendChild(option);
+      }
+    }
+    
+    // Update breed info
+    function updateBreedInfo() {
+      const breed = dogBreeds[selectedBreed];
+      
+      // Update colors
+      document.documentElement.style.setProperty('--accent-color', breed.accentColor);
+      document.documentElement.style.setProperty('--accent-hover', breed.accentColor);
+      document.documentElement.style.setProperty('--bg-color', breed.bgColor);
+      
+      // Update header background
+      cardHeader.style.backgroundColor = breed.bgColor;
+      
+      // Update breed info
+      breedBadge.textContent = breed.name.charAt(0);
+      breedName.textContent = breed.name;
+      breedDescription.textContent = breed.description;
+    }
+    
+    // Update gender selection
+    function updateGenderSelection() {
+      if (selectedGender === 'male') {
+        maleBtn.classList.add('active');
+        femaleBtn.classList.remove('active');
+      } else {
+        maleBtn.classList.remove('active');
+        femaleBtn.classList.add('active');
+      }
+    }
+    
+    // Generate names
+    function generateNames() {
+      const breed = dogBreeds[selectedBreed];
+      const names = breed.names[selectedGender];
+      
+      // Show loading state
+      generateBtn.innerHTML = `
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+        </svg>
+        Generating...
+      `;
+      generateBtn.classList.add('loading');
+      
+      // Simulate loading delay
+      setTimeout(() => {
+        // Shuffle names array
+        const shuffled = [...names].sort(() => 0.5 - Math.random());
+        
+        // Take first 5 names
+        const selectedNames = shuffled.slice(0, 5);
+        
+        // Update results title
+        resultsTitle.textContent = `Perfect Names for Your ${selectedGender === 'male' ? 'Boy' : 'Girl'} ${breed.name}`;
+        
+        // Clear previous name list
+        nameList.innerHTML = '';
+        
+        // Add name items
+        selectedNames.forEach((name, index) => {
+          const li = document.createElement('li');
+          li.className = 'name-item';
+          li.innerHTML = `
+            <div class="name-badge">${index + 1}</div>
+            <span>${name}</span>
+          `;
+          nameList.appendChild(li);
+        });
+        
+        // Show results
+        results.classList.remove('hidden');
+        
+        // Reset button
+        generateBtn.innerHTML = `
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+          </svg>
+          Generate Perfect Names
+        `;
+        generateBtn.classList.remove('loading');
+      }, 800);
+    }
+    
+    // Event listeners
+    breedSelect.addEventListener('change', (e) => {
+      selectedBreed = e.target.value;
+      updateBreedInfo();
+    });
+    
+    maleBtn.addEventListener('click', () => {
+      selectedGender = 'male';
+      updateGenderSelection();
+    });
+    
+    femaleBtn.addEventListener('click', () => {
+      selectedGender = 'female';
+      updateGenderSelection();
+    });
+    
+    generateBtn.addEventListener('click', generateNames);
+    
+    // Initialize
+    initBreedOptions();
+    updateBreedInfo();
+    updateGenderSelection();
+  </script>
+</body>
+</html>
