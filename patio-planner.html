@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patio Planner</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #e67e22;
+            --secondary-dark: #d35400;
+            --success: #27ae60;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --grey: #95a5a6;
+            --wood: #d4a068;
+            --wood-dark: #b37d41;
+            --wood-light: #e5c199;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: var(--dark);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            overflow: hidden;
+        }
+        
+        .header {
+            background-color: var(--dark);
+            color: white;
+            padding: 30px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        
+        .column {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow);
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+        
+        .card-header {
+            background-color: var(--light);
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-header svg {
+            margin-right: 10px;
+            fill: var(--primary);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 10px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .summary-item strong {
+            color: var(--primary);
+        }
+        
+        /* Patio Visualization */
+        .patio-container {
+            border: 3px solid var(--dark);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+        
+        .patio-visual {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .patio-visual td {
+            background: linear-gradient(to bottom, var(--wood-light), var(--wood));
+            border: 1px solid rgba(0,0,0,0.15);
+            height: 35px;
+            position: relative;
+        }
+        
+        .patio-visual td::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.03) 10px,
+                rgba(0,0,0,0.03) 12px
+            );
+        }
+        
+        .dimension-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: var(--light);
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        /* Cutting Plan */
+        .plank {
+            height: 50px;
+            background: linear-gradient(to bottom, var(--wood-light), var(--wood));
+            position: relative;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+        
+        .plank-label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 10px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        
+        .cut {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--wood), var(--wood-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            border-right: 2px dashed rgba(255,255,255,0.8);
+        }
+        
+        .cut:last-of-type {
+            border-right: none;
+        }
+        
+        .waste {
+            position: absolute;
+            height: 100%;
+            right: 0;
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(255,0,0,0.1),
+                rgba(255,0,0,0.1) 10px,
+                rgba(255,0,0,0.2) 10px,
+                rgba(255,0,0,0.2) 20px
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 0 2px rgba(255,255,255,0.7);
+        }
+        
+        .extra-info {
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+        
+        .extra-info h4 {
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .extra-info ul {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .column {
+                width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Patio Plank Calculator</h1>
+            <p>Plan your patio with the exact number of 2×4 planks needed and minimize waste with our optimized cutting plan</p>
+        </div>
+        
+        <div class="content">
+            <div class="column">
+                <div class="card">
+                    <div class="card-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                            <path d="M3 17h18v2H3zm0-7h18v2H3zm0-7h18v2H3z"/>
+                        </svg>
+                        Patio Information
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="patio-length">Patio Length (feet):</label>
+                            <input type="number" id="patio-length" min="1" step="0.1" value="12">
+                        </div>
+                        <div class="form-group">
+                            <label for="patio-width">Patio Width (feet):</label>
+                            <input type="number" id="patio-width" min="1" step="0.1" value="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="spacing">Space Between Planks (inches):</label>
+                            <input type="number" id="spacing" min="0" step="0.25" value="0.25">
+                        </div>
+                        <div class="form-group">
+                            <label for="plank-length">Standard Plank Length (feet):</label>
+                            <input type="number" id="plank-length" min="1" step="1" value="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="plank-width">Plank Width (inches):</label>
+                            <input type="number" id="plank-width" min="1" step="0.25" value="3.5">
+                        </div>
+                        <button id="calculate-btn">Calculate Materials</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                            <path d="M7 12h2v5H7zm4-7h2v12h-2zm4 4h2v8h-2z"/>
+                        </svg>
+                        Material Summary
+                    </div>
+                    <div class="card-body">
+                        <div id="summary-results">
+                            <div class="summary-item">
+                                <div>Enter dimensions and click Calculate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="card">
+                    <div class="card-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                            <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/>
+                        </svg>
+                        Patio Layout Preview
+                    </div>
+                    <div class="card-body">
+                        <div id="patio-preview">
+                            <p>Your patio preview will appear here after calculation.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                        </svg>
+                        Optimized Cutting Plan
+                    </div>
+                    <div class="card-body">
+                        <div id="cutting-plan">
+                            <p>Your cutting plan will appear here after calculation.</p>
+                        </div>
+                        
+                        <div class="extra-info">
+                            <h4>Cutting Tips:</h4>
+                            <ul>
+                                <li>Measure twice, cut once for best results</li>
+                                <li>Label your cuts to avoid confusion</li>
+                                <li>Consider adding 5% extra material for errors</li>
+                                <li>Use a straight edge to mark your cuts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const calculateBtn = document.getElementById('calculate-btn');
+            const summaryResults = document.getElementById('summary-results');
+            const patioPreview = document.getElementById('patio-preview');
+            const cuttingPlan = document.getElementById('cutting-plan');
+            
+            // Calculate button click handler
+            calculateBtn.addEventListener('click', function() {
+                // Get input values
+                const patioLength = parseFloat(document.getElementById('patio-length').value);
+                const patioWidth = parseFloat(document.getElementById('patio-width').value);
+                const spacing = parseFloat(document.getElementById('spacing').value);
+                const plankLength = parseFloat(document.getElementById('plank-length').value);
+                const plankWidth = parseFloat(document.getElementById('plank-width').value);
+                
+                // Validate inputs
+                if ([patioLength, patioWidth, spacing, plankLength, plankWidth].some(isNaN)) {
+                    alert('Please enter valid numbers for all fields');
+                    return;
+                }
+                
+                if (plankLength <= 0 || patioLength <= 0 || patioWidth <= 0) {
+                    alert('Dimensions must be greater than 0');
+                    return;
+                }
+                
+                // Convert to feet for calculations
+                const plankWidthFeet = plankWidth / 12;
+                const spacingFeet = spacing / 12;
+                
+                // Calculate number of planks needed across width
+                const numPlanksAcross = Math.ceil(patioWidth / (plankWidthFeet + spacingFeet));
+                
+                // Generate cutting pattern for a single run
+                const pattern = calculatePatternForRun(patioLength, plankLength);
+                console.log("Pattern for a single run:", pattern);
+                
+                // Generate optimized cutting plan
+                const cuttingPlanData = generateCuttingPlan(pattern, numPlanksAcross, plankLength);
+                console.log("Cutting plan:", cuttingPlanData);
+                
+                // Calculate waste and totals
+                let totalWaste = 0;
+                const totalStandardPlanks = cuttingPlanData.length;
+                const totalPlankLength = totalStandardPlanks * plankLength;
+                
+                cuttingPlanData.forEach(plank => {
+                    let usedLength = 0;
+                    plank.cuts.forEach(cut => {
+                        usedLength += cut.length;
+                    });
+                    plank.waste = plankLength - usedLength;
+                    totalWaste += plank.waste;
+                });
+                
+                const wastePercentage = (totalWaste / totalPlankLength) * 100;
+                
+                // Store calculation results
+                const results = {
+                    patioLength, 
+                    patioWidth,
+                    plankLength,
+                    numPlanksAcross,
+                    totalStandardPlanks,
+                    totalWaste,
+                    wastePercentage,
+                    cuttingPlan: cuttingPlanData
+                };
+                
+                // Update UI
+                updateSummary(results);
+                createPatioVisualization(results);
+                createCuttingPlanVisualization(results);
+            });
+            
+            function calculatePatternForRun(patioLength, plankLength) {
+                const pattern = [];
+                let remainingLength = patioLength;
+                
+                while (remainingLength > 0) {
+                    if (remainingLength >= plankLength) {
+                        pattern.push(plankLength);
+                        remainingLength -= plankLength;
+                    } else {
+                        pattern.push(remainingLength);
+                        remainingLength = 0;
+                    }
+                }
+                
+                return pattern;
+            }
+            
+            function generateCuttingPlan(pattern, numPlanksAcross, plankLength) {
+                const planks = [];
+                
+                // For each plank across the width
+                for (let i = 0; i < numPlanksAcross; i++) {
+                    // For each segment in the pattern
+                    for (let j = 0; j < pattern.length; j++) {
+                        const segmentLength = pattern[j];
+                        let placed = false;
+                        
+                        // Try to fit in existing planks first
+                        for (let k = 0; k < planks.length; k++) {
+                            const plank = planks[k];
+                            
+                            // Calculate used length
+                            let usedLength = 0;
+                            plank.cuts.forEach(cut => {
+                                usedLength += cut.length;
+                            });
+                            
+                            // Calculate remaining space
+                            const remainingSpace = plankLength - usedLength;
+                            
+                            // Check if there's enough space
+                            if (remainingSpace >= segmentLength) {
+                                plank.cuts.push({
+                                    length: segmentLength,
+                                    start: usedLength
+                                });
+                                placed = true;
+                                break;
+                            }
+                        }
+                        
+                        // If couldn't place in existing planks, add a new one
+                        if (!placed) {
+                            planks.push({
+                                id: planks.length + 1,
+                                cuts: [{
+                                    length: segmentLength,
+                                    start: 0
+                                }]
+                            });
+                        }
+                    }
+                }
+                
+                return planks;
+            }
+            
+            function updateSummary(results) {
+                // Calculate total number of cuts
+                let totalCuts = 0;
+                results.cuttingPlan.forEach(plank => {
+                    totalCuts += Math.max(0, plank.cuts.length - 1);
+                });
+                
+                let html = `
+                    <div class="summary-item">
+                        <div>Patio Dimensions:</div>
+                        <strong>${results.patioLength} × ${results.patioWidth} feet</strong>
+                    </div>
+                    <div class="summary-item">
+                        <div>Planks Across Width:</div>
+                        <strong>${results.numPlanksAcross}</strong>
+                    </div>
+                    <div class="summary-item">
+                        <div>Standard Plank Length:</div>
+                        <strong>${results.plankLength} feet</strong>
+                    </div>
+                    <div class="summary-item">
+                        <div>Total Planks Needed:</div>
+                        <strong>${results.totalStandardPlanks}</strong>
+                    </div>
+                    <div class="summary-item">
+                        <div>Total Cuts Required:</div>
+                        <strong>${totalCuts}</strong>
+                    </div>
+                    <div class="summary-item">
+                        <div>Material Waste:</div>
+                        <strong>${results.totalWaste.toFixed(2)} feet (${results.wastePercentage.toFixed(1)}%)</strong>
+                    </div>
+                `;
+                
+                summaryResults.innerHTML = html;
+            }
+            
+            function createPatioVisualization(results) {
+                // Calculate reasonable number of rows for visualization
+                const rows = Math.min(12, Math.max(3, Math.floor(results.patioLength / 2)));
+                
+                let html = `<div class="patio-container">`;
+                html += '<table class="patio-visual" style="width:100%;">';
+                
+                // Create rows and columns to represent the patio
+                for (let i = 0; i < rows; i++) {
+                    html += '<tr>';
+                    for (let j = 0; j < results.numPlanksAcross; j++) {
+                        html += '<td></td>';
+                    }
+                    html += '</tr>';
+                }
+                
+                html += '</table>';
+                html += `</div>`;
+                
+                // Add dimension labels
+                html += `
+                    <div class="dimension-info">
+                        <div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="var(--primary)">
+                            <path d="M19 9h-2v6.59L5.41 4 4 5.41 15.59 17H9v2h10V9z"/>
+                        </svg> Length: ${results.patioLength} ft</div>
+                        <div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="var(--primary)">
+                            <path d="M19 9h-2v6.59L5.41 4 4 5.41 15.59 17H9v2h10V9z"/>
+                        </svg> Width: ${results.patioWidth} ft</div>
+                        <div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="var(--primary)">
+                            <path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2z"/>
+                        </svg> Planks: ${results.numPlanksAcross}</div>
+                    </div>
+                `;
+                
+                patioPreview.innerHTML = html;
+            }
+            
+            function createCuttingPlanVisualization(results) {
+                const planks = results.cuttingPlan;
+                const standardLength = results.plankLength;
+                
+                let html = '';
+                
+                planks.forEach(plank => {
+                    html += `<div class="plank">`;
+                    html += `<div class="plank-label">Plank ${plank.id}</div>`;
+                    
+                    // Add each cut
+                    plank.cuts.forEach((cut, index) => {
+                        const startPercent = (cut.start / standardLength) * 100;
+                        const widthPercent = (cut.length / standardLength) * 100;
+                        
+                        html += `<div class="cut" style="left:${startPercent}%; width:${widthPercent}%;">${cut.length.toFixed(1)}'</div>`;
+                    });
+                    
+                    // Add waste indicator
+                    if (plank.waste > 0.01) {
+                        const startPercent = ((standardLength - plank.waste) / standardLength) * 100;
+                        const widthPercent = (plank.waste / standardLength) * 100;
+                        
+                        html += `<div class="waste" style="width:${widthPercent}%;">Waste: ${plank.waste.toFixed(1)}'</div>`;
+                    }
+                    
+                    html += `</div>`;
+                });
+                
+                cuttingPlan.innerHTML = html;
+            }
+            
+            // Initial calculation on load
+            calculateBtn.click();
+        });
+    </script>
+</body>
+</html>
