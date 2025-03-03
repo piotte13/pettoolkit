@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Spending Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --secondary: #C19A6B;
+            --accent: #F5DEB3;
+            --background: #FAF6F2;
+            --text: #3E2723;
+            --investment: #4CAF50;
+            --interest: #FF9800;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+        
+        .coffee-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .calculator {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: var(--accent);
+            border-radius: 8px;
+        }
+        
+        .results-section {
+            flex: 2;
+            min-width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--accent);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #5D4037;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            background-color: var(--background);
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .investment-box {
+            background-color: #E8F5E9;
+        }
+        
+        .interest-box {
+            background-color: #FFF3E0;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .investment-value {
+            color: var(--investment);
+        }
+        
+        .interest-value {
+            color: var(--interest);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+        
+        .chart-container {
+            margin-top: 30px;
+            height: 300px;
+        }
+        
+        .alternative-spending {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--accent);
+            border-radius: 8px;
+        }
+        
+        .alternative-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .alternative-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="coffee-icon">☕</div>
+            <h1>Coffee Spending Calculator</h1>
+            <p class="description">See how your daily coffee habit adds up over time</p>
+        </header>
+        
+        <div class="calculator">
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="coffeePrice">Average Price Per Coffee ($)</label>
+                    <input type="number" id="coffeePrice" min="0.01" step="0.01" value="4.25">
+                </div>
+                
+                <div class="form-group">
+                    <label for="coffeesPerDay">Coffees Per Day</label>
+                    <input type="number" id="coffeesPerDay" min="1" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="daysPerWeek">Days Per Week</label>
+                    <input type="number" id="daysPerWeek" min="1" max="7" value="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="timeSpan">Calculate For</label>
+                    <select id="timeSpan">
+                        <option value="1">1 Month</option>
+                        <option value="3">3 Months</option>
+                        <option value="6">6 Months</option>
+                        <option value="12" selected>1 Year</option>
+                        <option value="60">5 Years</option>
+                        <option value="120">10 Years</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interestRate">Annual Interest Rate (%)</label>
+                    <select id="interestRate">
+                        <option value="0">0% (No Interest)</option>
+                        <option value="1">1% (Savings Account)</option>
+                        <option value="3">3% (Conservative Investment)</option>
+                        <option value="5" selected>5% (Moderate Investment)</option>
+                        <option value="7">7% (Stock Market Average)</option>
+                        <option value="10">10% (Aggressive Investment)</option>
+                    </select>
+                </div>
+                
+                <button id="calculateBtn">Calculate Spending</button>
+            </div>
+            
+            <div class="results-section">
+                <h2>Your Coffee Spending</h2>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-value" id="dailySpending">$0.00</div>
+                        <div class="stat-label">Daily</div>
+                    </div>
+                    
+                    <div class="stat-box">
+                        <div class="stat-value" id="weeklySpending">$0.00</div>
+                        <div class="stat-label">Weekly</div>
+                    </div>
+                    
+                    <div class="stat-box">
+                        <div class="stat-value" id="monthlySpending">$0.00</div>
+                        <div class="stat-label">Monthly</div>
+                    </div>
+                    
+                    <div class="stat-box">
+                        <div class="stat-value" id="yearlySpending">$0.00</div>
+                        <div class="stat-label">Yearly</div>
+                    </div>
+                </div>
+                
+                <div class="stat-box" style="width: 100%">
+                    <div class="stat-value" id="totalSpending">$0.00</div>
+                    <div class="stat-label">Total Coffee Spending Over Selected Period</div>
+                </div>
+                
+                <div class="stat-box investment-box" style="width: 100%; margin-top: 15px;">
+                    <div class="stat-value investment-value" id="investmentValue">$0.00</div>
+                    <div class="stat-label">Potential Value If Invested</div>
+                </div>
+                
+                <div class="stat-box interest-box" style="width: 100%; margin-top: 15px;">
+                    <div class="stat-value interest-value" id="interestEarned">$0.00</div>
+                    <div class="stat-label">Interest You Could Have Earned</div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="spendingChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="investmentChart"></canvas>
+                </div>
+                
+                <div class="alternative-spending">
+                    <h3>With that money, you could buy:</h3>
+                    <div id="alternativeItems"></div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Made with ☕ and code | Calculate the true cost of your coffee habit</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Get DOM elements
+        const coffeePrice = document.getElementById('coffeePrice');
+        const coffeesPerDay = document.getElementById('coffeesPerDay');
+        const daysPerWeek = document.getElementById('daysPerWeek');
+        const timeSpan = document.getElementById('timeSpan');
+        const interestRate = document.getElementById('interestRate');
+        const calculateBtn = document.getElementById('calculateBtn');
+        
+        const dailySpending = document.getElementById('dailySpending');
+        const weeklySpending = document.getElementById('weeklySpending');
+        const monthlySpending = document.getElementById('monthlySpending');
+        const yearlySpending = document.getElementById('yearlySpending');
+        const totalSpending = document.getElementById('totalSpending');
+        const investmentValue = document.getElementById('investmentValue');
+        const interestEarned = document.getElementById('interestEarned');
+        
+        const alternativeItems = document.getElementById('alternativeItems');
+        
+        // Initialize charts
+        let spendingChart = null;
+        let investmentChart = null;
+        
+        // Set up default calculation on page load
+        document.addEventListener('DOMContentLoaded', calculateSpending);
+        
+        // Add event listener to calculate button
+        calculateBtn.addEventListener('click', calculateSpending);
+        
+        // Add event listeners to inputs for immediate calculation
+        const inputs = [coffeePrice, coffeesPerDay, daysPerWeek, timeSpan, interestRate];
+        inputs.forEach(input => {
+            input.addEventListener('change', calculateSpending);
+        });
+        
+        function calculateSpending() {
+            // Get values from inputs
+            const price = parseFloat(coffeePrice.value) || 0;
+            const perDay = parseInt(coffeesPerDay.value) || 0;
+            const perWeek = parseInt(daysPerWeek.value) || 0;
+            const months = parseInt(timeSpan.value) || 0;
+            const annualRate = parseFloat(interestRate.value) / 100 || 0;
+            
+            // Calculate spending
+            const dailyAmount = price * perDay;
+            const weeklyAmount = dailyAmount * perWeek;
+            const monthlyAmount = weeklyAmount * 4.33; // Average weeks in a month
+            const yearlyAmount = monthlyAmount * 12;
+            const totalAmount = monthlyAmount * months;
+            
+            // Calculate investment potential (compound interest)
+            const futureValue = calculateInvestmentGrowth(monthlyAmount, months, annualRate);
+            const interestAmount = futureValue - totalAmount;
+            
+            // Update displayed values
+            dailySpending.textContent = formatCurrency(dailyAmount);
+            weeklySpending.textContent = formatCurrency(weeklyAmount);
+            monthlySpending.textContent = formatCurrency(monthlyAmount);
+            yearlySpending.textContent = formatCurrency(yearlyAmount);
+            totalSpending.textContent = formatCurrency(totalAmount);
+            investmentValue.textContent = formatCurrency(futureValue);
+            interestEarned.textContent = formatCurrency(interestAmount);
+            
+            // Update charts
+            updateSpendingChart(dailyAmount, weeklyAmount, monthlyAmount, yearlyAmount);
+            updateInvestmentChart(monthlyAmount, months, annualRate);
+            
+            // Update alternative spending
+            updateAlternativeSpending(totalAmount);
+        }
+        
+        function calculateInvestmentGrowth(monthlyContribution, months, annualRate) {
+            // Convert annual rate to monthly rate
+            const monthlyRate = annualRate / 12;
+            
+            let futureValue = 0;
+            
+            // Calculate compound interest with monthly contributions
+            for (let i = 0; i < months; i++) {
+                futureValue = (futureValue + monthlyContribution) * (1 + monthlyRate);
+            }
+            
+            return futureValue;
+        }
+        
+        function formatCurrency(amount) {
+            return '$' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function updateSpendingChart(daily, weekly, monthly, yearly) {
+            const ctx = document.getElementById('spendingChart').getContext('2d');
+            
+            // Clear previous chart if it exists
+            if (spendingChart) {
+                spendingChart.destroy();
+            }
+            
+            // Create new chart
+            spendingChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
+                    datasets: [{
+                        label: 'Coffee Spending',
+                        data: [daily, weekly, monthly, yearly],
+                        backgroundColor: [
+                            'rgba(111, 78, 55, 0.6)',
+                            'rgba(111, 78, 55, 0.7)',
+                            'rgba(111, 78, 55, 0.8)',
+                            'rgba(111, 78, 55, 0.9)'
+                        ],
+                        borderColor: [
+                            'rgba(111, 78, 55, 1)',
+                            'rgba(111, 78, 55, 1)',
+                            'rgba(111, 78, 55, 1)',
+                            'rgba(111, 78, 55, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Coffee Spending By Time Period',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateInvestmentChart(monthlyAmount, months, annualRate) {
+            const ctx = document.getElementById('investmentChart').getContext('2d');
+            
+            // Generate data
+            const labels = [];
+            const spendingData = [];
+            const investmentData = [];
+            
+            let totalSpent = 0;
+            let investmentValue = 0;
+            const monthlyRate = annualRate / 12;
+            
+            for (let i = 0; i <= months; i++) {
+                // Skip some labels for readability if many months
+                if (months > 36) {
+                    if (i % 12 === 0 || i === months) {
+                        labels.push(i === 0 ? 'Start' : 
+                                   i === months ? 'End' : 
+                                   'Year ' + (i / 12));
+                    } else {
+                        labels.push('');
+                    }
+                } else if (months > 12) {
+                    if (i % 3 === 0 || i === months) {
+                        labels.push(i === 0 ? 'Start' : 'Month ' + i);
+                    } else {
+                        labels.push('');
+                    }
+                } else {
+                    labels.push(i === 0 ? 'Start' : 'Month ' + i);
+                }
+                
+                spendingData.push(totalSpent);
+                investmentData.push(investmentValue);
+                
+                // Update for next month
+                totalSpent += monthlyAmount;
+                investmentValue = (investmentValue + monthlyAmount) * (1 + monthlyRate);
+            }
+            
+            // Destroy previous chart if it exists
+            if (investmentChart) {
+                investmentChart.destroy();
+            }
+            
+            // Create new chart
+            investmentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Money Spent on Coffee',
+                            data: spendingData,
+                            borderColor: 'rgba(193, 154, 107, 1)',
+                            backgroundColor: 'rgba(193, 154, 107, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Potential Investment Value',
+                            data: investmentData,
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Coffee Spending vs. Investment Growth',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + context.raw.toFixed(2);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateAlternativeSpending(totalAmount) {
+            // Clear previous alternatives
+            alternativeItems.innerHTML = '';
+            
+            // Define alternative items and their costs
+            const alternatives = [
+                { name: 'Premium Coffee Machine', cost: 200, icon: '☕' },
+                { name: 'Weekend Getaway', cost: 500, icon: '✈️' },
+                { name: 'High-End Smartphone', cost: 1000, icon: '📱' },
+                { name: 'Month of Groceries', cost: 400, icon: '🛒' },
+                { name: 'Designer Clothing Item', cost: 300, icon: '👚' },
+                { name: 'Concert Tickets', cost: 150, icon: '🎵' },
+                { name: 'Fitness Equipment', cost: 250, icon: '🏋️' },
+                { name: 'Fancy Dinner for Two', cost: 100, icon: '🍽️' },
+                { name: 'Wireless Headphones', cost: 180, icon: '🎧' },
+                { name: 'Books', cost: 15, icon: '📚' },
+                { name: 'Video Games', cost: 60, icon: '🎮' },
+                { name: 'Movie Tickets', cost: 12, icon: '🎬' }
+            ];
+            
+            // Filter alternatives that cost less than total amount
+            const affordableAlternatives = alternatives.filter(item => item.cost <= totalAmount);
+            
+            // Sort by cost (highest first)
+            affordableAlternatives.sort((a, b) => b.cost - a.cost);
+            
+            // Limit to top 6 items
+            const displayItems = affordableAlternatives.slice(0, 6);
+            
+            // Create elements for each alternative
+            displayItems.forEach(item => {
+                const quantity = Math.floor(totalAmount / item.cost);
+                if (quantity > 0) {
+                    const altElement = document.createElement('div');
+                    altElement.className = 'alternative-item';
+                    
+                    altElement.innerHTML = `
+                        <div class="alternative-icon">${item.icon}</div>
+                        <div>${quantity} × ${item.name}${quantity > 1 ? 's' : ''} ($${item.cost} each)</div>
+                    `;
+                    
+                    alternativeItems.appendChild(altElement);
+                }
+            });
+            
+            // If no alternatives are affordable
+            if (displayItems.length === 0) {
+                alternativeItems.innerHTML = '<p>Keep saving! Your coffee spending will add up to something special soon.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
