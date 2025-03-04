@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Salary Calculator</title>
+    <title>Global Family Salary Calculator</title>
     <style>
-        /* Simple, clean styling */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -135,7 +134,7 @@
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
         
         .result-card:hover {
@@ -285,6 +284,21 @@
             margin-right: 5px;
         }
         
+        .family-section {
+            background-color: #fff0e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ffe0cc;
+        }
+        
+        .family-title {
+            margin-bottom: 15px;
+            color: #e67e22;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
         .summary-section {
             background-color: #f0f7ff;
             padding: 15px;
@@ -311,6 +325,37 @@
             border-top: 1px solid #d1e3ff;
             padding-top: 5px;
             margin-top: 5px;
+        }
+        
+        .expense-category {
+            margin-top: 10px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .expense-category:last-child {
+            border-bottom: none;
+        }
+        
+        .expense-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .child-options {
+            padding: 10px;
+            background-color: #fff9e6;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid #ffe0b2;
+        }
+        
+        .child-option-title {
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 10px;
         }
         
         footer {
@@ -346,14 +391,14 @@
 </head>
 <body>
     <header>
-        <h1>Global Salary Calculator</h1>
-        <p class="subtitle">See how your salary adjusts to maintain your quality of life when moving to a new city</p>
+        <h1>Global Family Salary Calculator</h1>
+        <p class="subtitle">See how your salary adjusts to maintain your family's quality of life when moving to a new city</p>
     </header>
 
     <div class="container">
         <div class="card">
             <h2>Enter Your Current Details</h2>
-            <p style="margin-bottom: 15px;">Including housing, transportation, food costs, and lifestyle preferences for a personalized estimate.</p>
+            <p style="margin-bottom: 15px;">Including housing, transportation, food costs, and family-specific expenses for a personalized estimate.</p>
             
             <div class="input-section">
                 <div class="input-group">
@@ -379,8 +424,70 @@
                 </div>
             </div>
             
+            <div class="family-section">
+                <div class="family-title">Family Composition</div>
+                
+                <div class="lifestyle-options">
+                    <div class="input-group">
+                        <label for="adults">Number of Adults</label>
+                        <select id="adults">
+                            <option value="1">1 Adult</option>
+                            <option value="2" selected>2 Adults</option>
+                            <option value="3">3 Adults</option>
+                            <option value="4+">4+ Adults</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="children">Number of Children</label>
+                        <select id="children">
+                            <option value="0">No Children</option>
+                            <option value="1">1 Child</option>
+                            <option value="2">2 Children</option>
+                            <option value="3">3 Children</option>
+                            <option value="4+">4+ Children</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="child-options" id="child-options" style="display: none;">
+                    <div class="child-option-title">Children's Expenses</div>
+                    
+                    <div class="lifestyle-options">
+                        <div class="input-group">
+                            <label for="education">Education Type</label>
+                            <select id="education">
+                                <option value="public">Public School</option>
+                                <option value="private-affordable">Affordable Private School</option>
+                                <option value="private-mid">Mid-range Private School</option>
+                                <option value="private-premium">Premium Private School</option>
+                                <option value="international">International School</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="childcare">Childcare Needs</label>
+                            <select id="childcare">
+                                <option value="none">None</option>
+                                <option value="part-time">Part-time (10-20 hrs/week)</option>
+                                <option value="full-time">Full-time (40+ hrs/week)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="activities">Extracurricular Activities</label>
+                            <select id="activities">
+                                <option value="minimal">Minimal</option>
+                                <option value="moderate" selected>Moderate</option>
+                                <option value="extensive">Extensive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="lifestyle-section">
-                <div class="lifestyle-title">Your Lifestyle Preferences</div>
+                <div class="lifestyle-title">Housing & Lifestyle Preferences</div>
                 
                 <div class="lifestyle-options">
                     <div class="input-group">
@@ -432,13 +539,11 @@
                     </div>
                     
                     <div class="input-group">
-                        <label for="household-size">Household Size</label>
-                        <select id="household-size">
-                            <option value="1">1 Person</option>
-                            <option value="2" selected>2 People</option>
-                            <option value="3">3 People</option>
-                            <option value="4">4 People</option>
-                            <option value="5+">5+ People</option>
+                        <label for="healthcare">Healthcare Needs</label>
+                        <select id="healthcare">
+                            <option value="basic">Basic</option>
+                            <option value="moderate" selected>Moderate</option>
+                            <option value="extensive">Extensive</option>
                         </select>
                     </div>
                 </div>
@@ -457,9 +562,9 @@
             
             <div class="tab-content active" id="list-content">
                 <h2>Salary Comparison by City</h2>
-                <div id="lifestyle-summary" class="summary-section" style="display: none;">
-                    <div class="summary-title">Your Lifestyle Factors</div>
-                    <div id="summary-content"></div>
+                <div id="expense-summary" class="summary-section" style="display: none;">
+                    <div class="summary-title">Your Family's Estimated Monthly Expenses</div>
+                    <div id="expense-breakdown"></div>
                 </div>
                 <div id="results-container">
                     <!-- Results will be added by JavaScript -->
@@ -479,262 +584,1005 @@
     </div>
 
     <footer>
-        <p>© 2025 Global Salary Calculator | Data is for illustrative purposes only</p>
+        <p>© 2025 Global Family Salary Calculator | Data is for illustrative purposes only</p>
     </footer>
 
     <script>
-        // City data with comprehensive cost of living index (New York = 100)
-        // Indices based on housing costs, food prices, transportation, healthcare, and local currency strength
+        // City data with family-focused cost factors
         const cities = [
             // North America
-            { name: "New York", continent: "North America", country: "USA", index: 100, 
-              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "High" },
-              factors: {
-                  rent: { studio: 3500, small: 4500, medium: 6000, large: 8000 },
-                  own: { studio: 600000, small: 850000, medium: 1500000, large: 2500000 },
-                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
-                  transport: { car: 400, public: 130 },
-                  dining: { rarely: 150, sometimes: 400, often: 800, "very-often": 1200 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "New York", 
+                continent: "North America", 
+                country: "USA", 
+                index: 100, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "High", 
+                    transport: "Moderate", 
+                    healthcare: "High",
+                    education: "Very High",
+                    childcare: "Very High"
+                },
+                factors: {
+                    rent: { studio: 3500, small: 4500, medium: 6000, large: 8000 },
+                    own: { studio: 600000, small: 850000, medium: 1500000, large: 2500000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                    transport: { car: 400, public: 130 },
+                    dining: { rarely: 150, sometimes: 400, often: 800, "very-often": 1200 },
+                    healthcare: { basic: 500, moderate: 800, extensive: 1200 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 25000, 
+                        "private-mid": 45000, 
+                        "private-premium": 65000,
+                        international: 70000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1800, 
+                        "full-time": 3500
+                    },
+                    activities: { 
+                        minimal: 100, 
+                        moderate: 300, 
+                        extensive: 800
+                    },
+                    base_food_cost: 400, // Base monthly food cost per adult
+                    child_food_ratio: 0.7, // A child costs 70% of an adult's food
+                    base_ent_cost: 300, // Base monthly entertainment & misc cost per adult
+                    child_ent_ratio: 0.6 // A child costs 60% of an adult's entertainment
+                }
             },
-            { name: "San Francisco", continent: "North America", country: "USA", index: 107.6, 
-              costs: { housing: "Extremely High", food: "High", transport: "High", healthcare: "High" },
-              factors: {
-                  rent: { studio: 3800, small: 4900, medium: 6500, large: 9000 },
-                  own: { studio: 700000, small: 1000000, medium: 1800000, large: 3000000 },
-                  location: { "city-center": 1.4, urban: 1.1, suburban: 0.85, rural: 0.7 },
-                  transport: { car: 450, public: 100 },
-                  dining: { rarely: 180, sometimes: 450, often: 900, "very-often": 1350 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "San Francisco", 
+                continent: "North America", 
+                country: "USA", 
+                index: 107.6, 
+                costs: { 
+                    housing: "Extremely High", 
+                    food: "High", 
+                    transport: "High", 
+                    healthcare: "High",
+                    education: "Very High",
+                    childcare: "Very High"
+                },
+                factors: {
+                    rent: { studio: 3800, small: 4900, medium: 6500, large: 9000 },
+                    own: { studio: 700000, small: 1000000, medium: 1800000, large: 3000000 },
+                    location: { "city-center": 1.4, urban: 1.1, suburban: 0.85, rural: 0.7 },
+                    transport: { car: 450, public: 100 },
+                    dining: { rarely: 180, sometimes: 450, often: 900, "very-often": 1350 },
+                    healthcare: { basic: 550, moderate: 850, extensive: 1300 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 30000, 
+                        "private-mid": 50000, 
+                        "private-premium": 70000,
+                        international: 75000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 2000, 
+                        "full-time": 3800
+                    },
+                    activities: { 
+                        minimal: 120, 
+                        moderate: 350, 
+                        extensive: 900
+                    },
+                    base_food_cost: 450,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 350,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Los Angeles", continent: "North America", country: "USA", index: 83.9, 
-              costs: { housing: "Very High", food: "Moderate", transport: "High", healthcare: "High" },
-              factors: {
-                  rent: { studio: 2500, small: 3200, medium: 4500, large: 6000 },
-                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
-                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
-                  transport: { car: 420, public: 100 },
-                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Los Angeles", 
+                continent: "North America", 
+                country: "USA", 
+                index: 83.9, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "Moderate", 
+                    transport: "High", 
+                    healthcare: "High",
+                    education: "Very High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 2500, small: 3200, medium: 4500, large: 6000 },
+                    own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                    transport: { car: 420, public: 100 },
+                    dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                    healthcare: { basic: 500, moderate: 800, extensive: 1200 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 22000, 
+                        "private-mid": 40000, 
+                        "private-premium": 60000,
+                        international: 65000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1700, 
+                        "full-time": 3300
+                    },
+                    activities: { 
+                        minimal: 100, 
+                        moderate: 300, 
+                        extensive: 800
+                    },
+                    base_food_cost: 380,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 300,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Chicago", continent: "North America", country: "USA", index: 74.8, 
-              costs: { housing: "Moderate", food: "Moderate", transport: "Moderate", healthcare: "High" },
-              factors: {
-                  rent: { studio: 1800, small: 2400, medium: 3200, large: 4500 },
-                  own: { studio: 300000, small: 450000, medium: 700000, large: 1200000 },
-                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.75, rural: 0.5 },
-                  transport: { car: 380, public: 100 },
-                  dining: { rarely: 130, sometimes: 350, often: 700, "very-often": 1000 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Chicago", 
+                continent: "North America", 
+                country: "USA", 
+                index: 74.8, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Moderate", 
+                    transport: "Moderate", 
+                    healthcare: "High",
+                    education: "High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 1800, small: 2400, medium: 3200, large: 4500 },
+                    own: { studio: 300000, small: 450000, medium: 700000, large: 1200000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.75, rural: 0.5 },
+                    transport: { car: 380, public: 100 },
+                    dining: { rarely: 130, sometimes: 350, often: 700, "very-often": 1000 },
+                    healthcare: { basic: 450, moderate: 750, extensive: 1100 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 20000, 
+                        "private-mid": 35000, 
+                        "private-premium": 55000,
+                        international: 60000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1500, 
+                        "full-time": 2800
+                    },
+                    activities: { 
+                        minimal: 80, 
+                        moderate: 250, 
+                        extensive: 700
+                    },
+                    base_food_cost: 350,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 270,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Toronto", continent: "North America", country: "Canada", index: 76.3, 
-              costs: { housing: "Very High", food: "Moderate", transport: "Moderate", healthcare: "Low" },
-              factors: {
-                  rent: { studio: 2000, small: 2800, medium: 3500, large: 4800 },
-                  own: { studio: 450000, small: 700000, medium: 1100000, large: 1800000 },
-                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
-                  transport: { car: 350, public: 120 },
-                  dining: { rarely: 140, sometimes: 350, often: 700, "very-often": 1050 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Toronto", 
+                continent: "North America", 
+                country: "Canada", 
+                index: 76.3, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "Moderate", 
+                    transport: "Moderate", 
+                    healthcare: "Low",
+                    education: "High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 2000, small: 2800, medium: 3500, large: 4800 },
+                    own: { studio: 450000, small: 700000, medium: 1100000, large: 1800000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                    transport: { car: 350, public: 120 },
+                    dining: { rarely: 140, sometimes: 350, often: 700, "very-often": 1050 },
+                    healthcare: { basic: 100, moderate: 200, extensive: 400 }, // Lower due to public healthcare
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 18000, 
+                        "private-mid": 30000, 
+                        "private-premium": 50000,
+                        international: 55000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1300, 
+                        "full-time": 2500
+                    },
+                    activities: { 
+                        minimal: 90, 
+                        moderate: 270, 
+                        extensive: 700
+                    },
+                    base_food_cost: 350,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 280,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Montreal", continent: "North America", country: "Canada", index: 67.1, 
-              costs: { housing: "Moderate", food: "Moderate", transport: "Low", healthcare: "Low" },
-              factors: {
-                  rent: { studio: 1300, small: 1800, medium: 2500, large: 3200 },
-                  own: { studio: 300000, small: 450000, medium: 650000, large: 900000 },
-                  location: { "city-center": 1.25, urban: 1.0, suburban: 0.8, rural: 0.6 },
-                  transport: { car: 320, public: 85 },
-                  dining: { rarely: 120, sometimes: 300, often: 600, "very-often": 900 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Montreal", 
+                continent: "North America", 
+                country: "Canada", 
+                index: 67.1, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Moderate", 
+                    transport: "Low", 
+                    healthcare: "Low",
+                    education: "Moderate",
+                    childcare: "Moderate"
+                },
+                factors: {
+                    rent: { studio: 1300, small: 1800, medium: 2500, large: 3200 },
+                    own: { studio: 300000, small: 450000, medium: 650000, large: 900000 },
+                    location: { "city-center": 1.25, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                    transport: { car: 320, public: 85 },
+                    dining: { rarely: 120, sometimes: 300, often: 600, "very-often": 900 },
+                    healthcare: { basic: 100, moderate: 200, extensive: 400 }, // Lower due to public healthcare
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 14000, 
+                        "private-mid": 25000, 
+                        "private-premium": 45000,
+                        international: 50000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1000, 
+                        "full-time": 2000
+                    },
+                    activities: { 
+                        minimal: 70, 
+                        moderate: 220, 
+                        extensive: 600
+                    },
+                    base_food_cost: 320,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 250,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Vancouver", continent: "North America", country: "Canada", index: 79.4, 
-              costs: { housing: "Very High", food: "Moderate", transport: "Moderate", healthcare: "Low" },
-              factors: {
-                  rent: { studio: 2100, small: 2900, medium: 3800, large: 5000 },
-                  own: { studio: 500000, small: 800000, medium: 1300000, large: 2000000 },
-                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
-                  transport: { car: 340, public: 100 },
-                  dining: { rarely: 140, sometimes: 350, often: 700, "very-often": 1050 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Warsaw", 
+                continent: "Europe", 
+                country: "Poland", 
+                index: 61.4, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Moderate", 
+                    transport: "Low", 
+                    healthcare: "Low",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 1100, small: 1500, medium: 2000, large: 2800 },
+                    own: { studio: 220000, small: 350000, medium: 550000, large: 800000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.75, rural: 0.5 },
+                    transport: { car: 300, public: 70 },
+                    dining: { rarely: 100, sometimes: 280, often: 550, "very-often": 850 },
+                    healthcare: { basic: 150, moderate: 300, extensive: 600 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 10000, 
+                        "private-mid": 20000, 
+                        "private-premium": 35000,
+                        international: 45000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 800, 
+                        "full-time": 1700
+                    },
+                    activities: { 
+                        minimal: 60, 
+                        moderate: 200, 
+                        extensive: 550
+                    },
+                    base_food_cost: 300,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 220,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Mexico City", continent: "North America", country: "Mexico", index: 43.2, 
-              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" },
-              factors: {
-                  rent: { studio: 700, small: 1000, medium: 1500, large: 2200 },
-                  own: { studio: 120000, small: 180000, medium: 300000, large: 500000 },
-                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
-                  transport: { car: 200, public: 30 },
-                  dining: { rarely: 80, sometimes: 200, often: 400, "very-often": 600 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Istanbul", 
+                continent: "Europe", 
+                country: "Turkey", 
+                index: 54.8, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Low", 
+                    transport: "Low", 
+                    healthcare: "Moderate",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 900, small: 1300, medium: 1800, large: 2500 },
+                    own: { studio: 180000, small: 280000, medium: 450000, large: 700000 },
+                    location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                    transport: { car: 280, public: 60 },
+                    dining: { rarely: 90, sometimes: 250, often: 500, "very-often": 800 },
+                    healthcare: { basic: 180, moderate: 350, extensive: 700 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 8000, 
+                        "private-mid": 16000, 
+                        "private-premium": 30000,
+                        international: 40000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 600, 
+                        "full-time": 1400
+                    },
+                    activities: { 
+                        minimal: 50, 
+                        moderate: 180, 
+                        extensive: 500
+                    },
+                    base_food_cost: 270,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 200,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "Buenos Aires", 
+                continent: "South America", 
+                country: "Argentina", 
+                index: 49.5, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Low", 
+                    transport: "Low", 
+                    healthcare: "Moderate",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 800, small: 1100, medium: 1600, large: 2300 },
+                    own: { studio: 150000, small: 240000, medium: 400000, large: 650000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                    transport: { car: 250, public: 50 },
+                    dining: { rarely: 80, sometimes: 230, often: 450, "very-often": 750 },
+                    healthcare: { basic: 160, moderate: 320, extensive: 650 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 6000, 
+                        "private-mid": 14000, 
+                        "private-premium": 25000,
+                        international: 35000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 500, 
+                        "full-time": 1200
+                    },
+                    activities: { 
+                        minimal: 45, 
+                        moderate: 160, 
+                        extensive: 450
+                    },
+                    base_food_cost: 250,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 180,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "Lima", 
+                continent: "South America", 
+                country: "Peru", 
+                index: 45.7, 
+                costs: { 
+                    housing: "Low", 
+                    food: "Low", 
+                    transport: "Low", 
+                    healthcare: "Low",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 750, small: 1000, medium: 1400, large: 2000 },
+                    own: { studio: 130000, small: 200000, medium: 350000, large: 550000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                    transport: { car: 230, public: 40 },
+                    dining: { rarely: 70, sometimes: 200, often: 400, "very-often": 650 },
+                    healthcare: { basic: 140, moderate: 300, extensive: 600 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 5000, 
+                        "private-mid": 12000, 
+                        "private-premium": 22000,
+                        international: 30000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 400, 
+                        "full-time": 1000
+                    },
+                    activities: { 
+                        minimal: 40, 
+                        moderate: 140, 
+                        extensive: 400
+                    },
+                    base_food_cost: 230,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 160,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "Vancouver", 
+                continent: "North America", 
+                country: "Canada", 
+                index: 79.4, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "Moderate", 
+                    transport: "Moderate", 
+                    healthcare: "Low",
+                    education: "High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 2100, small: 2900, medium: 3800, large: 5000 },
+                    own: { studio: 500000, small: 800000, medium: 1300000, large: 2000000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                    transport: { car: 340, public: 100 },
+                    dining: { rarely: 140, sometimes: 350, often: 700, "very-often": 1050 },
+                    healthcare: { basic: 100, moderate: 200, extensive: 400 }, // Lower due to public healthcare
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 16000, 
+                        "private-mid": 28000, 
+                        "private-premium": 48000,
+                        international: 54000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1200, 
+                        "full-time": 2400
+                    },
+                    activities: { 
+                        minimal: 90, 
+                        moderate: 270, 
+                        extensive: 700
+                    },
+                    base_food_cost: 350,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 280,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "London", 
+                continent: "Europe", 
+                country: "UK", 
+                index: 83.1, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "Moderate", 
+                    transport: "High", 
+                    healthcare: "Low",
+                    education: "Very High",
+                    childcare: "Very High"
+                },
+                factors: {
+                    rent: { studio: 2500, small: 3300, medium: 4500, large: 6500 },
+                    own: { studio: 550000, small: 800000, medium: 1300000, large: 2200000 },
+                    location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                    transport: { car: 400, public: 180 },
+                    dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                    healthcare: { basic: 150, moderate: 300, extensive: 600 }, // Lower due to NHS
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 25000, 
+                        "private-mid": 40000, 
+                        "private-premium": 60000,
+                        international: 65000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1600, 
+                        "full-time": 3000
+                    },
+                    activities: { 
+                        minimal: 100, 
+                        moderate: 300, 
+                        extensive: 800
+                    },
+                    base_food_cost: 350,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 300,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "Paris", 
+                continent: "Europe", 
+                country: "France", 
+                index: 84.3, 
+                costs: { 
+                    housing: "High", 
+                    food: "High", 
+                    transport: "Moderate", 
+                    healthcare: "Low",
+                    education: "High",
+                    childcare: "Moderate"
+                },
+                factors: {
+                    rent: { studio: 2200, small: 3000, medium: 4200, large: 6000 },
+                    own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                    location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                    transport: { car: 350, public: 80 },
+                    dining: { rarely: 160, sometimes: 400, often: 800, "very-often": 1200 },
+                    healthcare: { basic: 120, moderate: 250, extensive: 500 }, // Lower due to public healthcare
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 16000, 
+                        "private-mid": 28000, 
+                        "private-premium": 45000,
+                        international: 55000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1000, 
+                        "full-time": 2200
+                    },
+                    activities: { 
+                        minimal: 100, 
+                        moderate: 300, 
+                        extensive: 800
+                    },
+                    base_food_cost: 380,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 320,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "Tokyo", 
+                continent: "Asia", 
+                country: "Japan", 
+                index: 81.8, 
+                costs: { 
+                    housing: "High", 
+                    food: "High", 
+                    transport: "Moderate", 
+                    healthcare: "Moderate",
+                    education: "High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 1800, small: 2500, medium: 3500, large: 5000 },
+                    own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                    location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.4 },
+                    transport: { car: 350, public: 120 },
+                    dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                    healthcare: { basic: 200, moderate: 400, extensive: 800 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 18000, 
+                        "private-mid": 32000, 
+                        "private-premium": 50000,
+                        international: 60000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1200, 
+                        "full-time": 2500
+                    },
+                    activities: { 
+                        minimal: 100, 
+                        moderate: 300, 
+                        extensive: 800
+                    },
+                    base_food_cost: 400,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 300,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "Singapore", 
+                continent: "Asia", 
+                country: "Singapore", 
+                index: 87.3, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "High", 
+                    transport: "Moderate", 
+                    healthcare: "Moderate",
+                    education: "Very High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 2600, small: 3500, medium: 5000, large: 7000 },
+                    own: { studio: 600000, small: 900000, medium: 1500000, large: 2500000 },
+                    location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.7 },
+                    transport: { car: 700, public: 100 },
+                    dining: { rarely: 160, sometimes: 400, often: 800, "very-often": 1200 },
+                    healthcare: { basic: 300, moderate: 600, extensive: 1200 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 25000, 
+                        "private-mid": 40000, 
+                        "private-premium": 60000,
+                        international: 70000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1400, 
+                        "full-time": 2800
+                    },
+                    activities: { 
+                        minimal: 120, 
+                        moderate: 350, 
+                        extensive: 900
+                    },
+                    base_food_cost: 400,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 350,
+                    child_ent_ratio: 0.6
+                }
+            },
+            { 
+                name: "Sydney", 
+                continent: "Oceania", 
+                country: "Australia", 
+                index: 82.1, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "High", 
+                    transport: "Moderate", 
+                    healthcare: "Low",
+                    education: "High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 2000, small: 2700, medium: 3800, large: 5200 },
+                    own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                    location: { "city-center": 1.4, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                    transport: { car: 350, public: 130 },
+                    dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                    healthcare: { basic: 150, moderate: 300, extensive: 600 }, // Lower due to Medicare
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 20000, 
+                        "private-mid": 35000, 
+                        "private-premium": 50000,
+                        international: 60000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1300, 
+                        "full-time": 2700
+                    },
+                    activities: { 
+                        minimal: 100, 
+                        moderate: 300, 
+                        extensive: 800
+                    },
+                    base_food_cost: 380,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 320,
+                    child_ent_ratio: 0.6
+                }
             },
             
-            // South America
-            { name: "São Paulo", continent: "South America", country: "Brazil", index: 46.5, 
-              costs: { housing: "Moderate", food: "Low", transport: "Low", healthcare: "Moderate" },
-              factors: {
-                  rent: { studio: 800, small: 1200, medium: 1800, large: 2500 },
-                  own: { studio: 150000, small: 220000, medium: 350000, large: 550000 },
-                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
-                  transport: { car: 220, public: 40 },
-                  dining: { rarely: 70, sometimes: 180, often: 360, "very-often": 540 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            // Adding more affordable developing country cities
+            { 
+                name: "Mumbai", 
+                continent: "Asia", 
+                country: "India", 
+                index: 41.2, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Low", 
+                    transport: "Low", 
+                    healthcare: "Low",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 500, small: 800, medium: 1300, large: 2200 },
+                    own: { studio: 100000, small: 180000, medium: 300000, large: 500000 },
+                    location: { "city-center": 1.8, urban: 1.0, suburban: 0.6, rural: 0.3 },
+                    transport: { car: 180, public: 30 },
+                    dining: { rarely: 50, sometimes: 150, often: 300, "very-often": 500 },
+                    healthcare: { basic: 100, moderate: 250, extensive: 600 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 2000, 
+                        "private-mid": 5000, 
+                        "private-premium": 12000,
+                        international: 20000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 150, 
+                        "full-time": 350
+                    },
+                    activities: { 
+                        minimal: 30, 
+                        moderate: 80, 
+                        extensive: 200
+                    },
+                    base_food_cost: 150,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 100,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Buenos Aires", continent: "South America", country: "Argentina", index: 38.1, 
-              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" },
-              factors: {
-                  rent: { studio: 600, small: 800, medium: 1200, large: 1800 },
-                  own: { studio: 100000, small: 150000, medium: 250000, large: 400000 },
-                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.5 },
-                  transport: { car: 180, public: 15 },
-                  dining: { rarely: 60, sometimes: 150, often: 300, "very-often": 450 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Bangkok", 
+                continent: "Asia", 
+                country: "Thailand", 
+                index: 44.8, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Low", 
+                    transport: "Low", 
+                    healthcare: "Moderate",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 600, small: 900, medium: 1500, large: 2500 },
+                    own: { studio: 120000, small: 200000, medium: 350000, large: 600000 },
+                    location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.4 },
+                    transport: { car: 200, public: 40 },
+                    dining: { rarely: 70, sometimes: 180, often: 350, "very-often": 550 },
+                    healthcare: { basic: 120, moderate: 300, extensive: 700 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 3000, 
+                        "private-mid": 8000, 
+                        "private-premium": 15000,
+                        international: 25000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 200, 
+                        "full-time": 450
+                    },
+                    activities: { 
+                        minimal: 40, 
+                        moderate: 100, 
+                        extensive: 250
+                    },
+                    base_food_cost: 180,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 120,
+                    child_ent_ratio: 0.6
+                }
             },
-            
-            // Europe
-            { name: "London", continent: "Europe", country: "UK", index: 83.1, 
-              costs: { housing: "Very High", food: "Moderate", transport: "High", healthcare: "Low" },
-              factors: {
-                  rent: { studio: 2500, small: 3300, medium: 4500, large: 6500 },
-                  own: { studio: 550000, small: 800000, medium: 1300000, large: 2200000 },
-                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.5 },
-                  transport: { car: 400, public: 180 },
-                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Ho Chi Minh City", 
+                continent: "Asia", 
+                country: "Vietnam", 
+                index: 38.7, 
+                costs: { 
+                    housing: "Low", 
+                    food: "Very Low", 
+                    transport: "Very Low", 
+                    healthcare: "Low",
+                    education: "Low",
+                    childcare: "Very Low"
+                },
+                factors: {
+                    rent: { studio: 450, small: 700, medium: 1100, large: 1800 },
+                    own: { studio: 80000, small: 150000, medium: 250000, large: 400000 },
+                    location: { "city-center": 1.7, urban: 1.0, suburban: 0.6, rural: 0.3 },
+                    transport: { car: 150, public: 25 },
+                    dining: { rarely: 50, sometimes: 140, often: 280, "very-often": 450 },
+                    healthcare: { basic: 80, moderate: 200, extensive: 500 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 2000, 
+                        "private-mid": 5000, 
+                        "private-premium": 10000,
+                        international: 18000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 120, 
+                        "full-time": 300
+                    },
+                    activities: { 
+                        minimal: 30, 
+                        moderate: 80, 
+                        extensive: 200
+                    },
+                    base_food_cost: 120,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 80,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Paris", continent: "Europe", country: "France", index: 84.3, 
-              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Low" },
-              factors: {
-                  rent: { studio: 2200, small: 3000, medium: 4200, large: 6000 },
-                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
-                  location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.5 },
-                  transport: { car: 350, public: 80 },
-                  dining: { rarely: 160, sometimes: 400, often: 800, "very-often": 1200 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Kuala Lumpur", 
+                continent: "Asia", 
+                country: "Malaysia", 
+                index: 43.9, 
+                costs: { 
+                    housing: "Moderate", 
+                    food: "Low", 
+                    transport: "Low", 
+                    healthcare: "Moderate",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 550, small: 850, medium: 1300, large: 2200 },
+                    own: { studio: 110000, small: 180000, medium: 300000, large: 500000 },
+                    location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.4 },
+                    transport: { car: 180, public: 35 },
+                    dining: { rarely: 60, sometimes: 160, often: 320, "very-often": 500 },
+                    healthcare: { basic: 100, moderate: 250, extensive: 600 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 3000, 
+                        "private-mid": 7000, 
+                        "private-premium": 14000,
+                        international: 22000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 180, 
+                        "full-time": 400
+                    },
+                    activities: { 
+                        minimal: 35, 
+                        moderate: 90, 
+                        extensive: 220
+                    },
+                    base_food_cost: 160,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 110,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Berlin", continent: "Europe", country: "Germany", index: 69.2, 
-              costs: { housing: "Moderate", food: "Moderate", transport: "Low", healthcare: "Low" },
-              factors: {
-                  rent: { studio: 1200, small: 1700, medium: 2500, large: 3500 },
-                  own: { studio: 300000, small: 450000, medium: 700000, large: 1100000 },
-                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
-                  transport: { car: 300, public: 80 },
-                  dining: { rarely: 120, sometimes: 300, often: 600, "very-often": 900 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Hong Kong", 
+                continent: "Asia", 
+                country: "China", 
+                index: 93.5, 
+                costs: { 
+                    housing: "Extremely High", 
+                    food: "High", 
+                    transport: "Moderate", 
+                    healthcare: "High",
+                    education: "Very High",
+                    childcare: "High"
+                },
+                factors: {
+                    rent: { studio: 3200, small: 4300, medium: 5800, large: 8500 },
+                    own: { studio: 800000, small: 1200000, medium: 2000000, large: 3500000 },
+                    location: { "city-center": 1.5, urban: 1.0, suburban: 0.8, rural: 0.7 },
+                    transport: { car: 500, public: 80 },
+                    dining: { rarely: 170, sometimes: 450, often: 900, "very-often": 1300 },
+                    healthcare: { basic: 400, moderate: 700, extensive: 1400 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 24000, 
+                        "private-mid": 40000, 
+                        "private-premium": 65000,
+                        international: 75000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1700, 
+                        "full-time": 3500
+                    },
+                    activities: { 
+                        minimal: 120, 
+                        moderate: 350, 
+                        extensive: 950
+                    },
+                    base_food_cost: 450,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 350,
+                    child_ent_ratio: 0.6
+                }
             },
-            
-            // Asia
-            { name: "Tokyo", continent: "Asia", country: "Japan", index: 81.8, 
-              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Moderate" },
-              factors: {
-                  rent: { studio: 1800, small: 2500, medium: 3500, large: 5000 },
-                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
-                  location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.4 },
-                  transport: { car: 350, public: 120 },
-                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Shanghai", 
+                continent: "Asia", 
+                country: "China", 
+                index: 85.8, 
+                costs: { 
+                    housing: "Very High", 
+                    food: "Moderate", 
+                    transport: "Low", 
+                    healthcare: "Moderate",
+                    education: "High",
+                    childcare: "Moderate"
+                },
+                factors: {
+                    rent: { studio: 2200, small: 3000, medium: 4200, large: 6000 },
+                    own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                    location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                    transport: { car: 350, public: 50 },
+                    dining: { rarely: 130, sometimes: 350, often: 700, "very-often": 1100 },
+                    healthcare: { basic: 250, moderate: 500, extensive: 1000 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 15000, 
+                        "private-mid": 30000, 
+                        "private-premium": 50000,
+                        international: 65000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 1000, 
+                        "full-time": 2200
+                    },
+                    activities: { 
+                        minimal: 100, 
+                        moderate: 300, 
+                        extensive: 800
+                    },
+                    base_food_cost: 350,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 300,
+                    child_ent_ratio: 0.6
+                }
             },
-            { name: "Singapore", continent: "Asia", country: "Singapore", index: 87.3, 
-              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Moderate" },
-              factors: {
-                  rent: { studio: 2600, small: 3500, medium: 5000, large: 7000 },
-                  own: { studio: 600000, small: 900000, medium: 1500000, large: 2500000 },
-                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.7 },
-                  transport: { car: 700, public: 100 },
-                  dining: { rarely: 160, sometimes: 400, often: 800, "very-often": 1200 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
-            },
-            { name: "Tel Aviv", continent: "Asia", country: "Israel", index: 87.6, 
-              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Moderate" },
-              factors: {
-                  rent: { studio: 2200, small: 3000, medium: 4200, large: 6000 },
-                  own: { studio: 550000, small: 850000, medium: 1400000, large: 2300000 },
-                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.5 },
-                  transport: { car: 350, public: 70 },
-                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
-            },
-            
-            // A few more major cities with detailed factors
-            { name: "Sydney", continent: "Oceania", country: "Australia", index: 82.1, 
-              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Low" },
-              factors: {
-                  rent: { studio: 2000, small: 2700, medium: 3800, large: 5200 },
-                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
-                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.8, rural: 0.6 },
-                  transport: { car: 350, public: 130 },
-                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
-            },
-            { name: "Dubai", continent: "Asia", country: "UAE", index: 72.3, 
-              costs: { housing: "High", food: "Moderate", transport: "Low", healthcare: "Moderate" },
-              factors: {
-                  rent: { studio: 1700, small: 2300, medium: 3200, large: 4500 },
-                  own: { studio: 350000, small: 500000, medium: 800000, large: 1300000 },
-                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.8, rural: 0.6 },
-                  transport: { car: 300, public: 80 },
-                  dining: { rarely: 130, sometimes: 330, often: 650, "very-often": 950 },
-                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
-              }
+            { 
+                name: "Mexico City", 
+                continent: "North America", 
+                country: "Mexico", 
+                index: 43.2, 
+                costs: { 
+                    housing: "Low", 
+                    food: "Low", 
+                    transport: "Low", 
+                    healthcare: "Moderate",
+                    education: "Moderate",
+                    childcare: "Low"
+                },
+                factors: {
+                    rent: { studio: 700, small: 1000, medium: 1500, large: 2200 },
+                    own: { studio: 120000, small: 180000, medium: 300000, large: 500000 },
+                    location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                    transport: { car: 200, public: 30 },
+                    dining: { rarely: 80, sometimes: 200, often: 400, "very-often": 600 },
+                    healthcare: { basic: 150, moderate: 300, extensive: 700 },
+                    education: { 
+                        public: 0, 
+                        "private-affordable": 3500, 
+                        "private-mid": 8000, 
+                        "private-premium": 15000,
+                        international: 25000
+                    },
+                    childcare: { 
+                        none: 0, 
+                        "part-time": 200, 
+                        "full-time": 450
+                    },
+                    activities: { 
+                        minimal: 40, 
+                        moderate: 100, 
+                        extensive: 250
+                    },
+                    base_food_cost: 150,
+                    child_food_ratio: 0.7,
+                    base_ent_cost: 100,
+                    child_ent_ratio: 0.6
+                }
             }
         ];
-
-        // Simplified list of more cities with basic data (will use factor estimates)
-        const simplifiedCities = [
-            { name: "Rio de Janeiro", continent: "South America", country: "Brazil", index: 48.8, 
-              costs: { housing: "Moderate", food: "Low", transport: "Low", healthcare: "Moderate" } },
-            { name: "Lima", continent: "South America", country: "Peru", index: 41.7, 
-              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" } },
-            { name: "Bogotá", continent: "South America", country: "Colombia", index: 39.2, 
-              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" } },
-            { name: "Madrid", continent: "Europe", country: "Spain", index: 63.2, 
-              costs: { housing: "Moderate", food: "Moderate", transport: "Low", healthcare: "Low" } },
-            { name: "Rome", continent: "Europe", country: "Italy", index: 69.4, 
-              costs: { housing: "Moderate", food: "High", transport: "Moderate", healthcare: "Low" } },
-            { name: "Shanghai", continent: "Asia", country: "China", index: 64.7, 
-              costs: { housing: "High", food: "Moderate", transport: "Low", healthcare: "Moderate" } },
-            { name: "Hong Kong", continent: "Asia", country: "China", index: 80.9, 
-              costs: { housing: "Extremely High", food: "Moderate", transport: "Low", healthcare: "Moderate" } },
-            { name: "Mumbai", continent: "Asia", country: "India", index: 41.2, 
-              costs: { housing: "Moderate", food: "Low", transport: "Low", healthcare: "Low" } },
-            { name: "Cairo", continent: "Africa", country: "Egypt", index: 33.5, 
-              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Low" } },
-            { name: "Johannesburg", continent: "Africa", country: "South Africa", index: 42.3, 
-              costs: { housing: "Low", food: "Low", transport: "Moderate", healthcare: "Moderate" } },
-            { name: "Lagos", continent: "Africa", country: "Nigeria", index: 39.7, 
-              costs: { housing: "Moderate", food: "Low", transport: "Moderate", healthcare: "Low" } },
-            { name: "Nairobi", continent: "Africa", country: "Kenya", index: 40.9, 
-              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Low" } },
-            { name: "Casablanca", continent: "Africa", country: "Morocco", index: 44.2, 
-              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Low" } },
-            { name: "Melbourne", continent: "Oceania", country: "Australia", index: 77.3, 
-              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Low" } },
-            { name: "Auckland", continent: "Oceania", country: "New Zealand", index: 78.5, 
-              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Low" } },
-            { name: "Wellington", continent: "Oceania", country: "New Zealand", index: 74.2, 
-              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Low" } },
-            { name: "Brisbane", continent: "Oceania", country: "Australia", index: 72.8, 
-              costs: { housing: "High", food: "Moderate", transport: "Moderate", healthcare: "Low" } }
-        ];
-
-        // Combine all cities into one array
-        const allCities = [...cities, ...simplifiedCities];
 
         // Currency conversion rates (accurate as of early 2025)
         const currencyRates = {
@@ -760,25 +1608,29 @@
         const currentSalaryInput = document.getElementById('current-salary');
         const currentCitySelect = document.getElementById('current-city');
         const currencySelect = document.getElementById('currency');
+        const adultsSelect = document.getElementById('adults');
+        const childrenSelect = document.getElementById('children');
+        const childOptionsSection = document.getElementById('child-options');
+        const educationSelect = document.getElementById('education');
+        const childcareSelect = document.getElementById('childcare');
+        const activitiesSelect = document.getElementById('activities');
+        const housingStatusSelect = document.getElementById('housing-status');
+        const housingSizeSelect = document.getElementById('housing-size');
+        const housingLocationSelect = document.getElementById('housing-location');
+        const ownsCarCheckbox = document.getElementById('owns-car');
+        const usePublicTransitCheckbox = document.getElementById('use-public-transit');
+        const diningOutSelect = document.getElementById('dining-out');
+        const healthcareSelect = document.getElementById('healthcare');
         const calculateBtn = document.getElementById('calculate-btn');
         const resultsContainer = document.getElementById('results-container');
         const barContainer = document.getElementById('bar-container');
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
-        const summarySection = document.getElementById('lifestyle-summary');
-        const summaryContent = document.getElementById('summary-content');
-
-        // Lifestyle elements
-        const housingStatus = document.getElementById('housing-status');
-        const housingSize = document.getElementById('housing-size');
-        const housingLocation = document.getElementById('housing-location');
-        const ownsCar = document.getElementById('owns-car');
-        const usePublicTransit = document.getElementById('use-public-transit');
-        const diningOut = document.getElementById('dining-out');
-        const householdSize = document.getElementById('household-size');
+        const expenseSummary = document.getElementById('expense-summary');
+        const expenseBreakdown = document.getElementById('expense-breakdown');
 
         // Populate city dropdown
-        allCities.sort((a, b) => a.name.localeCompare(b.name)).forEach(city => {
+        cities.sort((a, b) => a.name.localeCompare(b.name)).forEach(city => {
             const option = document.createElement('option');
             option.value = city.name;
             option.textContent = `${city.name}, ${city.country}`;
@@ -788,6 +1640,42 @@
         // Set New York as default
         currentCitySelect.value = "New York";
 
+        // Show/hide child options based on children select
+        childrenSelect.addEventListener('change', function() {
+            if (this.value === '0') {
+                childOptionsSection.style.display = 'none';
+            } else {
+                childOptionsSection.style.display = 'block';
+            }
+        });
+
+        // Update housing size based on family size (optional guidance)
+        function updateRecommendedHousingSize() {
+            const adults = parseInt(adultsSelect.value) || 2;
+            const children = childrenSelect.value === '0' ? 0 : 
+                             childrenSelect.value === '4+' ? 4 : 
+                             parseInt(childrenSelect.value);
+            
+            // Simple logic to recommend housing size
+            if (adults === 1 && children === 0) {
+                // Highlight studio/1BR
+                housingSizeSelect.value = 'studio';
+            } else if ((adults === 2 && children === 0) || (adults === 1 && children === 1)) {
+                // Highlight 2BR
+                housingSizeSelect.value = 'small';
+            } else if ((adults <= 2 && children <= 2) || (adults === 3 && children <= 1)) {
+                // Highlight 3BR
+                housingSizeSelect.value = 'medium';
+            } else {
+                // Highlight 4+BR
+                housingSizeSelect.value = 'large';
+            }
+        }
+
+        // Add event listeners to family composition fields
+        adultsSelect.addEventListener('change', updateRecommendedHousingSize);
+        childrenSelect.addEventListener('change', updateRecommendedHousingSize);
+
         // Calculate button click event
         calculateBtn.addEventListener('click', () => {
             calculateAndDisplayResults();
@@ -795,117 +1683,220 @@
 
         // Main calculation function
         function calculateAndDisplayResults() {
-            const currentCity = allCities.find(c => c.name === currentCitySelect.value);
+            const currentCity = cities.find(c => c.name === currentCitySelect.value);
             const currentSalary = parseFloat(currentSalaryInput.value) || 75000;
             const currency = currencySelect.value;
             
             if (!currentCity) return;
             
-            // Get lifestyle factors
-            const lifestyle = getLifestyleFactors();
+            // Get family composition and lifestyle factors
+            const familyData = {
+                adults: adultsSelect.value === '4+' ? 4 : parseInt(adultsSelect.value),
+                children: childrenSelect.value === '0' ? 0 : 
+                          childrenSelect.value === '4+' ? 4 : 
+                          parseInt(childrenSelect.value),
+                education: educationSelect.value,
+                childcare: childcareSelect.value,
+                activities: activitiesSelect.value,
+                housingStatus: housingStatusSelect.value,
+                housingSize: housingSizeSelect.value,
+                housingLocation: housingLocationSelect.value,
+                ownsCar: ownsCarCheckbox.checked,
+                usePublicTransit: usePublicTransitCheckbox.checked,
+                diningOut: diningOutSelect.value,
+                healthcare: healthcareSelect.value
+            };
             
-            // Calculate lifestyle adjustment factor
-            const lifestyleFactors = calculateLifestyleFactors(currentCity, lifestyle);
+            // Calculate expenses for current city
+            const currentExpenses = calculateCityExpenses(currentCity, familyData);
             
-            // Update summary section
-            updateLifestyleSummary(lifestyle, lifestyleFactors, currency);
+            // Update expense summary section
+            updateExpenseSummary(currentCity, currentExpenses, currency);
             
             // Update each visualization
-            updateSalaryList(currentCity, currentSalary, currency, lifestyle, lifestyleFactors);
-            updateBarChart(currentCity, currentSalary, currency, lifestyle, lifestyleFactors);
+            updateSalaryList(currentCity, currentSalary, currency, familyData, currentExpenses);
+            updateBarChart(currentCity, currentSalary, currency, familyData, currentExpenses);
             
-            // Show the summary section
-            summarySection.style.display = 'block';
+            // Show the expense summary section
+            expenseSummary.style.display = 'block';
         }
 
-        // Get lifestyle factors from form
-        function getLifestyleFactors() {
-            return {
-                housingStatus: housingStatus.value,
-                housingSize: housingSize.value,
-                housingLocation: housingLocation.value,
-                ownsCar: ownsCar.checked,
-                usePublicTransit: usePublicTransit.checked,
-                diningOut: diningOut.value,
-                householdSize: householdSize.value
-            };
-        }
-        
-        // Calculate lifestyle adjustments based on factors
-        function calculateLifestyleFactors(city, lifestyle) {
-            // Get base city data or use New York as reference if detailed factors not available
-            const baseCity = cities.find(c => c.name === city.name) || cities.find(c => c.name === "New York");
-            const factors = baseCity.factors;
+        // Calculate expenses for a city based on family composition and lifestyle
+        function calculateCityExpenses(city, familyData) {
+            const factors = city.factors;
+            const expenses = {};
             
-            // Calculate housing factor
-            let housingFactor = 0;
-            if (lifestyle.housingStatus === "rent") {
-                housingFactor = factors.rent[lifestyle.housingSize];
+            // Calculate housing expenses
+            if (familyData.housingStatus === "rent") {
+                expenses.housing = factors.rent[familyData.housingSize];
             } else {
                 // Ownership costs are amortized (divide by 300 for rough monthly equivalent)
-                housingFactor = factors.own[lifestyle.housingSize] / 300;
+                expenses.housing = factors.own[familyData.housingSize] / 300;
             }
             
             // Adjust for location
-            housingFactor *= factors.location[lifestyle.housingLocation];
+            expenses.housing *= factors.location[familyData.housingLocation];
             
-            // Calculate transportation factor
-            let transportFactor = 0;
-            if (lifestyle.ownsCar) {
-                transportFactor += factors.transport.car;
+            // Calculate transportation expenses
+            expenses.transport = 0;
+            if (familyData.ownsCar) {
+                expenses.transport += factors.transport.car;
+                // Add more for additional adults who might need cars
+                if (familyData.adults > 1) {
+                    expenses.transport += (familyData.adults - 1) * factors.transport.car * 0.8; // 80% cost for additional cars
+                }
             }
-            if (lifestyle.usePublicTransit) {
-                transportFactor += factors.transport.public;
+            if (familyData.usePublicTransit) {
+                expenses.transport += factors.transport.public * familyData.adults;
+                // Add half-price for children over 5
+                if (familyData.children > 0) {
+                    expenses.transport += (factors.transport.public * 0.5) * familyData.children;
+                }
             }
             
-            // Calculate dining factor
-            const diningFactor = factors.dining[lifestyle.diningOut];
+            // Calculate healthcare expenses
+            expenses.healthcare = factors.healthcare[familyData.healthcare] * familyData.adults;
+            // Add healthcare for children (typically less expensive than adults)
+            if (familyData.children > 0) {
+                expenses.healthcare += (factors.healthcare[familyData.healthcare] * 0.7) * familyData.children;
+            }
             
-            // Calculate household size factor
-            const householdFactor = factors.household[lifestyle.householdSize];
+            // Calculate education expenses (only if there are children)
+            expenses.education = 0;
+            if (familyData.children > 0) {
+                // Annual cost divided by 12 for monthly
+                expenses.education = (factors.education[familyData.education] / 12) * familyData.children;
+            }
             
-            return {
-                housing: housingFactor,
-                transport: transportFactor,
-                dining: diningFactor,
-                household: householdFactor,
-                // Calculate total monthly expenses based on these factors
-                totalMonthly: (housingFactor + transportFactor + diningFactor) * householdFactor
+            // Calculate childcare expenses (only if there are children)
+            expenses.childcare = 0;
+            if (familyData.children > 0 && familyData.childcare !== 'none') {
+                expenses.childcare = factors.childcare[familyData.childcare] * familyData.children;
+            }
+            
+            // Calculate activities expenses (only if there are children)
+            expenses.activities = 0;
+            if (familyData.children > 0) {
+                expenses.activities = factors.activities[familyData.activities] * familyData.children;
+            }
+            
+            // Calculate food expenses
+            expenses.food = factors.base_food_cost * familyData.adults;
+            // Add food for children (typically less than adults)
+            if (familyData.children > 0) {
+                expenses.food += (factors.base_food_cost * factors.child_food_ratio) * familyData.children;
+            }
+            
+            // Adjust food based on dining out habits
+            const diningMultipliers = {
+                rarely: 0.8,
+                sometimes: 1.0,
+                often: 1.4,
+                "very-often": 1.8
             };
+            expenses.food *= diningMultipliers[familyData.diningOut];
+            expenses.dining = factors.dining[familyData.diningOut] * (familyData.adults + (familyData.children * 0.5));
+            
+            // Calculate entertainment and miscellaneous expenses
+            expenses.entertainment = factors.base_ent_cost * familyData.adults;
+            if (familyData.children > 0) {
+                expenses.entertainment += (factors.base_ent_cost * factors.child_ent_ratio) * familyData.children;
+            }
+            
+            // Calculate total monthly expenses
+            expenses.total = Object.values(expenses).reduce((sum, value) => sum + value, 0);
+            
+            return expenses;
         }
         
-        // Update the lifestyle summary section
-        function updateLifestyleSummary(lifestyle, factors, currency) {
+        // Update the expense summary section
+        function updateExpenseSummary(city, expenses, currency) {
             const currencySymbol = currencySymbols[currency];
             
             let summaryHTML = `
-                <div class="summary-item">
-                    <span>Housing (${lifestyle.housingStatus === "own" ? "Own" : "Rent"}, ${formatHousingSize(lifestyle.housingSize)}, ${formatLocation(lifestyle.housingLocation)})</span>
-                    <span>${currencySymbol}${formatNumber(factors.housing)}/mo</span>
+                <div class="expense-category">
+                    <div class="expense-title">Housing & Utilities</div>
+                    <div class="summary-item">
+                        <span>Housing (${formatHousingSize(housingSizeSelect.value)}, ${formatLocation(housingLocationSelect.value)})</span>
+                        <span>${currencySymbol}${formatNumber(expenses.housing)}/mo</span>
+                    </div>
                 </div>
-                <div class="summary-item">
-                    <span>Transportation (${lifestyle.ownsCar ? "Car" : ""}${lifestyle.ownsCar && lifestyle.usePublicTransit ? " + " : ""}${lifestyle.usePublicTransit ? "Public Transit" : ""})</span>
-                    <span>${currencySymbol}${formatNumber(factors.transport)}/mo</span>
+                
+                <div class="expense-category">
+                    <div class="expense-title">Transportation</div>
+                    <div class="summary-item">
+                        <span>Transportation (${ownsCarCheckbox.checked ? "Car" : ""}${ownsCarCheckbox.checked && usePublicTransitCheckbox.checked ? " + " : ""}${usePublicTransitCheckbox.checked ? "Public Transit" : ""})</span>
+                        <span>${currencySymbol}${formatNumber(expenses.transport)}/mo</span>
+                    </div>
                 </div>
-                <div class="summary-item">
-                    <span>Dining (${formatDining(lifestyle.diningOut)})</span>
-                    <span>${currencySymbol}${formatNumber(factors.dining)}/mo</span>
+                
+                <div class="expense-category">
+                    <div class="expense-title">Food & Dining</div>
+                    <div class="summary-item">
+                        <span>Groceries</span>
+                        <span>${currencySymbol}${formatNumber(expenses.food)}/mo</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Dining Out (${formatDining(diningOutSelect.value)})</span>
+                        <span>${currencySymbol}${formatNumber(expenses.dining)}/mo</span>
+                    </div>
                 </div>
-                <div class="summary-item">
-                    <span>Household Size (${lifestyle.householdSize} ${lifestyle.householdSize === "1" ? "person" : "people"})</span>
-                    <span>× ${factors.household}</span>
-                </div>
-                <div class="summary-item summary-total">
-                    <span>Estimated Monthly Expenses</span>
-                    <span>${currencySymbol}${formatNumber(factors.totalMonthly)}/mo</span>
+                
+                <div class="expense-category">
+                    <div class="expense-title">Healthcare</div>
+                    <div class="summary-item">
+                        <span>Healthcare (${formatHealthcare(healthcareSelect.value)})</span>
+                        <span>${currencySymbol}${formatNumber(expenses.healthcare)}/mo</span>
+                    </div>
                 </div>
             `;
             
-            summaryContent.innerHTML = summaryHTML;
+            // Only show child-related expenses if there are children
+            if (childrenSelect.value !== '0') {
+                summaryHTML += `
+                    <div class="expense-category">
+                        <div class="expense-title">Children's Expenses</div>
+                        <div class="summary-item">
+                            <span>Education (${formatEducation(educationSelect.value)})</span>
+                            <span>${currencySymbol}${formatNumber(expenses.education)}/mo</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Childcare (${formatChildcare(childcareSelect.value)})</span>
+                            <span>${currencySymbol}${formatNumber(expenses.childcare)}/mo</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Activities (${formatActivities(activitiesSelect.value)})</span>
+                            <span>${currencySymbol}${formatNumber(expenses.activities)}/mo</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            summaryHTML += `
+                <div class="expense-category">
+                    <div class="expense-title">Other</div>
+                    <div class="summary-item">
+                        <span>Entertainment & Miscellaneous</span>
+                        <span>${currencySymbol}${formatNumber(expenses.entertainment)}/mo</span>
+                    </div>
+                </div>
+                
+                <div class="summary-item summary-total">
+                    <span>Total Monthly Expenses</span>
+                    <span>${currencySymbol}${formatNumber(expenses.total)}/mo</span>
+                </div>
+                
+                <div class="summary-item">
+                    <span>Total Annual Expenses</span>
+                    <span>${currencySymbol}${formatNumber(expenses.total * 12)}/year</span>
+                </div>
+            `;
+            
+            expenseBreakdown.innerHTML = summaryHTML;
         }
 
-        // Update salary list view with lifestyle adjustments
-        function updateSalaryList(currentCity, currentSalary, currency, lifestyle, currentFactors) {
+        // Update salary list view with family adjustments
+        function updateSalaryList(currentCity, currentSalary, currency, familyData, currentExpenses) {
             resultsContainer.innerHTML = '';
             
             // Add result for current city first
@@ -917,34 +1908,31 @@
                     <div class="city-name">${currentCity.name}, ${currentCity.country}</div>
                     <div class="city-details">Current city • ${currentCity.continent}</div>
                     <div class="city-details" style="font-size: 11px; margin-top: 3px;">
-                        Housing: ${currentCity.costs.housing} • Food: ${currentCity.costs.food} • Healthcare: ${currentCity.costs.healthcare}
+                        Housing: ${currentCity.costs.housing} • Education: ${currentCity.costs.education} • Childcare: ${currentCity.costs.childcare}
                     </div>
                 </div>
                 <div class="salary-info">
                     <div class="salary">${currencySymbols[currency]}${formatNumber(currentSalary)}</div>
-                    <div class="city-details">Cost of Living Index: ${currentCity.index}</div>
-                    <div class="city-details" style="font-size: 11px;">Monthly Expenses: ${currencySymbols[currency]}${formatNumber(currentFactors.totalMonthly)}</div>
+                    <div class="city-details">Monthly Expenses: ${currencySymbols[currency]}${formatNumber(currentExpenses.total)}</div>
+                    <div class="city-details">Annual Expenses: ${currencySymbols[currency]}${formatNumber(currentExpenses.total * 12)}</div>
+                    <div class="city-details" style="font-size: 11px;">Cost of Living Index: ${currentCity.index}</div>
                 </div>
             `;
             resultsContainer.appendChild(currentCityResult);
             
             // Calculate and sort cities by adjusted salary
-            const citiesWithSalaries = allCities
+            const citiesWithSalaries = cities
                 .filter(city => city.name !== currentCity.name)
                 .map(city => {
-                    // Calculate base adjustment using index
-                    let adjustedSalary = calculateAdjustedSalary(currentSalary, currentCity.index, city.index);
+                    // Calculate expenses for this city
+                    const targetExpenses = calculateCityExpenses(city, familyData);
                     
-                    // Apply lifestyle factors if detailed data available
-                    if (cities.some(c => c.name === city.name)) {
-                        const targetFactors = calculateLifestyleFactors(city, lifestyle);
-                        // Adjust based on monthly expenses ratio
-                        const expenseRatio = targetFactors.totalMonthly / currentFactors.totalMonthly;
-                        adjustedSalary = currentSalary * expenseRatio;
-                    }
+                    // Calculate adjusted salary based on expense ratio
+                    const expenseRatio = targetExpenses.total / currentExpenses.total;
+                    const adjustedSalary = currentSalary * expenseRatio;
                     
                     const percentChange = ((adjustedSalary / currentSalary - 1) * 100).toFixed(1);
-                    return { ...city, adjustedSalary, percentChange };
+                    return { ...city, adjustedSalary, percentChange, expenses: targetExpenses };
                 })
                 .sort((a, b) => b.adjustedSalary - a.adjustedSalary);
             
@@ -955,9 +1943,9 @@
                 resultElement.innerHTML = `
                     <div class="city-info">
                         <div class="city-name">${city.name}, ${city.country}</div>
-                        <div class="city-details">${city.continent} • Cost of Living Index: ${city.index}</div>
+                        <div class="city-details">${city.continent} • Index: ${city.index}</div>
                         <div class="city-details" style="font-size: 11px; margin-top: 3px;">
-                            Housing: ${city.costs.housing} • Food: ${city.costs.food} • Healthcare: ${city.costs.healthcare}
+                            Housing: ${city.costs.housing} • Education: ${city.costs.education} • Childcare: ${city.costs.childcare}
                         </div>
                     </div>
                     <div class="salary-info">
@@ -965,38 +1953,39 @@
                         <div class="difference ${city.percentChange >= 0 ? 'positive' : 'negative'}">
                             ${city.percentChange >= 0 ? '+' : ''}${city.percentChange}%
                         </div>
+                        <div class="city-details" style="font-size: 11px; margin-top: 3px;">
+                            Monthly: ${currencySymbols[currency]}${formatNumber(city.expenses.total)}
+                        </div>
+                        <div class="city-details" style="font-size: 11px;">
+                            Annual: ${currencySymbols[currency]}${formatNumber(city.expenses.total * 12)}
+                        </div>
                     </div>
                 `;
                 resultsContainer.appendChild(resultElement);
             });
         }
 
-        // Update bar chart view with lifestyle adjustments
-        function updateBarChart(currentCity, currentSalary, currency, lifestyle, currentFactors) {
+        // Update bar chart view with family adjustments
+        function updateBarChart(currentCity, currentSalary, currency, familyData, currentExpenses) {
             barContainer.innerHTML = '';
             
-            // Get top 15 cities by population/importance for the chart
-            const majorCities = allCities
-                .filter(city => cities.some(c => c.name === city.name)) // Only cities with detailed data
-                .map(city => {
-                    // Calculate base adjustment using index
-                    let adjustedSalary = calculateAdjustedSalary(currentSalary, currentCity.index, city.index);
-                    
-                    // Apply lifestyle factors
-                    const targetFactors = calculateLifestyleFactors(city, lifestyle);
-                    // Adjust based on monthly expenses ratio
-                    const expenseRatio = targetFactors.totalMonthly / currentFactors.totalMonthly;
-                    adjustedSalary = currentSalary * expenseRatio;
-                    
-                    return { ...city, adjustedSalary };
-                })
-                .sort((a, b) => b.adjustedSalary - a.adjustedSalary);
+            // Calculate expenses and adjusted salaries for all cities
+            const citiesWithSalaries = cities.map(city => {
+                // Calculate expenses for this city
+                const targetExpenses = calculateCityExpenses(city, familyData);
+                
+                // Calculate adjusted salary based on expense ratio
+                const expenseRatio = targetExpenses.total / currentExpenses.total;
+                const adjustedSalary = currentSalary * expenseRatio;
+                
+                return { ...city, adjustedSalary, expenses: targetExpenses };
+            }).sort((a, b) => b.adjustedSalary - a.adjustedSalary);
             
             // Find max salary for scaling
-            const maxSalary = Math.max(...majorCities.map(city => city.adjustedSalary));
+            const maxSalary = Math.max(...citiesWithSalaries.map(city => city.adjustedSalary));
             
             // Create bars for each city
-            majorCities.forEach(city => {
+            citiesWithSalaries.forEach(city => {
                 const barHeight = (city.adjustedSalary / maxSalary) * 100;
                 const barElement = document.createElement('div');
                 barElement.classList.add('bar');
@@ -1019,11 +2008,6 @@
                 
                 barContainer.appendChild(barElement);
             });
-        }
-
-        // Utility function to calculate adjusted salary
-        function calculateAdjustedSalary(salary, currentCityIndex, targetCityIndex) {
-            return salary * (targetCityIndex / currentCityIndex);
         }
 
         // Helper function to format housing size
@@ -1058,7 +2042,49 @@
                 default: return frequency;
             }
         }
-
+        
+        // Helper function to format healthcare level
+        function formatHealthcare(level) {
+            switch(level) {
+                case 'basic': return 'Basic coverage';
+                case 'moderate': return 'Moderate coverage';
+                case 'extensive': return 'Extensive coverage';
+                default: return level;
+            }
+        }
+        
+        // Helper function to format education type
+        function formatEducation(type) {
+            switch(type) {
+                case 'public': return 'Public School';
+                case 'private-affordable': return 'Affordable Private';
+                case 'private-mid': return 'Mid-range Private';
+                case 'private-premium': return 'Premium Private';
+                case 'international': return 'International School';
+                default: return type;
+            }
+        }
+        
+        // Helper function to format childcare level
+        function formatChildcare(level) {
+            switch(level) {
+                case 'none': return 'None';
+                case 'part-time': return 'Part-time (10-20hrs/week)';
+                case 'full-time': return 'Full-time (40+hrs/week)';
+                default: return level;
+            }
+        }
+        
+        // Helper function to format activities level
+        function formatActivities(level) {
+            switch(level) {
+                case 'minimal': return 'Minimal';
+                case 'moderate': return 'Moderate';
+                case 'extensive': return 'Extensive';
+                default: return level;
+            }
+        }
+        
         // Utility function to format numbers with commas
         function formatNumber(number) {
             return Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1087,8 +2113,9 @@
             });
         });
 
-        // Initialize with default values (but don't show results yet)
-        // summarySection.style.display = 'none';
+        // Initial setup
+        childOptionsSection.style.display = 'none'; // Hide child options initially
+        expenseSummary.style.display = 'none'; // Hide expense summary initially
     </script>
 </body>
 </html>
