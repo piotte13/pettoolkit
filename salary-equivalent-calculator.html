@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Salary Calculator</title>
+    <style>
+        /* Simple, clean styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f5f7fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .result-card {
+            background-color: white;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-card:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .city-info {
+            flex: 1;
+        }
+        
+        .city-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        
+        .city-details {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .salary-info {
+            text-align: right;
+            flex: 1;
+        }
+        
+        .salary {
+            font-weight: bold;
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .difference {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+        
+        .positive {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .negative {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        /* Bar chart */
+        .bar-chart {
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .bar-container {
+            display: flex;
+            height: 300px;
+            align-items: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            min-width: 800px;
+        }
+        
+        .bar {
+            flex: 1;
+            background-color: #3498db;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-width: 40px;
+            transition: height 0.5s;
+        }
+        
+        .bar-current {
+            background-color: #f39c12;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .continent-title {
+            margin: 30px 0 10px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .lifestyle-section {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .lifestyle-title {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .lifestyle-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .toggle-section {
+            margin-bottom: 10px;
+        }
+        
+        .toggle-section label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 15px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        
+        .toggle-section input[type="radio"],
+        .toggle-section input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+        
+        .summary-section {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #d1e3ff;
+        }
+        
+        .summary-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .summary-total {
+            font-weight: bold;
+            border-top: 1px solid #d1e3ff;
+            padding-top: 5px;
+            margin-top: 5px;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .input-section {
+                flex-direction: column;
+            }
+            
+            .result-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .salary-info {
+                text-align: left;
+                margin-top: 10px;
+            }
+            
+            .lifestyle-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Global Salary Calculator</h1>
+        <p class="subtitle">See how your salary adjusts to maintain your quality of life when moving to a new city</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Enter Your Current Details</h2>
+            <p style="margin-bottom: 15px;">Including housing, transportation, food costs, and lifestyle preferences for a personalized estimate.</p>
+            
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="current-salary">Current Annual Salary</label>
+                    <input type="number" id="current-salary" placeholder="e.g. 75000" value="75000">
+                </div>
+                <div class="input-group">
+                    <label for="current-city">Current City</label>
+                    <select id="current-city">
+                        <!-- Options will be loaded by JavaScript -->
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="currency">Currency</label>
+                    <select id="currency">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="JPY">JPY (¥)</option>
+                        <option value="AUD">AUD (A$)</option>
+                        <option value="CAD">CAD (C$)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="lifestyle-section">
+                <div class="lifestyle-title">Your Lifestyle Preferences</div>
+                
+                <div class="lifestyle-options">
+                    <div class="input-group">
+                        <label for="housing-status">Housing Status</label>
+                        <select id="housing-status">
+                            <option value="rent">Renting</option>
+                            <option value="own">Own a Home</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="housing-size">Housing Size</label>
+                        <select id="housing-size">
+                            <option value="studio">Studio/1 Bedroom</option>
+                            <option value="small" selected>2 Bedroom</option>
+                            <option value="medium">3 Bedroom</option>
+                            <option value="large">4+ Bedroom</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="housing-location">Housing Location</label>
+                        <select id="housing-location">
+                            <option value="city-center">City Center</option>
+                            <option value="urban">Urban (Not Center)</option>
+                            <option value="suburban" selected>Suburban</option>
+                            <option value="rural">Rural</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="lifestyle-options" style="margin-top: 15px;">
+                    <div class="input-group">
+                        <label>Transportation</label>
+                        <div class="toggle-section">
+                            <label><input type="checkbox" id="owns-car" checked> Own a Car</label>
+                            <label><input type="checkbox" id="use-public-transit"> Use Public Transit</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="dining-out">Dining Out Frequency</label>
+                        <select id="dining-out">
+                            <option value="rarely">Rarely (1-2 times/month)</option>
+                            <option value="sometimes" selected>Sometimes (1-2 times/week)</option>
+                            <option value="often">Often (3-5 times/week)</option>
+                            <option value="very-often">Very Often (Daily)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="household-size">Household Size</label>
+                        <select id="household-size">
+                            <option value="1">1 Person</option>
+                            <option value="2" selected>2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5+">5+ People</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <button id="calculate-btn">Calculate Adjusted Salary</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <div class="tab active" data-tab="list">Salary List</div>
+                <div class="tab" data-tab="chart">Bar Chart</div>
+            </div>
+            
+            <div class="tab-content active" id="list-content">
+                <h2>Salary Comparison by City</h2>
+                <div id="lifestyle-summary" class="summary-section" style="display: none;">
+                    <div class="summary-title">Your Lifestyle Factors</div>
+                    <div id="summary-content"></div>
+                </div>
+                <div id="results-container">
+                    <!-- Results will be added by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="chart-content">
+                <h2>Visual Salary Comparison</h2>
+                <p>The chart below shows how your salary would need to adjust to maintain the same quality of life:</p>
+                <div class="bar-chart">
+                    <div id="bar-container" class="bar-container">
+                        <!-- Bars will be added by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Global Salary Calculator | Data is for illustrative purposes only</p>
+    </footer>
+
+    <script>
+        // City data with comprehensive cost of living index (New York = 100)
+        // Indices based on housing costs, food prices, transportation, healthcare, and local currency strength
+        const cities = [
+            // North America
+            { name: "New York", continent: "North America", country: "USA", index: 100, 
+              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "High" },
+              factors: {
+                  rent: { studio: 3500, small: 4500, medium: 6000, large: 8000 },
+                  own: { studio: 600000, small: 850000, medium: 1500000, large: 2500000 },
+                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                  transport: { car: 400, public: 130 },
+                  dining: { rarely: 150, sometimes: 400, often: 800, "very-often": 1200 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "San Francisco", continent: "North America", country: "USA", index: 107.6, 
+              costs: { housing: "Extremely High", food: "High", transport: "High", healthcare: "High" },
+              factors: {
+                  rent: { studio: 3800, small: 4900, medium: 6500, large: 9000 },
+                  own: { studio: 700000, small: 1000000, medium: 1800000, large: 3000000 },
+                  location: { "city-center": 1.4, urban: 1.1, suburban: 0.85, rural: 0.7 },
+                  transport: { car: 450, public: 100 },
+                  dining: { rarely: 180, sometimes: 450, often: 900, "very-often": 1350 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Los Angeles", continent: "North America", country: "USA", index: 83.9, 
+              costs: { housing: "Very High", food: "Moderate", transport: "High", healthcare: "High" },
+              factors: {
+                  rent: { studio: 2500, small: 3200, medium: 4500, large: 6000 },
+                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                  transport: { car: 420, public: 100 },
+                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Chicago", continent: "North America", country: "USA", index: 74.8, 
+              costs: { housing: "Moderate", food: "Moderate", transport: "Moderate", healthcare: "High" },
+              factors: {
+                  rent: { studio: 1800, small: 2400, medium: 3200, large: 4500 },
+                  own: { studio: 300000, small: 450000, medium: 700000, large: 1200000 },
+                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.75, rural: 0.5 },
+                  transport: { car: 380, public: 100 },
+                  dining: { rarely: 130, sometimes: 350, often: 700, "very-often": 1000 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Toronto", continent: "North America", country: "Canada", index: 76.3, 
+              costs: { housing: "Very High", food: "Moderate", transport: "Moderate", healthcare: "Low" },
+              factors: {
+                  rent: { studio: 2000, small: 2800, medium: 3500, large: 4800 },
+                  own: { studio: 450000, small: 700000, medium: 1100000, large: 1800000 },
+                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                  transport: { car: 350, public: 120 },
+                  dining: { rarely: 140, sometimes: 350, often: 700, "very-often": 1050 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Montreal", continent: "North America", country: "Canada", index: 67.1, 
+              costs: { housing: "Moderate", food: "Moderate", transport: "Low", healthcare: "Low" },
+              factors: {
+                  rent: { studio: 1300, small: 1800, medium: 2500, large: 3200 },
+                  own: { studio: 300000, small: 450000, medium: 650000, large: 900000 },
+                  location: { "city-center": 1.25, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                  transport: { car: 320, public: 85 },
+                  dining: { rarely: 120, sometimes: 300, often: 600, "very-often": 900 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Vancouver", continent: "North America", country: "Canada", index: 79.4, 
+              costs: { housing: "Very High", food: "Moderate", transport: "Moderate", healthcare: "Low" },
+              factors: {
+                  rent: { studio: 2100, small: 2900, medium: 3800, large: 5000 },
+                  own: { studio: 500000, small: 800000, medium: 1300000, large: 2000000 },
+                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                  transport: { car: 340, public: 100 },
+                  dining: { rarely: 140, sometimes: 350, often: 700, "very-often": 1050 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Mexico City", continent: "North America", country: "Mexico", index: 43.2, 
+              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" },
+              factors: {
+                  rent: { studio: 700, small: 1000, medium: 1500, large: 2200 },
+                  own: { studio: 120000, small: 180000, medium: 300000, large: 500000 },
+                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                  transport: { car: 200, public: 30 },
+                  dining: { rarely: 80, sometimes: 200, often: 400, "very-often": 600 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            
+            // South America
+            { name: "São Paulo", continent: "South America", country: "Brazil", index: 46.5, 
+              costs: { housing: "Moderate", food: "Low", transport: "Low", healthcare: "Moderate" },
+              factors: {
+                  rent: { studio: 800, small: 1200, medium: 1800, large: 2500 },
+                  own: { studio: 150000, small: 220000, medium: 350000, large: 550000 },
+                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                  transport: { car: 220, public: 40 },
+                  dining: { rarely: 70, sometimes: 180, often: 360, "very-often": 540 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Buenos Aires", continent: "South America", country: "Argentina", index: 38.1, 
+              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" },
+              factors: {
+                  rent: { studio: 600, small: 800, medium: 1200, large: 1800 },
+                  own: { studio: 100000, small: 150000, medium: 250000, large: 400000 },
+                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                  transport: { car: 180, public: 15 },
+                  dining: { rarely: 60, sometimes: 150, often: 300, "very-often": 450 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            
+            // Europe
+            { name: "London", continent: "Europe", country: "UK", index: 83.1, 
+              costs: { housing: "Very High", food: "Moderate", transport: "High", healthcare: "Low" },
+              factors: {
+                  rent: { studio: 2500, small: 3300, medium: 4500, large: 6500 },
+                  own: { studio: 550000, small: 800000, medium: 1300000, large: 2200000 },
+                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                  transport: { car: 400, public: 180 },
+                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Paris", continent: "Europe", country: "France", index: 84.3, 
+              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Low" },
+              factors: {
+                  rent: { studio: 2200, small: 3000, medium: 4200, large: 6000 },
+                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                  location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                  transport: { car: 350, public: 80 },
+                  dining: { rarely: 160, sometimes: 400, often: 800, "very-often": 1200 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Berlin", continent: "Europe", country: "Germany", index: 69.2, 
+              costs: { housing: "Moderate", food: "Moderate", transport: "Low", healthcare: "Low" },
+              factors: {
+                  rent: { studio: 1200, small: 1700, medium: 2500, large: 3500 },
+                  own: { studio: 300000, small: 450000, medium: 700000, large: 1100000 },
+                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                  transport: { car: 300, public: 80 },
+                  dining: { rarely: 120, sometimes: 300, often: 600, "very-often": 900 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            
+            // Asia
+            { name: "Tokyo", continent: "Asia", country: "Japan", index: 81.8, 
+              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Moderate" },
+              factors: {
+                  rent: { studio: 1800, small: 2500, medium: 3500, large: 5000 },
+                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                  location: { "city-center": 1.6, urban: 1.0, suburban: 0.7, rural: 0.4 },
+                  transport: { car: 350, public: 120 },
+                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Singapore", continent: "Asia", country: "Singapore", index: 87.3, 
+              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Moderate" },
+              factors: {
+                  rent: { studio: 2600, small: 3500, medium: 5000, large: 7000 },
+                  own: { studio: 600000, small: 900000, medium: 1500000, large: 2500000 },
+                  location: { "city-center": 1.3, urban: 1.0, suburban: 0.8, rural: 0.7 },
+                  transport: { car: 700, public: 100 },
+                  dining: { rarely: 160, sometimes: 400, often: 800, "very-often": 1200 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Tel Aviv", continent: "Asia", country: "Israel", index: 87.6, 
+              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Moderate" },
+              factors: {
+                  rent: { studio: 2200, small: 3000, medium: 4200, large: 6000 },
+                  own: { studio: 550000, small: 850000, medium: 1400000, large: 2300000 },
+                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.7, rural: 0.5 },
+                  transport: { car: 350, public: 70 },
+                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            
+            // A few more major cities with detailed factors
+            { name: "Sydney", continent: "Oceania", country: "Australia", index: 82.1, 
+              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Low" },
+              factors: {
+                  rent: { studio: 2000, small: 2700, medium: 3800, large: 5200 },
+                  own: { studio: 500000, small: 750000, medium: 1200000, large: 2000000 },
+                  location: { "city-center": 1.4, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                  transport: { car: 350, public: 130 },
+                  dining: { rarely: 150, sometimes: 380, often: 750, "very-often": 1100 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            },
+            { name: "Dubai", continent: "Asia", country: "UAE", index: 72.3, 
+              costs: { housing: "High", food: "Moderate", transport: "Low", healthcare: "Moderate" },
+              factors: {
+                  rent: { studio: 1700, small: 2300, medium: 3200, large: 4500 },
+                  own: { studio: 350000, small: 500000, medium: 800000, large: 1300000 },
+                  location: { "city-center": 1.5, urban: 1.0, suburban: 0.8, rural: 0.6 },
+                  transport: { car: 300, public: 80 },
+                  dining: { rarely: 130, sometimes: 330, often: 650, "very-often": 950 },
+                  household: { "1": 1.0, "2": 1.6, "3": 2.0, "4": 2.3, "5+": 2.6 }
+              }
+            }
+        ];
+
+        // Simplified list of more cities with basic data (will use factor estimates)
+        const simplifiedCities = [
+            { name: "Rio de Janeiro", continent: "South America", country: "Brazil", index: 48.8, 
+              costs: { housing: "Moderate", food: "Low", transport: "Low", healthcare: "Moderate" } },
+            { name: "Lima", continent: "South America", country: "Peru", index: 41.7, 
+              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" } },
+            { name: "Bogotá", continent: "South America", country: "Colombia", index: 39.2, 
+              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Moderate" } },
+            { name: "Madrid", continent: "Europe", country: "Spain", index: 63.2, 
+              costs: { housing: "Moderate", food: "Moderate", transport: "Low", healthcare: "Low" } },
+            { name: "Rome", continent: "Europe", country: "Italy", index: 69.4, 
+              costs: { housing: "Moderate", food: "High", transport: "Moderate", healthcare: "Low" } },
+            { name: "Shanghai", continent: "Asia", country: "China", index: 64.7, 
+              costs: { housing: "High", food: "Moderate", transport: "Low", healthcare: "Moderate" } },
+            { name: "Hong Kong", continent: "Asia", country: "China", index: 80.9, 
+              costs: { housing: "Extremely High", food: "Moderate", transport: "Low", healthcare: "Moderate" } },
+            { name: "Mumbai", continent: "Asia", country: "India", index: 41.2, 
+              costs: { housing: "Moderate", food: "Low", transport: "Low", healthcare: "Low" } },
+            { name: "Cairo", continent: "Africa", country: "Egypt", index: 33.5, 
+              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Low" } },
+            { name: "Johannesburg", continent: "Africa", country: "South Africa", index: 42.3, 
+              costs: { housing: "Low", food: "Low", transport: "Moderate", healthcare: "Moderate" } },
+            { name: "Lagos", continent: "Africa", country: "Nigeria", index: 39.7, 
+              costs: { housing: "Moderate", food: "Low", transport: "Moderate", healthcare: "Low" } },
+            { name: "Nairobi", continent: "Africa", country: "Kenya", index: 40.9, 
+              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Low" } },
+            { name: "Casablanca", continent: "Africa", country: "Morocco", index: 44.2, 
+              costs: { housing: "Low", food: "Low", transport: "Low", healthcare: "Low" } },
+            { name: "Melbourne", continent: "Oceania", country: "Australia", index: 77.3, 
+              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Low" } },
+            { name: "Auckland", continent: "Oceania", country: "New Zealand", index: 78.5, 
+              costs: { housing: "Very High", food: "High", transport: "Moderate", healthcare: "Low" } },
+            { name: "Wellington", continent: "Oceania", country: "New Zealand", index: 74.2, 
+              costs: { housing: "High", food: "High", transport: "Moderate", healthcare: "Low" } },
+            { name: "Brisbane", continent: "Oceania", country: "Australia", index: 72.8, 
+              costs: { housing: "High", food: "Moderate", transport: "Moderate", healthcare: "Low" } }
+        ];
+
+        // Combine all cities into one array
+        const allCities = [...cities, ...simplifiedCities];
+
+        // Currency conversion rates (accurate as of early 2025)
+        const currencyRates = {
+            USD: 1,
+            EUR: 0.93,
+            GBP: 0.79,
+            JPY: 151.8,
+            AUD: 1.52,
+            CAD: 1.44
+        };
+
+        // Currency symbols
+        const currencySymbols = {
+            USD: "$",
+            EUR: "€",
+            GBP: "£",
+            JPY: "¥",
+            AUD: "A$",
+            CAD: "C$"
+        };
+
+        // DOM elements
+        const currentSalaryInput = document.getElementById('current-salary');
+        const currentCitySelect = document.getElementById('current-city');
+        const currencySelect = document.getElementById('currency');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultsContainer = document.getElementById('results-container');
+        const barContainer = document.getElementById('bar-container');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const summarySection = document.getElementById('lifestyle-summary');
+        const summaryContent = document.getElementById('summary-content');
+
+        // Lifestyle elements
+        const housingStatus = document.getElementById('housing-status');
+        const housingSize = document.getElementById('housing-size');
+        const housingLocation = document.getElementById('housing-location');
+        const ownsCar = document.getElementById('owns-car');
+        const usePublicTransit = document.getElementById('use-public-transit');
+        const diningOut = document.getElementById('dining-out');
+        const householdSize = document.getElementById('household-size');
+
+        // Populate city dropdown
+        allCities.sort((a, b) => a.name.localeCompare(b.name)).forEach(city => {
+            const option = document.createElement('option');
+            option.value = city.name;
+            option.textContent = `${city.name}, ${city.country}`;
+            currentCitySelect.appendChild(option);
+        });
+
+        // Set New York as default
+        currentCitySelect.value = "New York";
+
+        // Calculate button click event
+        calculateBtn.addEventListener('click', () => {
+            calculateAndDisplayResults();
+        });
+
+        // Main calculation function
+        function calculateAndDisplayResults() {
+            const currentCity = allCities.find(c => c.name === currentCitySelect.value);
+            const currentSalary = parseFloat(currentSalaryInput.value) || 75000;
+            const currency = currencySelect.value;
+            
+            if (!currentCity) return;
+            
+            // Get lifestyle factors
+            const lifestyle = getLifestyleFactors();
+            
+            // Calculate lifestyle adjustment factor
+            const lifestyleFactors = calculateLifestyleFactors(currentCity, lifestyle);
+            
+            // Update summary section
+            updateLifestyleSummary(lifestyle, lifestyleFactors, currency);
+            
+            // Update each visualization
+            updateSalaryList(currentCity, currentSalary, currency, lifestyle, lifestyleFactors);
+            updateBarChart(currentCity, currentSalary, currency, lifestyle, lifestyleFactors);
+            
+            // Show the summary section
+            summarySection.style.display = 'block';
+        }
+
+        // Get lifestyle factors from form
+        function getLifestyleFactors() {
+            return {
+                housingStatus: housingStatus.value,
+                housingSize: housingSize.value,
+                housingLocation: housingLocation.value,
+                ownsCar: ownsCar.checked,
+                usePublicTransit: usePublicTransit.checked,
+                diningOut: diningOut.value,
+                householdSize: householdSize.value
+            };
+        }
+        
+        // Calculate lifestyle adjustments based on factors
+        function calculateLifestyleFactors(city, lifestyle) {
+            // Get base city data or use New York as reference if detailed factors not available
+            const baseCity = cities.find(c => c.name === city.name) || cities.find(c => c.name === "New York");
+            const factors = baseCity.factors;
+            
+            // Calculate housing factor
+            let housingFactor = 0;
+            if (lifestyle.housingStatus === "rent") {
+                housingFactor = factors.rent[lifestyle.housingSize];
+            } else {
+                // Ownership costs are amortized (divide by 300 for rough monthly equivalent)
+                housingFactor = factors.own[lifestyle.housingSize] / 300;
+            }
+            
+            // Adjust for location
+            housingFactor *= factors.location[lifestyle.housingLocation];
+            
+            // Calculate transportation factor
+            let transportFactor = 0;
+            if (lifestyle.ownsCar) {
+                transportFactor += factors.transport.car;
+            }
+            if (lifestyle.usePublicTransit) {
+                transportFactor += factors.transport.public;
+            }
+            
+            // Calculate dining factor
+            const diningFactor = factors.dining[lifestyle.diningOut];
+            
+            // Calculate household size factor
+            const householdFactor = factors.household[lifestyle.householdSize];
+            
+            return {
+                housing: housingFactor,
+                transport: transportFactor,
+                dining: diningFactor,
+                household: householdFactor,
+                // Calculate total monthly expenses based on these factors
+                totalMonthly: (housingFactor + transportFactor + diningFactor) * householdFactor
+            };
+        }
+        
+        // Update the lifestyle summary section
+        function updateLifestyleSummary(lifestyle, factors, currency) {
+            const currencySymbol = currencySymbols[currency];
+            
+            let summaryHTML = `
+                <div class="summary-item">
+                    <span>Housing (${lifestyle.housingStatus === "own" ? "Own" : "Rent"}, ${formatHousingSize(lifestyle.housingSize)}, ${formatLocation(lifestyle.housingLocation)})</span>
+                    <span>${currencySymbol}${formatNumber(factors.housing)}/mo</span>
+                </div>
+                <div class="summary-item">
+                    <span>Transportation (${lifestyle.ownsCar ? "Car" : ""}${lifestyle.ownsCar && lifestyle.usePublicTransit ? " + " : ""}${lifestyle.usePublicTransit ? "Public Transit" : ""})</span>
+                    <span>${currencySymbol}${formatNumber(factors.transport)}/mo</span>
+                </div>
+                <div class="summary-item">
+                    <span>Dining (${formatDining(lifestyle.diningOut)})</span>
+                    <span>${currencySymbol}${formatNumber(factors.dining)}/mo</span>
+                </div>
+                <div class="summary-item">
+                    <span>Household Size (${lifestyle.householdSize} ${lifestyle.householdSize === "1" ? "person" : "people"})</span>
+                    <span>× ${factors.household}</span>
+                </div>
+                <div class="summary-item summary-total">
+                    <span>Estimated Monthly Expenses</span>
+                    <span>${currencySymbol}${formatNumber(factors.totalMonthly)}/mo</span>
+                </div>
+            `;
+            
+            summaryContent.innerHTML = summaryHTML;
+        }
+
+        // Update salary list view with lifestyle adjustments
+        function updateSalaryList(currentCity, currentSalary, currency, lifestyle, currentFactors) {
+            resultsContainer.innerHTML = '';
+            
+            // Add result for current city first
+            const currentCityResult = document.createElement('div');
+            currentCityResult.classList.add('result-card');
+            currentCityResult.style.borderLeft = '4px solid #f39c12';
+            currentCityResult.innerHTML = `
+                <div class="city-info">
+                    <div class="city-name">${currentCity.name}, ${currentCity.country}</div>
+                    <div class="city-details">Current city • ${currentCity.continent}</div>
+                    <div class="city-details" style="font-size: 11px; margin-top: 3px;">
+                        Housing: ${currentCity.costs.housing} • Food: ${currentCity.costs.food} • Healthcare: ${currentCity.costs.healthcare}
+                    </div>
+                </div>
+                <div class="salary-info">
+                    <div class="salary">${currencySymbols[currency]}${formatNumber(currentSalary)}</div>
+                    <div class="city-details">Cost of Living Index: ${currentCity.index}</div>
+                    <div class="city-details" style="font-size: 11px;">Monthly Expenses: ${currencySymbols[currency]}${formatNumber(currentFactors.totalMonthly)}</div>
+                </div>
+            `;
+            resultsContainer.appendChild(currentCityResult);
+            
+            // Calculate and sort cities by adjusted salary
+            const citiesWithSalaries = allCities
+                .filter(city => city.name !== currentCity.name)
+                .map(city => {
+                    // Calculate base adjustment using index
+                    let adjustedSalary = calculateAdjustedSalary(currentSalary, currentCity.index, city.index);
+                    
+                    // Apply lifestyle factors if detailed data available
+                    if (cities.some(c => c.name === city.name)) {
+                        const targetFactors = calculateLifestyleFactors(city, lifestyle);
+                        // Adjust based on monthly expenses ratio
+                        const expenseRatio = targetFactors.totalMonthly / currentFactors.totalMonthly;
+                        adjustedSalary = currentSalary * expenseRatio;
+                    }
+                    
+                    const percentChange = ((adjustedSalary / currentSalary - 1) * 100).toFixed(1);
+                    return { ...city, adjustedSalary, percentChange };
+                })
+                .sort((a, b) => b.adjustedSalary - a.adjustedSalary);
+            
+            // Add results for all other cities
+            citiesWithSalaries.forEach(city => {
+                const resultElement = document.createElement('div');
+                resultElement.classList.add('result-card');
+                resultElement.innerHTML = `
+                    <div class="city-info">
+                        <div class="city-name">${city.name}, ${city.country}</div>
+                        <div class="city-details">${city.continent} • Cost of Living Index: ${city.index}</div>
+                        <div class="city-details" style="font-size: 11px; margin-top: 3px;">
+                            Housing: ${city.costs.housing} • Food: ${city.costs.food} • Healthcare: ${city.costs.healthcare}
+                        </div>
+                    </div>
+                    <div class="salary-info">
+                        <div class="salary">${currencySymbols[currency]}${formatNumber(city.adjustedSalary)}</div>
+                        <div class="difference ${city.percentChange >= 0 ? 'positive' : 'negative'}">
+                            ${city.percentChange >= 0 ? '+' : ''}${city.percentChange}%
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(resultElement);
+            });
+        }
+
+        // Update bar chart view with lifestyle adjustments
+        function updateBarChart(currentCity, currentSalary, currency, lifestyle, currentFactors) {
+            barContainer.innerHTML = '';
+            
+            // Get top 15 cities by population/importance for the chart
+            const majorCities = allCities
+                .filter(city => cities.some(c => c.name === city.name)) // Only cities with detailed data
+                .map(city => {
+                    // Calculate base adjustment using index
+                    let adjustedSalary = calculateAdjustedSalary(currentSalary, currentCity.index, city.index);
+                    
+                    // Apply lifestyle factors
+                    const targetFactors = calculateLifestyleFactors(city, lifestyle);
+                    // Adjust based on monthly expenses ratio
+                    const expenseRatio = targetFactors.totalMonthly / currentFactors.totalMonthly;
+                    adjustedSalary = currentSalary * expenseRatio;
+                    
+                    return { ...city, adjustedSalary };
+                })
+                .sort((a, b) => b.adjustedSalary - a.adjustedSalary);
+            
+            // Find max salary for scaling
+            const maxSalary = Math.max(...majorCities.map(city => city.adjustedSalary));
+            
+            // Create bars for each city
+            majorCities.forEach(city => {
+                const barHeight = (city.adjustedSalary / maxSalary) * 100;
+                const barElement = document.createElement('div');
+                barElement.classList.add('bar');
+                
+                if (city.name === currentCity.name) {
+                    barElement.classList.add('bar-current');
+                }
+                
+                barElement.style.height = `${barHeight}%`;
+                
+                const labelElement = document.createElement('div');
+                labelElement.classList.add('bar-label');
+                labelElement.textContent = city.name;
+                barElement.appendChild(labelElement);
+                
+                const valueElement = document.createElement('div');
+                valueElement.classList.add('bar-value');
+                valueElement.textContent = currencySymbols[currency] + formatShortNumber(city.adjustedSalary);
+                barElement.appendChild(valueElement);
+                
+                barContainer.appendChild(barElement);
+            });
+        }
+
+        // Utility function to calculate adjusted salary
+        function calculateAdjustedSalary(salary, currentCityIndex, targetCityIndex) {
+            return salary * (targetCityIndex / currentCityIndex);
+        }
+
+        // Helper function to format housing size
+        function formatHousingSize(size) {
+            switch(size) {
+                case 'studio': return 'Studio/1BR';
+                case 'small': return '2BR';
+                case 'medium': return '3BR';
+                case 'large': return '4+BR';
+                default: return size;
+            }
+        }
+        
+        // Helper function to format location
+        function formatLocation(location) {
+            switch(location) {
+                case 'city-center': return 'City Center';
+                case 'urban': return 'Urban';
+                case 'suburban': return 'Suburban';
+                case 'rural': return 'Rural';
+                default: return location;
+            }
+        }
+        
+        // Helper function to format dining frequency
+        function formatDining(frequency) {
+            switch(frequency) {
+                case 'rarely': return 'Rarely (1-2/month)';
+                case 'sometimes': return 'Sometimes (1-2/week)';
+                case 'often': return 'Often (3-5/week)';
+                case 'very-often': return 'Daily';
+                default: return frequency;
+            }
+        }
+
+        // Utility function to format numbers with commas
+        function formatNumber(number) {
+            return Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Utility function to format short numbers
+        function formatShortNumber(number) {
+            if (number >= 1000000) {
+                return (number / 1000000).toFixed(1) + 'M';
+            } else if (number >= 1000) {
+                return (number / 1000).toFixed(0) + 'K';
+            }
+            return Math.round(number).toString();
+        }
+
+        // Tab switching functionality
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Deactivate all tabs and content
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Activate clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+            });
+        });
+
+        // Initialize with default values (but don't show results yet)
+        // summarySection.style.display = 'none';
+    </script>
+</body>
+</html>
