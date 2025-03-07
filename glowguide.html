@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✿ GlowGuide - Your Personalized Beauty Routine ✿</title>
+    <style>
+        :root {
+            --primary-color: #e686b2; /* Pink instead of blue */
+            --secondary-color: #fef2f7; /* Light pink background */
+            --accent-color: #b36ad8; /* Purple accent */
+            --text-color: #4a3a4a; /* Softer dark text */
+            --light-text: #8a7389; /* Softer light text */
+            --white: #fff;
+            --shadow: 0 6px 10px rgba(230, 134, 178, 0.15); /* Softer, colored shadow */
+            --border-radius: 20px; /* More rounded corners */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' fill-opacity='0.05'%3E%3Cpath fill='%23e686b2' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/svg%3E");
+            font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+            color: var(--white);
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Decorative elements */
+        header:before, header:after {
+            content: "";
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff' opacity='0.2'%3E%3Cpath d='M12,2C7.6,2,4,5.6,4,10c0,3.9,7,12,8,12s8-8.1,8-12C20,5.6,16.4,2,12,2z M12,12c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S13.1,12,12,12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            opacity: 0.2;
+        }
+        
+        header:before {
+            top: 20px;
+            left: 20px;
+        }
+        
+        header:after {
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(180deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section, .results-section {
+            width: 100%;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .form-section:before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 50px;
+            height: 50px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e686b2' opacity='0.3'%3E%3Cpath d='M12 1.044c-1.424 0-4.289 3.7-5.542 3.7-.59 0-1.045-.477-1.045-1.045 0-1.424 5.999-3.7 5.999-3.7s.588 1.045.588 1.045zm1.045 3.7c1.424 0 4.289-3.7 5.542-3.7.59 0 1.045.478 1.045 1.045 0 1.424-5.999 3.7-5.999 3.7s-.588-1.045-.588-1.045zM2.349 8.637c0-1.424 5.999-3.7 5.999-3.7s.588 1.045.588 1.045c-1.424 0-4.289 3.7-5.542 3.7-.59 0-1.045-.477-1.045-1.045zm18.258 0c0 1.424-5.999 3.7-5.999 3.7s-.588-1.045-.588-1.045c1.424 0 4.289-3.7 5.542-3.7.59 0 1.045.478 1.045 1.045zM2.349 15.363c0 1.424 5.999 3.7 5.999 3.7s.588-1.045.588-1.045c-1.424 0-4.289-3.7-5.542-3.7-.59 0-1.045.478-1.045 1.045zm18.258 0c0-1.424-5.999-3.7-5.999-3.7s-.588 1.045-.588 1.045c1.424 0 4.289 3.7 5.542 3.7.59 0 1.045-.477 1.045-1.045zM7.76 22.956c-1.424 0-4.289-3.7-5.542-3.7-.59 0-1.045.478-1.045 1.045 0 1.424 5.999 3.7 5.999 3.7s.588-1.045.588-1.045zm8.48 0c1.424 0 4.289 3.7 5.542 3.7.59 0 1.045-.477 1.045-1.045 0-1.424-5.999-3.7-5.999-3.7s-.588 1.045-.588 1.045z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        h2 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        h2:after {
+            content: "✿"; /* Flower symbol */
+            position: absolute;
+            right: 0;
+            bottom: 5px;
+            color: var(--primary-color);
+            opacity: 0.4;
+            font-size: 1.2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--light-text);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .concern-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .concern-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .concern-option input {
+            width: auto;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--accent-color), #eb8dc0);
+            color: var(--white);
+            border: none;
+            padding: 16px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(179, 106, 216, 0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #d05bbd, #e686b2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(179, 106, 216, 0.4);
+        }
+        
+        #results {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .routine-container {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .routine-step {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .step-icon {
+            width: 35px;
+            height: 35px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+        }
+        
+        .product {
+            border-left: 3px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 15px 0;
+            background-color: var(--white);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product:hover {
+            transform: translateX(5px);
+        }
+        
+        .product:before {
+            content: "❀";
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            color: var(--primary-color);
+            opacity: 0.1;
+            font-size: 1.5rem;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .product-description {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .product-price {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .product-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+            color: var(--white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-weight: 500;
+        }
+        
+        .product-link:hover {
+            background: linear-gradient(135deg, #e065a0, #f483b6);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .routine-summary {
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+            color: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .climate-note {
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .routine-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .concern-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✿ GlowGuide ✿</h1>
+            <p class="tagline">Your personalized skincare routine, tailored to your unique beauty needs</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="form-section">
+                <h2>Tell us about your skin</h2>
+                <form id="skincare-form">
+                    <div class="form-group">
+                        <label for="climate">Your Climate Type</label>
+                        <select id="climate" required>
+                            <option value="">Select climate type</option>
+                            <option value="dry">Dry/Arid</option>
+                            <option value="humid">Humid/Tropical</option>
+                            <option value="moderate">Moderate/Temperate</option>
+                            <option value="cold">Cold/Arctic</option>
+                            <option value="coastal">Coastal/Marine</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="season">Current Season</label>
+                        <select id="season" required>
+                            <option value="">Select season</option>
+                            <option value="winter">Winter</option>
+                            <option value="spring">Spring</option>
+                            <option value="summer">Summer</option>
+                            <option value="fall">Fall</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="skin-type">Your Skin Type</label>
+                        <select id="skin-type" required>
+                            <option value="">Select skin type</option>
+                            <option value="dry">Dry</option>
+                            <option value="oily">Oily</option>
+                            <option value="combination">Combination</option>
+                            <option value="normal">Normal</option>
+                            <option value="sensitive">Sensitive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Your Skin Concerns (Select all that apply)</label>
+                        <div class="concern-options">
+                            <div class="concern-option">
+                                <input type="checkbox" id="acne" name="concerns" value="acne">
+                                <label for="acne">Acne</label>
+                            </div>
+                            <div class="concern-option">
+                                <input type="checkbox" id="aging" name="concerns" value="aging">
+                                <label for="aging">Anti-aging</label>
+                            </div>
+                            <div class="concern-option">
+                                <input type="checkbox" id="pigmentation" name="concerns" value="pigmentation">
+                                <label for="pigmentation">Hyperpigmentation</label>
+                            </div>
+                            <div class="concern-option">
+                                <input type="checkbox" id="redness" name="concerns" value="redness">
+                                <label for="redness">Redness</label>
+                            </div>
+                            <div class="concern-option">
+                                <input type="checkbox" id="dullness" name="concerns" value="dullness">
+                                <label for="dullness">Dullness</label>
+                            </div>
+                            <div class="concern-option">
+                                <input type="checkbox" id="dryness" name="concerns" value="dryness">
+                                <label for="dryness">Dryness</label>
+                            </div>
+                            <div class="concern-option">
+                                <input type="checkbox" id="texture" name="concerns" value="texture">
+                                <label for="texture">Texture</label>
+                            </div>
+                            <div class="concern-option">
+                                <input type="checkbox" id="pores" name="concerns" value="pores">
+                                <label for="pores">Large Pores</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit">Get My Personalized Routine</button>
+                </form>
+            </section>
+            
+            <section class="results-section" id="results">
+                <h2>Your Personalized Skincare Routine</h2>
+                
+                <div class="routine-summary" id="routine-summary">
+                    <!-- Will be filled with JavaScript -->
+                </div>
+                
+                <div class="routine-container" id="routine-container">
+                    <!-- Will be filled with JavaScript -->
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>© 2025 GlowGuide | Personalized beauty recommendations for your unique glow journey ✿</p>
+            <p>Note: Product recommendations are lovingly curated based on your skin profile and environmental factors.</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.getElementById('skincare-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get user inputs
+            const climate = document.getElementById('climate').value;
+            const season = document.getElementById('season').value;
+            const skinType = document.getElementById('skin-type').value;
+            
+            // Get selected concerns
+            const concernCheckboxes = document.querySelectorAll('input[name="concerns"]:checked');
+            const concerns = Array.from(concernCheckboxes).map(cb => cb.value);
+            
+            // Show results section
+            document.getElementById('results').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Generate personalized routine
+            generateRoutine(climate, season, skinType, concerns);
+        });
+        
+        function generateRoutine(climate, season, skinType, concerns) {
+            // Create summary
+            let summaryCopy = `Customized routine for ${skinType} skin`;
+            if (concerns.length > 0) {
+                summaryCopy += ` targeting ${concerns.join(', ')}`;
+            }
+            summaryCopy += ` during ${season} in a ${climate} climate.`;
+            
+            // Add climate note based on season and climate
+            let climateNote = '';
+            
+            if (climate === 'dry') {
+                climateNote = 'For dry climates, focus on deep hydration and moisture retention.';
+                if (season === 'winter') {
+                    climateNote += ' Extra protection is needed in winter months.';
+                }
+            } else if (climate === 'humid') {
+                climateNote = 'For humid climates, focus on oil control and non-comedogenic products.';
+                if (season === 'summer') {
+                    climateNote += ' Summer humidity requires lightweight, breathable formulas.';
+                }
+            } else if (climate === 'cold') {
+                climateNote = 'For cold climates, focus on barrier repair and protection against harsh elements.';
+                if (season === 'winter') {
+                    climateNote += ' Winter months need extra emollients and protection.';
+                }
+            } else if (climate === 'coastal') {
+                climateNote = 'For coastal areas, focus on protection against salt air and sun damage.';
+                if (season === 'summer') {
+                    climateNote += ' Increased SPF is recommended for summer months.';
+                }
+            } else {
+                if (season === 'winter') {
+                    climateNote = 'For winter months, focus on hydration and barrier protection.';
+                } else if (season === 'summer') {
+                    climateNote = 'For summer months, focus on oil control and sun protection.';
+                } else if (season === 'spring') {
+                    climateNote = 'For spring, focus on adapting to increasing humidity and temperature.';
+                } else if (season === 'fall') {
+                    climateNote = 'For fall, focus on repairing summer damage and preparing for drier conditions.';
+                }
+            }
+            
+            document.getElementById('routine-summary').innerHTML = `
+                <h3>Your Custom Routine</h3>
+                <p>${summaryCopy}</p>
+                <p class="climate-note">${climateNote}</p>
+            `;
+            
+            // Initialize routine container
+            const routineContainer = document.getElementById('routine-container');
+            routineContainer.innerHTML = '';
+            
+            // Generate morning routine
+            const morningRoutine = document.createElement('div');
+            morningRoutine.classList.add('routine-step');
+            morningRoutine.innerHTML = `
+                <div class="step-title">
+                    <div class="step-icon">AM</div>
+                    Morning Routine
+                </div>
+            `;
+            
+            // Add cleanser
+            let cleanser = getCleanser(skinType, season);
+            morningRoutine.innerHTML += createProductHTML(cleanser);
+            
+            // Add toner if needed
+            if (concerns.includes('pores') || concerns.includes('dullness') || skinType === 'oily' || skinType === 'combination') {
+                let toner = getToner(skinType, concerns);
+                morningRoutine.innerHTML += createProductHTML(toner);
+            }
+            
+            // Add serum based on concerns
+            if (concerns.length > 0) {
+                let serum = getSerum(concerns, skinType, 'am');
+                morningRoutine.innerHTML += createProductHTML(serum);
+            }
+            
+            // Add moisturizer
+            let moisturizer = getMoisturizer(skinType, season);
+            morningRoutine.innerHTML += createProductHTML(moisturizer);
+            
+            // Add sunscreen for morning
+            let sunscreen = getSunscreen(skinType);
+            morningRoutine.innerHTML += createProductHTML(sunscreen);
+            
+            routineContainer.appendChild(morningRoutine);
+            
+            // Generate evening routine
+            const eveningRoutine = document.createElement('div');
+            eveningRoutine.classList.add('routine-step');
+            eveningRoutine.innerHTML = `
+                <div class="step-title">
+                    <div class="step-icon">PM</div>
+                    Evening Routine
+                </div>
+            `;
+            
+            // Add makeup remover for evening if needed
+            if (skinType !== 'sensitive') {
+                let makeupRemover = getMakeupRemover(skinType);
+                eveningRoutine.innerHTML += createProductHTML(makeupRemover);
+            }
+            
+            // Add cleanser (same as morning)
+            eveningRoutine.innerHTML += createProductHTML(cleanser);
+            
+            // Add exfoliant if needed (only evening, 2-3 times per week)
+            if (!skinType === 'sensitive') {
+                let exfoliant = getExfoliant(skinType, concerns);
+                exfoliant.description += " (Use 2-3 times per week)";
+                eveningRoutine.innerHTML += createProductHTML(exfoliant);
+            }
+            
+            // Add serum based on concerns (evening specific)
+            if (concerns.length > 0) {
+                let pmSerum = getSerum(concerns, skinType, 'pm');
+                eveningRoutine.innerHTML += createProductHTML(pmSerum);
+            }
+            
+            // Add night cream/moisturizer
+            let nightCream = getNightCream(skinType, season, concerns);
+            eveningRoutine.innerHTML += createProductHTML(nightCream);
+            
+            // Add treatment for specific concerns
+            if (concerns.includes('acne') || concerns.includes('aging') || concerns.includes('pigmentation')) {
+                let treatment = getTreatment(concerns[0], skinType);
+                eveningRoutine.innerHTML += createProductHTML(treatment);
+            }
+            
+            routineContainer.appendChild(eveningRoutine);
+            
+            // Add weekly treatments section
+            const weeklyRoutine = document.createElement('div');
+            weeklyRoutine.classList.add('routine-step');
+            weeklyRoutine.innerHTML = `
+                <div class="step-title">
+                    <div class="step-icon">W</div>
+                    Weekly Treatments
+                </div>
+            `;
+            
+            // Add mask based on skin type and concerns
+            let mask = getMask(skinType, concerns);
+            weeklyRoutine.innerHTML += createProductHTML(mask);
+            
+            routineContainer.appendChild(weeklyRoutine);
+        }
+        
+        // Helper functions to get products based on parameters
+        function getCleanser(skinType, season) {
+            let cleanserOptions = {
+                'dry': {
+                    name: "CeraVe Hydrating Facial Cleanser",
+                    description: "Gentle, hydrating cleanser with ceramides that won't strip your skin's natural oils.",
+                    price: "$14.99",
+                    link: "#cerave-hydrating-cleanser"
+                },
+                'oily': {
+                    name: "La Roche-Posay Effaclar Purifying Foaming Gel Cleanser",
+                    description: "Oil-free foaming cleanser that removes excess oil while respecting your skin's pH.",
+                    price: "$24.99",
+                    link: "#laroche-effaclar-cleanser"
+                },
+                'combination': {
+                    name: "Fresh Soy Face Cleanser",
+                    description: "Balanced pH formula that cleanses without drying for combination skin types.",
+                    price: "$38.00",
+                    link: "#fresh-soy-cleanser"
+                },
+                'normal': {
+                    name: "Kiehl's Ultra Facial Cleanser",
+                    description: "Gentle formula that maintains skin's natural balance while cleansing effectively.",
+                    price: "$22.00",
+                    link: "#kiehls-facial-cleanser"
+                },
+                'sensitive': {
+                    name: "Vanicream Gentle Facial Cleanser",
+                    description: "Free from common irritants, perfect for sensitive skin that needs gentle cleansing.",
+                    price: "$8.99",
+                    link: "#vanicream-gentle-cleanser"
+                }
+            };
+            
+            // Winter adjustments for dry/normal skin
+            if (season === 'winter' && (skinType === 'dry' || skinType === 'normal')) {
+                return {
+                    name: "First Aid Beauty Pure Skin Face Cleanser",
+                    description: "Creamy, fragrance-free cleanser that's extra gentle for winter-dry skin.",
+                    price: "$22.00",
+                    link: "#firstaid-face-cleanser"
+                };
+            }
+            
+            // Summer adjustments for oily/combination skin
+            if (season === 'summer' && (skinType === 'oily' || skinType === 'combination')) {
+                return {
+                    name: "Paula's Choice Clear Pore Normalizing Cleanser",
+                    description: "Helps control oil and prevent breakouts in hot, humid weather.",
+                    price: "$18.00",
+                    link: "#paulaschoice-pore-cleanser"
+                };
+            }
+            
+            return cleanserOptions[skinType];
+        }
+        
+        function getToner(skinType, concerns) {
+            if (concerns.includes('acne') || skinType === 'oily') {
+                return {
+                    name: "Paula's Choice 2% BHA Liquid Exfoliant",
+                    description: "Salicylic acid toner that unclogs pores and reduces excess oil.",
+                    price: "$29.50",
+                    link: "#paulaschoice-bha-liquid"
+                };
+            } else if (concerns.includes('dullness') || concerns.includes('pigmentation')) {
+                return {
+                    name: "Some By Mi AHA-BHA-PHA 30 Days Miracle Toner",
+                    description: "Gentle exfoliating toner that brightens and evens skin tone.",
+                    price: "$16.00",
+                    link: "#somebymi-miracle-toner"
+                };
+            } else if (skinType === 'dry' || skinType === 'sensitive') {
+                return {
+                    name: "Laneige Cream Skin Toner & Moisturizer",
+                    description: "Hydrating toner that adds moisture while preparing skin for next steps.",
+                    price: "$33.00",
+                    link: "#laneige-cream-skin"
+                };
+            } else {
+                return {
+                    name: "Klairs Supple Preparation Unscented Toner",
+                    description: "Hydrating and balancing toner suitable for all skin types.",
+                    price: "$22.00",
+                    link: "#klairs-supple-toner"
+                };
+            }
+        }
+        
+        function getSerum(concerns, skinType, timeOfDay) {
+            if (timeOfDay === 'am') {
+                if (concerns.includes('aging')) {
+                    return {
+                        name: "Timeless 20% Vitamin C + E Ferulic Acid Serum",
+                        description: "Antioxidant serum that brightens, firms, and protects against environmental damage.",
+                        price: "$25.95",
+                        link: "#timeless-vitamin-c"
+                    };
+                } else if (concerns.includes('acne')) {
+                    return {
+                        name: "The Ordinary Niacinamide 10% + Zinc 1%",
+                        description: "Reduces sebum production and minimizes appearance of pores and blemishes.",
+                        price: "$5.90",
+                        link: "#ordinary-niacinamide"
+                    };
+                } else if (concerns.includes('pigmentation')) {
+                    return {
+                        name: "Good Molecules Discoloration Correcting Serum",
+                        description: "Targets dark spots and uneven skin tone with tranexamic acid and niacinamide.",
+                        price: "$12.00",
+                        link: "#goodmolecules-discoloration"
+                    };
+                } else if (concerns.includes('redness')) {
+                    return {
+                        name: "Dr. Jart+ Cicapair Tiger Grass Serum",
+                        description: "Calms and soothes irritated skin with centella asiatica extract.",
+                        price: "$49.00",
+                        link: "#drjart-cicapair"
+                    };
+                } else {
+                    return {
+                        name: "The Inkey List Hyaluronic Acid Serum",
+                        description: "Multi-molecular weight hyaluronic acid for deep hydration.",
+                        price: "$7.99",
+                        link: "#inkeylist-hyaluronic"
+                    };
+                }
+            } else { // PM serums
+                if (concerns.includes('aging')) {
+                    return {
+                        name: "The Ordinary Retinol 0.5% in Squalane",
+                        description: "Anti-aging retinol to reduce fine lines and improve skin texture.",
+                        price: "$5.80",
+                        link: "#ordinary-retinol"
+                    };
+                } else if (concerns.includes('acne')) {
+                    return {
+                        name: "Paula's Choice 10% Azelaic Acid Booster",
+                        description: "Reduces breakouts, unclogs pores, and fades post-acne marks.",
+                        price: "$36.00",
+                        link: "#paulaschoice-azelaic"
+                    };
+                } else if (concerns.includes('pigmentation')) {
+                    return {
+                        name: "Alpha Arbutin 2% + HA",
+                        description: "Reduces the look of dark spots and hyperpigmentation.",
+                        price: "$8.90",
+                        link: "#ordinary-alpha-arbutin"
+                    };
+                } else if (concerns.includes('dullness') || concerns.includes('texture')) {
+                    return {
+                        name: "COSRX Advanced Snail 96 Mucin Power Essence",
+                        description: "Hydrates, repairs, and improves skin texture.",
+                        price: "$23.00",
+                        link: "#cosrx-snail-mucin"
+                    };
+                } else {
+                    return {
+                        name: "The Ordinary Buffet",
+                        description: "Multi-technology peptide serum for multiple skin concerns.",
+                        price: "$14.80",
+                        link: "#ordinary-buffet"
+                    };
+                }
+            }
+        }
+        
+        function getMoisturizer(skinType, season) {
+            if (skinType === 'dry') {
+                if (season === 'winter') {
+                    return {
+                        name: "Weleda Skin Food Original Ultra-Rich Cream",
+                        description: "Intensely nourishing cream that repairs and protects dry winter skin.",
+                        price: "$18.99",
+                        link: "#weleda-skin-food"
+                    };
+                } else {
+                    return {
+                        name: "First Aid Beauty Ultra Repair Cream",
+                        description: "Rich but fast-absorbing moisturizer for dry and sensitive skin.",
+                        price: "$34.00",
+                        link: "#firstaid-repair-cream"
+                    };
+                }
+            } else if (skinType === 'oily') {
+                return {
+                    name: "Neutrogena Hydro Boost Water Gel",
+                    description: "Oil-free, lightweight gel that hydrates without clogging pores.",
+                    price: "$19.99",
+                    link: "#neutrogena-hydro-boost"
+                };
+            } else if (skinType === 'combination') {
+                return {
+                    name: "Clinique Dramatically Different Moisturizing Gel",
+                    description: "Balances and hydrates combination skin without adding oil.",
+                    price: "$29.50",
+                    link: "#clinique-dramatically-different"
+                };
+            } else if (skinType === 'sensitive') {
+                return {
+                    name: "Avène Tolerance Extreme Emulsion",
+                    description: "Minimalist formula that soothes and hydrates reactive skin.",
+                    price: "$38.00",
+                    link: "#avene-tolerance"
+                };
+            } else { // Normal skin
+                return {
+                    name: "CeraVe Daily Moisturizing Lotion",
+                    description: "Lightweight, all-day hydration with ceramides and hyaluronic acid.",
+                    price: "$13.99",
+                    link: "#cerave-daily-moisturizer"
+                };
+            }
+        }
+        
+        function getSunscreen(skinType) {
+            if (skinType === 'oily' || skinType === 'combination') {
+                return {
+                    name: "Supergoop! Unseen Sunscreen SPF 40",
+                    description: "Invisible, weightless, scentless broad-spectrum SPF that works on all skin tones.",
+                    price: "$36.00",
+                    link: "#supergoop-unseen"
+                };
+            } else if (skinType === 'dry') {
+                return {
+                    name: "La Roche-Posay Anthelios Melt-In Milk SPF 60",
+                    description: "Hydrating, broad-spectrum protection that feels nourishing on dry skin.",
+                    price: "$35.99",
+                    link: "#laroche-anthelios-milk"
+                };
+            } else if (skinType === 'sensitive') {
+                return {
+                    name: "EltaMD UV Clear Broad-Spectrum SPF 46",
+                    description: "Oil-free, fragrance-free, non-comedogenic protection for sensitive skin.",
+                    price: "$37.00",
+                    link: "#eltamd-uv-clear"
+                };
+            } else {
+                return {
+                    name: "Biore UV Aqua Rich Watery Essence SPF 50+",
+                    description: "Lightweight, water-based sunscreen that absorbs instantly.",
+                    price: "$15.00",
+                    link: "#biore-uv-aqua"
+                };
+            }
+        }
+        
+        function getMakeupRemover(skinType) {
+            if (skinType === 'dry') {
+                return {
+                    name: "DHC Deep Cleansing Oil",
+                    description: "Olive oil-based cleanser that removes makeup while nourishing dry skin.",
+                    price: "$28.00",
+                    link: "#dhc-cleansing-oil"
+                };
+            } else if (skinType === 'oily') {
+                return {
+                    name: "Bioderma Sensibio H2O Micellar Water",
+                    description: "Gentle, non-oily micellar water that removes makeup without adding shine.",
+                    price: "$14.90",
+                    link: "#bioderma-sensibio"
+                };
+            } else {
+                return {
+                    name: "Banila Co Clean It Zero Original Cleansing Balm",
+                    description: "Sorbet-like texture that melts makeup away without stripping the skin.",
+                    price: "$19.00",
+                    link: "#banila-cleansing-balm"
+                };
+            }
+        }
+        
+        function getExfoliant(skinType, concerns) {
+            if (skinType === 'sensitive') {
+                return {
+                    name: "Stratia Soft Touch AHA",
+                    description: "Gentle mandelic acid exfoliant that doesn't irritate sensitive skin.",
+                    price: "$18.00",
+                    link: "#stratia-soft-touch"
+                };
+            } else if (concerns.includes('acne') || skinType === 'oily') {
+                return {
+                    name: "Paula's Choice Skin Perfecting 2% BHA Liquid",
+                    description: "Salicylic acid exfoliant that unclogs pores and smooths skin texture.",
+                    price: "$29.50",
+                    link: "#paulaschoice-bha"
+                };
+            } else if (concerns.includes('aging') || concerns.includes('dullness')) {
+                return {
+                    name: "The Ordinary Glycolic Acid 7% Toning Solution",
+                    description: "AHA exfoliant that improves skin brightness and reduces signs of aging.",
+                    price: "$8.70",
+                    link: "#ordinary-glycolic"
+                };
+            } else {
+                return {
+                    name: "COSRX AHA/BHA Clarifying Treatment Toner",
+                    description: "Gentle exfoliating toner with both AHA and BHA for balanced exfoliation.",
+                    price: "$19.00",
+                    link: "#cosrx-aha-bha"
+                };
+            }
+        }
+        
+        function getNightCream(skinType, season, concerns) {
+            if (skinType === 'dry') {
+                return {
+                    name: "Drunk Elephant Lala Retro Whipped Cream",
+                    description: "Rich, whipped moisturizer with ceramides and antioxidants for dry skin.",
+                    price: "$60.00",
+                    link: "#drunkelephant-lala"
+                };
+            } else if (skinType === 'oily') {
+                return {
+                    name: "Cetaphil Oil Control Moisturizer",
+                    description: "Lightweight, oil-free moisturizer that hydrates without clogging pores.",
+                    price: "$16.99",
+                    link: "#cetaphil-oil-control"
+                };
+            } else if (skinType === 'sensitive') {
+                return {
+                    name: "La Roche-Posay Toleriane Ultra Night Cream",
+                    description: "Ultra-soothing night cream for sensitive skin that calms while you sleep.",
+                    price: "$29.99",
+                    link: "#laroche-toleriane-night"
+                };
+            } else if (concerns.includes('aging')) {
+                return {
+                    name: "Olay Regenerist Retinol 24 Night Moisturizer",
+                    description: "Retinol night cream that reduces fine lines and improves skin texture overnight.",
+                    price: "$28.99",
+                    link: "#olay-regenerist"
+                };
+            } else {
+                return {
+                    name: "CeraVe PM Facial Moisturizing Lotion",
+                    description: "Lightweight night lotion with niacinamide and ceramides for overnight repair.",
+                    price: "$15.99",
+                    link: "#cerave-pm"
+                };
+            }
+        }
+        
+        function getTreatment(concern, skinType) {
+            if (concern === 'acne') {
+                if (skinType === 'sensitive') {
+                    return {
+                        name: "La Roche-Posay Effaclar Duo",
+                        description: "Gentle spot treatment with benzoyl peroxide that doesn't irritate sensitive skin.",
+                        price: "$31.99",
+                        link: "#laroche-effaclar-duo"
+                    };
+                } else {
+                    return {
+                        name: "Paula's Choice CLEAR Regular Strength Daily Skin Clearing Treatment",
+                        description: "2.5% benzoyl peroxide treatment that fights acne-causing bacteria.",
+                        price: "$18.00",
+                        link: "#paulaschoice-clear"
+                    };
+                }
+            } else if (concern === 'aging') {
+                return {
+                    name: "Neutrogena Rapid Wrinkle Repair Retinol Oil",
+                    description: "Concentrated retinol oil that reduces the look of fine lines and wrinkles.",
+                    price: "$27.99",
+                    link: "#neutrogena-wrinkle-repair"
+                };
+            } else if (concern === 'pigmentation') {
+                return {
+                    name: "Murad Rapid Age Spot and Pigment Lightening Serum",
+                    description: "Targeted treatment with hydroquinone that fades dark spots and discoloration.",
+                    price: "$72.00",
+                    link: "#murad-age-spot"
+                };
+            } else {
+                return {
+                    name: "The Ordinary Niacinamide 10% + Zinc 1%",
+                    description: "Multi-benefit treatment that balances oil production and improves skin texture.",
+                    price: "$5.90",
+                    link: "#ordinary-niacinamide"
+                };
+            }
+        }
+        
+        function getMask(skinType, concerns) {
+            if (skinType === 'dry') {
+                return {
+                    name: "Summer Fridays Jet Lag Mask",
+                    description: "Hydrating mask with niacinamide and glycerin for deep moisture. Use 1-2 times weekly.",
+                    price: "$49.00",
+                    link: "#summerfridays-jetlag"
+                };
+            } else if (skinType === 'oily' || concerns.includes('acne')) {
+                return {
+                    name: "Aztec Secret Indian Healing Clay",
+                    description: "Deep-cleansing clay mask that draws out impurities. Mix with apple cider vinegar for best results. Use once weekly.",
+                    price: "$9.99",
+                    link: "#aztec-clay"
+                };
+            } else if (concerns.includes('aging')) {
+                return {
+                    name: "Peter Thomas Roth Pumpkin Enzyme Mask",
+                    description: "Exfoliating enzyme mask that resurfaces skin for a more youthful appearance. Use once weekly.",
+                    price: "$60.00",
+                    link: "#ptr-pumpkin"
+                };
+            } else if (concerns.includes('dullness') || concerns.includes('pigmentation')) {
+                return {
+                    name: "Glow Recipe Watermelon Glow Sleeping Mask",
+                    description: "Overnight mask with AHA that brightens and hydrates while you sleep. Use 2-3 times weekly.",
+                    price: "$45.00",
+                    link: "#glowrecipe-watermelon"
+                };
+            } else {
+                return {
+                    name: "I'm From Honey Mask",
+                    description: "Nourishing honey mask that hydrates and soothes all skin types. Use 1-2 times weekly.",
+                    price: "$38.00",
+                    link: "#imfrom-honey"
+                };
+            }
+        }
+        
+        function createProductHTML(product) {
+            return `
+                <div class="product">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-price">${product.price}</div>
+                    <a href="${product.link}" class="product-link">Shop Now</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

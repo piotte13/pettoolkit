@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your savings rate and predict your retirement income with the 4% rule using our free calculator.">
+    <title>Savings Rate Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #34d399;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0px 1px 2px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0px 4px 6px -1px rgba(15, 23, 42, 0.1), 0px 2px 4px -2px rgba(15, 23, 42, 0.1);
+            --shadow-lg: 0px 10px 15px -3px rgba(15, 23, 42, 0.1), 0px 4px 6px -4px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .calculator-wrapper {
+            background-color: var(--bg-secondary);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .calculator-header {
+            background-color: var(--primary);
+            padding: 1.5rem 2rem;
+            color: white;
+        }
+
+        .calculator-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .calculator-body {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .calculator-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .inputs-panel {
+            padding: 2rem;
+            border-right: 1px solid var(--border);
+        }
+
+        @media (max-width: 1024px) {
+            .inputs-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        .results-panel {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 1rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .calculate-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-card {
+            background-color: var(--bg-primary);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .result-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chart-container {
+            margin-top: 2rem;
+            height: 300px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            padding: 1rem;
+            background-color: var(--bg-primary);
+        }
+
+        .info-section {
+            margin-top: 3rem;
+            background-color: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .info-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-card {
+            background-color: var(--bg-primary);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: rgba(14, 165, 233, 0.1);
+            color: var(--primary);
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Financial Independence Calculator</h1>
+            <p class="subtitle">Calculate how your savings rate impacts your journey to financial independence and see when you could retire using the 4% rule.</p>
+        </div>
+        
+        <div class="calculator-wrapper">
+            <div class="calculator-header">
+                <h2>Savings Rate & Retirement Projection Calculator</h2>
+            </div>
+            
+            <div class="calculator-body">
+                <div class="inputs-panel">
+                    <div class="form-group">
+                        <label for="annual-income">Annual Income (After Tax)</label>
+                        <div class="input-group">
+                            <span class="input-icon">💰</span>
+                            <input type="number" id="annual-income" value="60000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="annual-expenses">Annual Expenses</label>
+                        <div class="input-group">
+                            <span class="input-icon">💸</span>
+                            <input type="number" id="annual-expenses" value="45000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="current-investments">Current Investment Portfolio</label>
+                        <div class="input-group">
+                            <span class="input-icon">📊</span>
+                            <input type="number" id="current-investments" value="50000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="growth-rate">Expected Annual Investment Return (%)</label>
+                        <div class="input-group">
+                            <span class="input-icon">📈</span>
+                            <input type="number" id="growth-rate" value="7" step="0.1">
+                        </div>
+                        <span class="help-text">Historical average for a diversified portfolio is around 7-10% before inflation.</span>
+                    </div>
+                    
+                    <button id="calculate-btn" class="calculate-btn">
+                        <span>🧮</span> Calculate My Financial Independence
+                    </button>
+                </div>
+                
+                <div class="results-panel">
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">
+                                <span>💵</span> Your Current Savings Rate
+                            </div>
+                            <div class="result-value" id="savings-rate">25.0%</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">
+                                <span>⏱️</span> Years to Financial Independence
+                                <span class="tag">FI</span>
+                            </div>
+                            <div class="result-value" id="years-to-fi">32.5</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">
+                                <span>🎯</span> Retirement Portfolio Needed
+                            </div>
+                            <div class="result-value" id="target-portfolio">$1,125,000</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">
+                                <span>💲</span> Annual Retirement Income
+                                <span class="tag">4% Rule</span>
+                            </div>
+                            <div class="result-value" id="retirement-income">$45,000</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="retirement-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>How to Interpret Your Results</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3><span>💰</span> Savings Rate</h3>
+                    <p>The percentage of your after-tax income that you save and invest. This is calculated as (Income - Expenses) / Income. A higher savings rate dramatically accelerates your path to financial independence.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><span>⏱️</span> Years to Financial Independence</h3>
+                    <p>The estimated time until your investment portfolio can support your current expenses using the 4% rule. This is when you could potentially retire or become work-optional.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><span>🎯</span> Retirement Portfolio Target</h3>
+                    <p>The target amount you need to save to support your current lifestyle in retirement (25x your annual expenses). This is based on the widely-used 4% safe withdrawal rate.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><span>💲</span> Annual Retirement Income</h3>
+                    <p>The amount you can safely withdraw from your portfolio each year in retirement (4% of your total portfolio). This is designed to last indefinitely based on historical market performance.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 Financial Independence Calculator • Made to help you achieve financial freedom</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize chart
+        let retirementChart;
+
+        // Initialize default values
+        const defaultAnnualIncome = 60000;
+        const defaultAnnualExpenses = 45000;
+        const defaultCurrentInvestments = 50000;
+        const defaultGrowthRate = 7;
+
+        // Calculate savings rate and years to FI on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateResults();
+            
+            // Add event listener to calculate button
+            document.getElementById('calculate-btn').addEventListener('click', calculateResults);
+        });
+
+        function calculateResults() {
+            // Get values from inputs
+            const annualIncome = parseFloat(document.getElementById('annual-income').value);
+            const annualExpenses = parseFloat(document.getElementById('annual-expenses').value);
+            const currentInvestments = parseFloat(document.getElementById('current-investments').value);
+            const growthRate = parseFloat(document.getElementById('growth-rate').value) / 100;
+            
+            // Calculate savings rate
+            const savingsRate = ((annualIncome - annualExpenses) / annualIncome) * 100;
+            
+            // Calculate target portfolio using the 4% rule
+            const targetPortfolio = annualExpenses * 25;
+            
+            // Calculate retirement income
+            const retirementIncome = targetPortfolio * 0.04;
+            
+            // Calculate years to financial independence
+            const annualSavings = annualIncome - annualExpenses;
+            let yearsToFI = 0;
+            
+            if (annualSavings <= 0) {
+                yearsToFI = Infinity;
+            } else {
+                // Create a simulation to calculate years to FI
+                let portfolio = currentInvestments;
+                let years = 0;
+                
+                while (portfolio < targetPortfolio && years < 100) {
+                    portfolio = portfolio * (1 + growthRate) + annualSavings;
+                    years++;
+                }
+                
+                yearsToFI = years;
+            }
+            
+            // Update the result elements
+            document.getElementById('savings-rate').textContent = savingsRate.toFixed(1) + '%';
+            document.getElementById('years-to-fi').textContent = yearsToFI === Infinity ? 'Never' : yearsToFI.toFixed(1);
+            document.getElementById('target-portfolio').textContent = '$' + formatNumber(targetPortfolio);
+            document.getElementById('retirement-income').textContent = '$' + formatNumber(retirementIncome);
+            
+            // Update the chart
+            updateChart(currentInvestments, targetPortfolio, yearsToFI, growthRate, annualSavings);
+        }
+        
+        function formatNumber(number) {
+            return number.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
+        
+        function updateChart(currentInvestments, targetPortfolio, yearsToFI, growthRate, annualSavings) {
+            // Create data for chart
+            const labels = [];
+            const portfolioData = [];
+            const targetLine = [];
+            
+            // Limit to 50 years on chart
+            const chartYears = Math.min(yearsToFI + 5, 50);
+            
+            let portfolio = currentInvestments;
+            
+            for (let year = 0; year <= chartYears; year++) {
+                labels.push('Year ' + year);
+                portfolioData.push(portfolio);
+                targetLine.push(targetPortfolio);
+                
+                portfolio = portfolio * (1 + growthRate) + annualSavings;
+            }
+            
+            // Destroy previous chart if it exists
+            if (retirementChart) {
+                retirementChart.destroy();
+            }
+            
+            // Create new chart
+            const ctx = document.getElementById('retirement-chart').getContext('2d');
+            retirementChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Your Portfolio',
+                            data: portfolioData,
+                            borderColor: '#0ea5e9',
+                            backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                            fill: true,
+                            tension: 0.2,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Target (25x Expenses)',
+                            data: targetLine,
+                            borderColor: '#34d399',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15,
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleFont: {
+                                family: "'Inter', sans-serif",
+                                size: 14
+                            },
+                            bodyFont: {
+                                family: "'Inter', sans-serif",
+                                size: 13
+                            },
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + formatNumber(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11
+                                },
+                                color: '#475569',
+                                padding: 10,
+                                callback: function(value) {
+                                    if (value >= 1000000) {
+                                        return '$' + (value / 1000000).toFixed(1) + 'M';
+                                    } else if (value >= 1000) {
+                                        return '$' + (value / 1000).toFixed(0) + 'K';
+                                    } else {
+                                        return '$' + value;
+                                    }
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11
+                                },
+                                color: '#475569',
+                                padding: 10,
+                                maxRotation: 0,
+                                autoSkip: true,
+                                maxTicksLimit: 10
+                            }
+                        }
+                    },
+                    elements: {
+                        point: {
+                            radius: 3,
+                            hoverRadius: 6
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

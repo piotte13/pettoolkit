@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Rent vs Buy Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2b5797;
+            margin-bottom: 30px;
+        }
+        
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            background-color: #2b5797;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+        }
+        
+        button:hover {
+            background-color: #1e3a68;
+        }
+        
+        .results {
+            margin-top: 30px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .results h2 {
+            color: #2b5797;
+            border-bottom: 2px solid #2b5797;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .option {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .buy {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+        }
+        
+        .rent {
+            background-color: #d9edf7;
+            border: 1px solid #bce8f1;
+        }
+        
+        .value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .recommendation {
+            font-size: 18px;
+            text-align: center;
+            padding: 15px;
+            background-color: #2b5797;
+            color: white;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Rent vs Buy Calculator</h1>
+    
+    <div class="calculator">
+        <div class="form-grid">
+            <div>
+                <h2>Buying Details</h2>
+                <div class="form-group">
+                    <label for="home-price">Home Purchase Price ($)</label>
+                    <input type="number" id="home-price" min="0" step="1000" value="500000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="down-payment">Down Payment (%)</label>
+                    <input type="number" id="down-payment" min="1" max="100" step="1" value="20">
+                </div>
+                
+                <div class="form-group">
+                    <label for="mortgage-rate">Mortgage Interest Rate (%)</label>
+                    <input type="number" id="mortgage-rate" min="0.1" max="20" step="0.1" value="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="mortgage-term">Mortgage Term (Years)</label>
+                    <select id="mortgage-term">
+                        <option value="15">15 years</option>
+                        <option value="20">20 years</option>
+                        <option value="25" selected>25 years</option>
+                        <option value="30">30 years</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="property-tax-rate">Property Tax Rate (%)</label>
+                    <input type="number" id="property-tax-rate" min="0.1" max="5" step="0.1" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="welcome-tax">Welcome Tax / Land Transfer Tax ($)</label>
+                    <input type="number" id="welcome-tax" min="0" step="100" value="5000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="home-insurance">Annual Home Insurance ($)</label>
+                    <input type="number" id="home-insurance" min="0" step="100" value="1200">
+                </div>
+                
+                <div class="form-group">
+                    <label for="maintenance">Annual Maintenance Cost (%)</label>
+                    <input type="number" id="maintenance" min="0.1" max="5" step="0.1" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="home-appreciation">Home Appreciation Rate (%)</label>
+                    <input type="number" id="home-appreciation" min="0" max="10" step="0.1" value="3">
+                </div>
+            </div>
+            
+            <div>
+                <h2>Renting & Investment Details</h2>
+                <div class="form-group">
+                    <label for="monthly-rent">Monthly Rent ($)</label>
+                    <input type="number" id="monthly-rent" min="0" step="100" value="2000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="rent-increase">Annual Rent Increase (%)</label>
+                    <input type="number" id="rent-increase" min="0" max="10" step="0.1" value="2">
+                </div>
+                
+                <div class="form-group">
+                    <label for="renter-insurance">Annual Renter's Insurance ($)</label>
+                    <input type="number" id="renter-insurance" min="0" step="50" value="300">
+                </div>
+                
+                <div class="form-group">
+                    <label for="investment-return">Investment Return Rate (%)</label>
+                    <input type="number" id="investment-return" min="1" max="15" step="0.1" value="7">
+                </div>
+                
+                <div class="form-group">
+                    <label for="analysis-period">Analysis Period (Years)</label>
+                    <select id="analysis-period">
+                        <option value="5">5 years</option>
+                        <option value="10" selected>10 years</option>
+                        <option value="15">15 years</option>
+                        <option value="20">20 years</option>
+                        <option value="25">25 years</option>
+                        <option value="30">30 years</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <button id="calculate-btn">Calculate</button>
+        
+        <div id="results" class="results" style="display: none;">
+            <h2>Results</h2>
+            
+            <div class="comparison">
+                <div class="option buy">
+                    <h3>Buying</h3>
+                    <div>
+                        <p>Monthly Mortgage Payment:</p>
+                        <div id="monthly-mortgage" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Total Cost Over Time:</p>
+                        <div id="total-buy-cost" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Final Home Value:</p>
+                        <div id="final-home-value" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Total Equity Built:</p>
+                        <div id="home-equity" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Net Financial Position:</p>
+                        <div id="owner-net-worth" class="value">$0</div>
+                    </div>
+                </div>
+                
+                <div class="option rent">
+                    <h3>Renting</h3>
+                    <div>
+                        <p>Current Monthly Rent:</p>
+                        <div id="current-rent" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Total Rent Paid:</p>
+                        <div id="total-rent-cost" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Monthly Rent in Final Year:</p>
+                        <div id="final-rent" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Total Investment Value:</p>
+                        <div id="renter-investment" class="value">$0</div>
+                    </div>
+                    <div>
+                        <p>Net Financial Position:</p>
+                        <div id="renter-net-worth" class="value">$0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation" id="recommendation">
+                Calculating recommendation...
+            </div>
+            
+            <h3>Detailed Breakdown</h3>
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Buy</th>
+                    <th>Rent</th>
+                </tr>
+                <tr>
+                    <td>Principal Paid</td>
+                    <td id="total-principal">$0</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td>Interest Paid</td>
+                    <td id="total-interest">$0</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td>Property Tax</td>
+                    <td id="total-property-tax">$0</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td>Maintenance</td>
+                    <td id="total-maintenance">$0</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td>Insurance</td>
+                    <td id="total-home-insurance">$0</td>
+                    <td id="total-renter-insurance">$0</td>
+                </tr>
+                <tr>
+                    <td>Welcome/Transfer Tax</td>
+                    <td id="total-welcome-tax">$0</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td>Break-Even Year</td>
+                    <td colspan="2" id="break-even-year">N/A</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the calculate button
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            // Add click event listener
+            calculateBtn.addEventListener('click', function() {
+                calculateRentVsBuy();
+            });
+            
+            // Format currency
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            }
+            
+            // Calculate mortgage payment
+            function calculateMortgagePayment(principal, annualRate, termYears) {
+                const monthlyRate = annualRate / 100 / 12;
+                const numPayments = termYears * 12;
+                
+                if (monthlyRate === 0) {
+                    return principal / numPayments;
+                }
+                
+                const payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+                              (Math.pow(1 + monthlyRate, numPayments) - 1);
+                              
+                return payment;
+            }
+            
+            // Calculate amortization schedule
+            function calculateAmortizationSchedule(principal, annualRate, termYears) {
+                const monthlyRate = annualRate / 100 / 12;
+                const numPayments = termYears * 12;
+                const monthlyPayment = calculateMortgagePayment(principal, annualRate, termYears);
+                
+                let balance = principal;
+                let totalInterest = 0;
+                let totalPrincipal = 0;
+                const schedule = [];
+                
+                for (let i = 1; i <= numPayments; i++) {
+                    const interest = balance * monthlyRate;
+                    const principalPayment = monthlyPayment - interest;
+                    balance = Math.max(0, balance - principalPayment);
+                    
+                    totalInterest += interest;
+                    totalPrincipal += principalPayment;
+                    
+                    if (i % 12 === 0) {
+                        const year = i / 12;
+                        schedule.push({
+                            year,
+                            totalInterest,
+                            totalPrincipal,
+                            remainingBalance: balance
+                        });
+                    }
+                }
+                
+                return {
+                    monthlyPayment,
+                    schedule
+                };
+            }
+            
+            // Main calculation function
+            function calculateRentVsBuy() {
+                try {
+                    // Get input values
+                    const homePrice = parseFloat(document.getElementById('home-price').value);
+                    const downPaymentPercent = parseFloat(document.getElementById('down-payment').value);
+                    const mortgageRate = parseFloat(document.getElementById('mortgage-rate').value);
+                    const mortgageTerm = parseInt(document.getElementById('mortgage-term').value);
+                    const propertyTaxRate = parseFloat(document.getElementById('property-tax-rate').value);
+                    const welcomeTax = parseFloat(document.getElementById('welcome-tax').value);
+                    const homeInsurance = parseFloat(document.getElementById('home-insurance').value);
+                    const maintenanceRate = parseFloat(document.getElementById('maintenance').value);
+                    const homeAppreciationRate = parseFloat(document.getElementById('home-appreciation').value);
+                    const monthlyRent = parseFloat(document.getElementById('monthly-rent').value);
+                    const annualRentIncrease = parseFloat(document.getElementById('rent-increase').value);
+                    const renterInsurance = parseFloat(document.getElementById('renter-insurance').value);
+                    const investmentReturn = parseFloat(document.getElementById('investment-return').value);
+                    const analysisPeriod = parseInt(document.getElementById('analysis-period').value);
+                    
+                    // Calculate down payment and loan amount
+                    const downPayment = homePrice * (downPaymentPercent / 100);
+                    const loanAmount = homePrice - downPayment;
+                    
+                    // Calculate mortgage details
+                    const mortgageDetails = calculateAmortizationSchedule(loanAmount, mortgageRate, mortgageTerm);
+                    const monthlyPayment = mortgageDetails.monthlyPayment;
+                    const schedule = mortgageDetails.schedule;
+                    
+                    // Arrays to store yearly data
+                    const years = Array.from({ length: analysisPeriod }, (_, i) => i + 1);
+                    const buyingCostsPerYear = [];
+                    const rentingCostsPerYear = [];
+                    const homeValuePerYear = [];
+                    const mortgageBalancePerYear = [];
+                    const equityPerYear = [];
+                    
+                    // Calculate home value with appreciation
+                    let currentHomeValue = homePrice;
+                    for (let year = 1; year <= analysisPeriod; year++) {
+                        homeValuePerYear.push(currentHomeValue);
+                        currentHomeValue *= (1 + homeAppreciationRate / 100);
+                    }
+                    
+                    // Get mortgage data by year
+                    for (let year = 1; year <= analysisPeriod; year++) {
+                        const yearData = year <= mortgageTerm 
+                            ? schedule[year - 1] 
+                            : {
+                                totalInterest: schedule[schedule.length - 1].totalInterest,
+                                totalPrincipal: loanAmount,
+                                remainingBalance: 0
+                              };
+                        
+                        mortgageBalancePerYear.push(yearData.remainingBalance);
+                        equityPerYear.push(homeValuePerYear[year - 1] - yearData.remainingBalance);
+                    }
+                    
+                    // Calculate buying costs
+                    let totalBuyingCost = welcomeTax + downPayment; // Initial costs
+                    let cumulativePropertyTax = 0;
+                    let cumulativeMaintenance = 0;
+                    let cumulativeHomeInsurance = 0;
+                    
+                    for (let year = 1; year <= analysisPeriod; year++) {
+                        const yearlyMortgagePayment = year <= mortgageTerm ? monthlyPayment * 12 : 0;
+                        const yearlyPropertyTax = homeValuePerYear[year - 1] * (propertyTaxRate / 100);
+                        const yearlyMaintenance = homeValuePerYear[year - 1] * (maintenanceRate / 100);
+                        
+                        cumulativePropertyTax += yearlyPropertyTax;
+                        cumulativeMaintenance += yearlyMaintenance;
+                        cumulativeHomeInsurance += homeInsurance;
+                        
+                        const yearlyBuyingCost = yearlyMortgagePayment + yearlyPropertyTax + 
+                                               yearlyMaintenance + homeInsurance;
+                        totalBuyingCost += yearlyBuyingCost;
+                        buyingCostsPerYear.push(totalBuyingCost);
+                    }
+                    
+                    // Calculate renting costs
+                    let totalRentingCost = 0;
+                    let currentMonthlyRent = monthlyRent;
+                    let finalMonthlyRent = monthlyRent;
+                    let renterAvailableForInvestment = downPayment; // Initial investment equals down payment
+                    let cumulativeRenterInsurance = 0;
+                    
+                    for (let year = 1; year <= analysisPeriod; year++) {
+                        const yearlyRent = currentMonthlyRent * 12;
+                        totalRentingCost += yearlyRent + renterInsurance;
+                        cumulativeRenterInsurance += renterInsurance;
+                        rentingCostsPerYear.push(totalRentingCost);
+                        
+                        // Calculate what the renter can invest
+                        const mortgagePayment = year <= mortgageTerm ? monthlyPayment * 12 : 0;
+                        const propertyTax = homeValuePerYear[year - 1] * (propertyTaxRate / 100);
+                        const maintenance = homeValuePerYear[year - 1] * (maintenanceRate / 100);
+                        
+                        const yearlyRenterSavings = (mortgagePayment + propertyTax + maintenance + homeInsurance) - 
+                                                 (yearlyRent + renterInsurance);
+                        
+                        renterAvailableForInvestment = (renterAvailableForInvestment * 
+                                                    (1 + investmentReturn / 100)) + yearlyRenterSavings;
+                        
+                        // Update rent for next year
+                        currentMonthlyRent *= (1 + annualRentIncrease / 100);
+                        if (year === analysisPeriod) {
+                            finalMonthlyRent = currentMonthlyRent;
+                        }
+                    }
+                    
+                    // Calculate owner's investment
+                    let ownerAvailableForInvestment = 0;
+                    for (let year = 1; year <= analysisPeriod; year++) {
+                        if (year > mortgageTerm) {
+                            // After mortgage is paid off, owner can invest the mortgage payment
+                            ownerAvailableForInvestment = (ownerAvailableForInvestment * 
+                                                      (1 + investmentReturn / 100)) + monthlyPayment * 12;
+                        } else {
+                            // Before mortgage is paid, owner's investment just grows
+                            ownerAvailableForInvestment *= (1 + investmentReturn / 100);
+                        }
+                    }
+                    
+                    // Calculate net worth
+                    const ownerNetWorth = equityPerYear[analysisPeriod - 1] + ownerAvailableForInvestment;
+                    const renterNetWorth = renterAvailableForInvestment;
+                    
+                    // Determine break-even point
+                    let breakEvenYear = 'N/A';
+                    let ownerNetWorthByYear = [];
+                    let renterNetWorthByYear = [];
+                    
+                    let tempRenterInvestment = downPayment;
+                    let tempOwnerInvestment = 0;
+                    
+                    for (let year = 1; year <= analysisPeriod; year++) {
+                        // Calculate what the renter can invest each year
+                        const mortgagePayment = year <= mortgageTerm ? monthlyPayment * 12 : 0;
+                        const propertyTax = homeValuePerYear[year - 1] * (propertyTaxRate / 100);
+                        const maintenance = homeValuePerYear[year - 1] * (maintenanceRate / 100);
+                        const yearlyRent = monthlyRent * Math.pow(1 + annualRentIncrease / 100, year - 1) * 12;
+                        
+                        const yearlyRenterSavings = (mortgagePayment + propertyTax + maintenance + homeInsurance) - 
+                                                 (yearlyRent + renterInsurance);
+                        
+                        tempRenterInvestment = (tempRenterInvestment * (1 + investmentReturn / 100)) + yearlyRenterSavings;
+                        
+                        // Calculate owner's investment
+                        if (year > mortgageTerm) {
+                            tempOwnerInvestment = (tempOwnerInvestment * 
+                                               (1 + investmentReturn / 100)) + monthlyPayment * 12;
+                        } else {
+                            tempOwnerInvestment *= (1 + investmentReturn / 100);
+                        }
+                        
+                        // Calculate net worth for this year
+                        const yearlyOwnerNetWorth = equityPerYear[year - 1] + tempOwnerInvestment;
+                        const yearlyRenterNetWorth = tempRenterInvestment;
+                        
+                        ownerNetWorthByYear.push(yearlyOwnerNetWorth);
+                        renterNetWorthByYear.push(yearlyRenterNetWorth);
+                        
+                        // Check for break-even
+                        if (breakEvenYear === 'N/A' && yearlyOwnerNetWorth > yearlyRenterNetWorth) {
+                            breakEvenYear = year;
+                        }
+                    }
+                    
+                    // Calculate total interest and principal paid
+                    const mortgageYears = Math.min(mortgageTerm, analysisPeriod);
+                    const totalInterestPaid = schedule[mortgageYears - 1].totalInterest;
+                    const totalPrincipalPaid = schedule[mortgageYears - 1].totalPrincipal;
+                    
+                    // Update results in the DOM
+                    document.getElementById('monthly-mortgage').textContent = formatCurrency(monthlyPayment);
+                    document.getElementById('total-buy-cost').textContent = formatCurrency(totalBuyingCost);
+                    document.getElementById('final-home-value').textContent = formatCurrency(homeValuePerYear[analysisPeriod - 1]);
+                    document.getElementById('home-equity').textContent = formatCurrency(equityPerYear[analysisPeriod - 1]);
+                    document.getElementById('owner-net-worth').textContent = formatCurrency(ownerNetWorth);
+                    
+                    document.getElementById('current-rent').textContent = formatCurrency(monthlyRent);
+                    document.getElementById('total-rent-cost').textContent = formatCurrency(totalRentingCost);
+                    document.getElementById('final-rent').textContent = formatCurrency(finalMonthlyRent);
+                    document.getElementById('renter-investment').textContent = formatCurrency(renterAvailableForInvestment);
+                    document.getElementById('renter-net-worth').textContent = formatCurrency(renterNetWorth);
+                    
+                    document.getElementById('total-principal').textContent = formatCurrency(totalPrincipalPaid);
+                    document.getElementById('total-interest').textContent = formatCurrency(totalInterestPaid);
+                    document.getElementById('total-property-tax').textContent = formatCurrency(cumulativePropertyTax);
+                    document.getElementById('total-maintenance').textContent = formatCurrency(cumulativeMaintenance);
+                    document.getElementById('total-home-insurance').textContent = formatCurrency(cumulativeHomeInsurance);
+                    document.getElementById('total-renter-insurance').textContent = formatCurrency(cumulativeRenterInsurance);
+                    document.getElementById('total-welcome-tax').textContent = formatCurrency(welcomeTax);
+                    
+                    document.getElementById('break-even-year').textContent = breakEvenYear === 'N/A' ? 
+                                                                        'N/A' : `Year ${breakEvenYear}`;
+                    
+                    // Show recommendation
+                    const recommendation = document.getElementById('recommendation');
+                    if (ownerNetWorth > renterNetWorth) {
+                        const difference = ownerNetWorth - renterNetWorth;
+                        recommendation.textContent = `Buying is better by ${formatCurrency(difference)}`;
+                        recommendation.style.backgroundColor = '#4CAF50';
+                    } else {
+                        const difference = renterNetWorth - ownerNetWorth;
+                        recommendation.textContent = `Renting is better by ${formatCurrency(difference)}`;
+                        recommendation.style.backgroundColor = '#2196F3';
+                    }
+                    
+                    // Show results section
+                    document.getElementById('results').style.display = 'block';
+                    
+                } catch (error) {
+                    console.error('Calculation error:', error);
+                    alert('Error in calculation. Please check your inputs and try again.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
