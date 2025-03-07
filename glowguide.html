@@ -6,14 +6,15 @@
     <title>✿ GlowGuide - Your Personalized Beauty Routine ✿</title>
     <style>
         :root {
-            --primary-color: #e686b2; /* Pink instead of blue */
-            --secondary-color: #fef2f7; /* Light pink background */
-            --accent-color: #b36ad8; /* Purple accent */
-            --text-color: #4a3a4a; /* Softer dark text */
+            --primary-color: #e686b2; /* Pink */
+            --primary-light: #f8a5c9; /* Light pink */
+            --secondary-color: #fef2f7; /* Very light pink background */
+            --accent-color: #b36ad8; /* Purple */
+            --text-color: #4a3a4a; /* Soft dark text */
             --light-text: #8a7389; /* Softer light text */
             --white: #fff;
-            --shadow: 0 6px 10px rgba(230, 134, 178, 0.15); /* Softer, colored shadow */
-            --border-radius: 20px; /* More rounded corners */
+            --shadow: 0 6px 10px rgba(230, 134, 178, 0.15);
+            --border-radius: 20px;
         }
         
         * {
@@ -28,10 +29,8 @@
             color: var(--text-color);
             line-height: 1.6;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' fill-opacity='0.05'%3E%3Cpath fill='%23e686b2' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/svg%3E");
-            font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
         
         .container {
             max-width: 1200px;
@@ -42,7 +41,7 @@
         header {
             text-align: center;
             padding: 30px 0;
-            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             color: var(--white);
             border-radius: var(--border-radius);
             margin-bottom: 30px;
@@ -148,7 +147,7 @@
             color: var(--light-text);
         }
         
-        input, select {
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -157,29 +156,47 @@
             transition: border-color 0.3s;
         }
         
-        input:focus, select:focus {
+        select:focus {
             outline: none;
             border-color: var(--primary-color);
         }
         
-        .concern-options {
+        /* Gray toggle buttons */
+        .concern-toggles {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 10px;
+            margin-top: 15px;
         }
         
-        .concern-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .toggle-btn {
+            background-color: #f2f2f2;
+            color: #666666;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
         }
         
-        .concern-option input {
-            width: auto;
+        .toggle-btn:hover {
+            background-color: #e8e8e8;
+            border-color: #d0d0d0;
         }
         
-        button {
-            background: linear-gradient(135deg, var(--accent-color), #eb8dc0);
+        .toggle-btn.active {
+            background-color: #dddddd;
+            border-color: #cccccc;
+            color: #333333;
+            font-weight: 500;
+        }
+        
+        /* Pink submit button */
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
             color: var(--white);
             border: none;
             padding: 16px 25px;
@@ -195,7 +212,7 @@
             letter-spacing: 0.5px;
         }
         
-        button:hover {
+        .submit-btn:hover {
             background: linear-gradient(135deg, #d05bbd, #e686b2);
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(179, 106, 216, 0.4);
@@ -204,6 +221,24 @@
         #results {
             display: none;
             margin-top: 20px;
+        }
+        
+        .routine-summary {
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+            color: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .climate-note {
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
         }
         
         .routine-container {
@@ -308,24 +343,6 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
         
-        .routine-summary {
-            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
-            color: var(--white);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-            text-align: center;
-            box-shadow: var(--shadow);
-        }
-        
-        .climate-note {
-            font-style: italic;
-            margin-top: 10px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            opacity: 0.9;
-        }
-        
         footer {
             text-align: center;
             margin-top: 30px;
@@ -339,7 +356,7 @@
                 grid-template-columns: 1fr;
             }
             
-            .concern-options {
+            .concern-toggles {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -393,43 +410,20 @@
                     
                     <div class="form-group">
                         <label>Your Skin Concerns (Select all that apply)</label>
-                        <div class="concern-options">
-                            <div class="concern-option">
-                                <input type="checkbox" id="acne" name="concerns" value="acne">
-                                <label for="acne">Acne</label>
-                            </div>
-                            <div class="concern-option">
-                                <input type="checkbox" id="aging" name="concerns" value="aging">
-                                <label for="aging">Anti-aging</label>
-                            </div>
-                            <div class="concern-option">
-                                <input type="checkbox" id="pigmentation" name="concerns" value="pigmentation">
-                                <label for="pigmentation">Hyperpigmentation</label>
-                            </div>
-                            <div class="concern-option">
-                                <input type="checkbox" id="redness" name="concerns" value="redness">
-                                <label for="redness">Redness</label>
-                            </div>
-                            <div class="concern-option">
-                                <input type="checkbox" id="dullness" name="concerns" value="dullness">
-                                <label for="dullness">Dullness</label>
-                            </div>
-                            <div class="concern-option">
-                                <input type="checkbox" id="dryness" name="concerns" value="dryness">
-                                <label for="dryness">Dryness</label>
-                            </div>
-                            <div class="concern-option">
-                                <input type="checkbox" id="texture" name="concerns" value="texture">
-                                <label for="texture">Texture</label>
-                            </div>
-                            <div class="concern-option">
-                                <input type="checkbox" id="pores" name="concerns" value="pores">
-                                <label for="pores">Large Pores</label>
-                            </div>
+                        <div class="concern-toggles">
+                            <button type="button" class="toggle-btn" data-concern="acne">Acne</button>
+                            <button type="button" class="toggle-btn" data-concern="aging">Anti-aging</button>
+                            <button type="button" class="toggle-btn" data-concern="pigmentation">Hyperpigmentation</button>
+                            <button type="button" class="toggle-btn" data-concern="redness">Redness</button>
+                            <button type="button" class="toggle-btn" data-concern="dullness">Dullness</button>
+                            <button type="button" class="toggle-btn" data-concern="dryness">Dryness</button>
+                            <button type="button" class="toggle-btn" data-concern="texture">Texture</button>
+                            <button type="button" class="toggle-btn" data-concern="pores">Large Pores</button>
                         </div>
+                        <div id="selected-concerns" style="display: none;"></div>
                     </div>
                     
-                    <button type="submit">Get My Personalized Routine</button>
+                    <button type="submit" class="submit-btn">Get My Personalized Routine</button>
                 </form>
             </section>
             
@@ -453,17 +447,47 @@
     </div>
     
     <script>
+        // Initialize toggle buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            const selectedConcerns = document.getElementById('selected-concerns');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    
+                    updateSelectedConcerns();
+                });
+            });
+            
+            function updateSelectedConcerns() {
+                // Clear previous selections
+                selectedConcerns.innerHTML = '';
+                
+                // Add hidden inputs for each selected concern
+                document.querySelectorAll('.toggle-btn.active').forEach(button => {
+                    const concern = button.getAttribute('data-concern');
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'concerns';
+                    input.value = concern;
+                    selectedConcerns.appendChild(input);
+                });
+            }
+        });
+        
+        // Form submission
         document.getElementById('skincare-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get user inputs
+            // Get form values
             const climate = document.getElementById('climate').value;
             const season = document.getElementById('season').value;
             const skinType = document.getElementById('skin-type').value;
             
             // Get selected concerns
-            const concernCheckboxes = document.querySelectorAll('input[name="concerns"]:checked');
-            const concerns = Array.from(concernCheckboxes).map(cb => cb.value);
+            const concernInputs = document.querySelectorAll('#selected-concerns input');
+            const concerns = Array.from(concernInputs).map(input => input.value);
             
             // Show results section
             document.getElementById('results').style.display = 'block';
@@ -471,7 +495,7 @@
             // Scroll to results
             document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
             
-            // Generate personalized routine
+            // Generate routine
             generateRoutine(climate, season, skinType, concerns);
         });
         
