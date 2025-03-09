@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Food Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-light: #e8f1ff;
+            --primary-dark: #345182;
+            --secondary: #6b8f71;
+            --secondary-light: #e9f5eb;
+            --accent: #d98659;
+            --gray-light: #f7f9fc;
+            --gray: #e2e8f0;
+            --text: #2d3748;
+            --text-light: #718096;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --transition: all 0.2s ease;
+        }
+        
+        body {
+            font-family: 'Nunito', 'Arial', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            letter-spacing: 0.2px;
+            box-sizing: border-box;
+        }
+        
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 40px;
+            font-size: 36px;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-bottom: 10px;
+            padding-left: 56px;
+            padding-right: 56px;
+            border-bottom: 3px solid var(--accent);
+        }
+        
+        h1::before,
+        h1::after {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        h1::before {
+            left: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="%236b8f71"><path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5.3-86.2 32.6-96.8S212.2 50 226.5 92.9zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7.9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7c-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29.1-51.7-10.2-84.1s54-47.3 78.5-33.3s29.1 51.7 10.2 84.1s-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5s46.9 53.9 32.6 96.8s-52.1 69.1-84.4 58.5z"/></svg>');
+        }
+        
+        h1::after {
+            right: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="%236b8f71"><path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5.3-86.2 32.6-96.8S212.2 50 226.5 92.9zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7.9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7c-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29.1-51.7-10.2-84.1s54-47.3 78.5-33.3s29.1 51.7 10.2 84.1s-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5s46.9 53.9 32.6 96.8s-52.1 69.1-84.4 58.5z"/></svg>');
+        }
+        
+        .calculator-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+        }
+        
+        .input-section, .result-section {
+            padding: 30px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+        
+        .input-section {
+            background-color: var(--primary-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .input-section::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%234a6fa5" opacity="0.1"><path d="M48.8,17.2c-4.5-8-14.5-10.9-22.5-6.4s-10.9,14.5-6.4,22.5c3.5,6.1,10.3,9.4,16.9,8.5c-8,14.4-10.9,30.8-8.4,46.7c1,6.3,6.9,10.6,13.2,9.6c6.3-1,10.6-6.9,9.6-13.2c-3.6-22.7,7.1-45.7,27.5-58.8c5.4-3.4,7-10.5,3.6-15.9c-3.4-5.4-10.5-7-15.9-3.6c-6.7,4.3-12.5,9.9-17.6,16.2L48.8,17.2z"/></svg>') no-repeat center center;
+            opacity: 0.05;
+        }
+        
+        .result-section {
+            background-color: var(--secondary-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-section::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 120px;
+            height: 120px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%236b8f71" opacity="0.1"><path d="M62.4,12.8c-7.5-5.6-18.1-4.1-23.7,3.4s-4.1,18.1,3.4,23.7c5.7,4.3,13.4,4.3,19.1,0.2c-2.5,16.1,1.4,32.6,10.8,45.9c3.7,5.2,10.9,6.5,16.1,2.7c5.2-3.7,6.5-10.9,2.7-16.1C80.5,57,75.4,33.9,86.2,14.6c2.8-5.7,0.5-12.6-5.2-15.5C75.3-3.7,68.4-1.4,65.5,4.4c-3.9,7.8-6.3,16.2-7.1,24.8L62.4,12.8z"/></svg>') no-repeat center center;
+            opacity: 0.05;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: 700;
+            display: inline-block;
+            padding-bottom: 8px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 15px;
+        }
+        
+        input,         /* Custom input styling */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--gray);
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: var(--white);
+            color: var(--text);
+            box-shadow: var(--shadow);
+            font-family: 'Nunito', sans-serif;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        .input-wrapper input:hover {
+            border-color: var(--primary);
+        }
+        
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        /* Hide number input arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--gray);
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: var(--white);
+            color: var(--text);
+            box-shadow: var(--shadow);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234a6fa5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        select:hover {
+            border-color: var(--primary);
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        /* Animated select icon */
+        .select-wrapper::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 14px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .select-wrapper:hover::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        input::placeholder {
+            color: var(--text-light);
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: var(--radius);
+            cursor: pointer;
+            width: 100%;
+            margin-top: 24px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+            transition: transform 0.5s ease-out;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover::after {
+            transform: translateX(300%) rotate(30deg);
+        }
+        
+        .result-box {
+            background-color: var(--white);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .result-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .result-box h3 {
+            margin-top: 0;
+            color: var(--secondary);
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .result-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 12px 0;
+            transition: var(--transition);
+        }
+        
+        .dog-image {
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .logo-icon {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f9f9ff, #e6efff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        .logo-icon::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(107, 143, 113, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            top: -20px;
+            left: -20px;
+            z-index: 0;
+        }
+        
+        .measuring-cup {
+            position: relative;
+            width: 70px;
+            height: 65px;
+            background: transparent;
+            border: none;
+            border-radius: 12px 12px 40% 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            overflow: visible;
+        }
+        
+        .cup-outline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid;
+            border-image: linear-gradient(to bottom, #5b87bd, #4a6fa5) 1;
+            border-radius: 12px 12px 40% 40%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cup-shine {
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            width: 50px;
+            height: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+            border-radius: 50%;
+            transform: rotate(-10deg);
+        }
+        
+        .measuring-handle {
+            position: absolute;
+            width: 25px;
+            height: 30px;
+            border: 4px solid;
+            border-image: linear-gradient(to bottom, #5b87bd, #4a6fa5) 1;
+            border-left: 0;
+            border-radius: 0 50% 50% 0;
+            right: -25px;
+            top: 15px;
+            box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .measuring-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(to right, #5b87bd, #4a6fa5);
+            left: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .line-1 {
+            width: 35px;
+            top: 15px;
+        }
+        
+        .line-2 {
+            width: 45px;
+            top: 30px;
+        }
+        
+        .line-3 {
+            width: 55px;
+            top: 45px;
+        }
+        
+        .line-label {
+            position: absolute;
+            font-size: 8px;
+            font-weight: bold;
+            color: #4a6fa5;
+            left: 3px;
+        }
+        
+        .label-1 {
+            top: 6px;
+        }
+        
+        .label-2 {
+            top: 21px;
+        }
+        
+        .label-3 {
+            top: 36px;
+        }
+        
+        .cup-fill {
+            position: absolute;
+            width: 62px;
+            height: 32px;
+            background: linear-gradient(to bottom, rgba(107, 143, 113, 0.2), rgba(107, 143, 113, 0.3));
+            border-radius: 0 0 35% 35%;
+            bottom: 4px;
+            left: 4px;
+        }
+        
+        .paw-icon {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            top: 15px;
+            left: 55px;
+            z-index: 3;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+            transform: rotate(-15deg);
+        }
+        
+        .paw-center {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(145deg, #6b8f71, #5c7960);
+            border-radius: 50%;
+            bottom: 0;
+            left: 10px;
+        }
+        
+        .paw-digit {
+            position: absolute;
+            background: linear-gradient(145deg, #6b8f71, #5c7960);
+            border-radius: 50%;
+            box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+        }
+        
+        .paw-digit-1 {
+            width: 10px;
+            height: 12px;
+            top: 0;
+            left: 8px;
+        }
+        
+        .paw-digit-2 {
+            width: 9px;
+            height: 11px;
+            top: 3px;
+            left: 19px;
+        }
+        
+        .paw-digit-3 {
+            width: 9px;
+            height: 11px;
+            top: 3px;
+            left: 0;
+        }
+        
+        .info-text {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 6px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 850px) {
+            .calculator-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .container {
+                padding: 25px;
+                margin: 10px auto;
+                max-width: calc(100% - 20px);
+            }
+            
+            .input-section, .result-section {
+                padding: 25px 20px;
+            }
+            
+            .dog-icon {
+                width: 120px;
+                height: 120px;
+            }
+            
+            h1 {
+                font-size: 28px;
+                margin-bottom: 25px;
+                padding-left: 46px;
+                padding-right: 46px;
+            }
+            
+            h1::before, 
+            h1::after {
+                width: 32px;
+                height: 32px;
+            }
+            
+            h2 {
+                font-size: 22px;
+            }
+            
+            .result-value {
+                font-size: 24px;
+            }
+        }
+        
+        .slider-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: none; /* Hidden initially until calculation */
+            border-left: 4px solid var(--accent);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .slider-header h3 {
+            margin: 0;
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .slider-value {
+            font-weight: 700;
+            color: var(--accent);
+            background-color: var(--primary-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, var(--primary-light), var(--accent));
+            outline: none;
+            margin: 16px 0;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.1);
+        }
+        
+        .treats-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .treat-calories-allowed {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 16px;
+        }
+        
+        .highlight {
+            animation: highlight 2s ease;
+        }
+        
+        @keyframes highlight {
+            0% { box-shadow: var(--shadow); }
+            50% { box-shadow: 0 0 15px rgba(107, 143, 113, 0.5); }
+            100% { box-shadow: var(--shadow); }
+        }
+        
+        .meal {
+            margin: 10px 0;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .meal:last-child {
+            border-bottom: none;
+        }
+        
+        .meal-time {
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .meal-time::before {
+            content: "🍽️";
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .meal-amount {
+            background-color: var(--secondary-light);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        #feeding-recommendation {
+            background-color: var(--primary-light);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dog Food Calculator</h1>
+        <div class="calculator-section">
+            <div class="input-section">
+                <h2>Your Dog's Information</h2>
+                <div class="form-group">
+                    <label for="weight">Ideal Weight (lbs)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="weight" min="1" step="0.1" placeholder="Enter your dog's ideal weight">
+                    </div>
+                    <p class="info-text">Enter your dog's ideal or target weight, not necessarily their current weight</p>
+                </div>
+                <div class="form-group">
+                    <label for="food-calories">Food Calories (kcal/cup)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="food-calories" min="1" placeholder="Calories per cup of food">
+                    </div>
+                    <p class="info-text">This information can be found on your dog food packaging</p>
+                </div>
+                <div class="form-group">
+                    <label for="activity-level">Activity Level</label>
+                    <div class="select-wrapper">
+                        <select id="activity-level">
+                            <option value="low">Low (Senior or inactive)</option>
+                            <option value="moderate" selected>Moderate (Regular walks)</option>
+                            <option value="high">High (Very active, working dog)</option>
+                            <option value="puppy">Puppy (Under 1 year)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="feeding-frequency">Feeding Frequency</label>
+                    <div class="select-wrapper">
+                        <select id="feeding-frequency">
+                            <option value="2" selected>2 times per day</option>
+                            <option value="3">3 times per day</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="calculate-btn">Calculate Food Amount</button>
+                
+                <!-- Treat slider appears after calculation -->
+                <div class="slider-container" id="treat-slider-container">
+                    <div class="slider-header">
+                        <h3>Treat Percentage</h3>
+                        <span class="slider-value" id="treat-percent-value">0%</span>
+                    </div>
+                    <input type="range" min="0" max="10" value="0" class="slider" id="treat-percent-slider">
+                    <div class="treats-info">
+                        <span>0%</span>
+                        <span>Vet recommended max: 10%</span>
+                    </div>
+                    <div class="treats-info">
+                        <span>Daily treats allowed:</span>
+                        <span class="treat-calories-allowed" id="treat-calories-allowed">0 kcal</span>
+                    </div>
+                    <p class="info-text">Veterinarians recommend treats should not exceed 10% of daily calorie intake</p>
+                </div>
+            </div>
+            <div class="result-section">
+                <h2>Feeding Recommendations</h2>
+                <div class="result-box">
+                    <h3>Daily Calories Needed</h3>
+                    <div class="result-value" id="daily-calories">-</div>
+                    <p>Total calories your dog needs per day</p>
+                </div>
+                <div class="result-box">
+                    <h3>Daily Food Amount</h3>
+                    <div class="result-value" id="food-amount">-</div>
+                    <p>Amount of food to feed your dog per day</p>
+                </div>
+                <div class="result-box">
+                    <h3>Treats Percentage</h3>
+                    <div class="result-value" id="treats-percentage">-</div>
+                    <p>Percentage of daily calories from treats</p>
+                </div>
+                <div class="result-box">
+                    <h3>Feeding Schedule</h3>
+                    <p id="feeding-recommendation">-</p>
+                    <div id="meal-schedule">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="info-text" style="text-align: center; margin-top: 30px;">Created for dog owners who want to provide the best nutrition for their furry friends</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const weightInput = document.getElementById('weight');
+            const foodCaloriesInput = document.getElementById('food-calories');
+            const activityLevelSelect = document.getElementById('activity-level');
+            const feedingFrequencySelect = document.getElementById('feeding-frequency');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const dailyCaloriesEl = document.getElementById('daily-calories');
+            const foodAmountEl = document.getElementById('food-amount');
+            const treatsPercentageEl = document.getElementById('treats-percentage');
+            const treatPercentSlider = document.getElementById('treat-percent-slider');
+            const treatPercentValue = document.getElementById('treat-percent-value');
+            const treatCaloriesAllowed = document.getElementById('treat-calories-allowed');
+            const treatSliderContainer = document.getElementById('treat-slider-container');
+            const feedingRecommendation = document.getElementById('feeding-recommendation');
+            const mealSchedule = document.getElementById('meal-schedule');
+            const resultBoxes = document.querySelectorAll('.result-box');
+
+            // Variables to store calculated values
+            let calculatedDER = 0;
+            let calculatedCupsPerDay = 0;
+            
+            // Helper function to convert decimal cups to fraction format
+            function formatCupMeasurement(cups) {
+                // Round to nearest 1/8 cup
+                cups = Math.round(cups * 8) / 8;
+                
+                // Extract whole number
+                const whole = Math.floor(cups);
+                
+                // Get remaining decimal part
+                let fraction = cups - whole;
+                
+                // If fraction is very small, just return whole number
+                if (fraction < 0.001) {
+                    return whole > 0 ? `${whole} cup${whole !== 1 ? 's' : ''}` : '0 cups';
+                }
+                
+                // Convert to fraction
+                let numerator, denominator;
+                
+                // Map decimal to common fractions
+                if (Math.abs(fraction - 0.125) < 0.001) {
+                    numerator = 1; denominator = 8;
+                } else if (Math.abs(fraction - 0.25) < 0.001) {
+                    numerator = 1; denominator = 4;
+                } else if (Math.abs(fraction - 0.375) < 0.001) {
+                    numerator = 3; denominator = 8;
+                } else if (Math.abs(fraction - 0.5) < 0.001) {
+                    numerator = 1; denominator = 2;
+                } else if (Math.abs(fraction - 0.625) < 0.001) {
+                    numerator = 5; denominator = 8;
+                } else if (Math.abs(fraction - 0.75) < 0.001) {
+                    numerator = 3; denominator = 4;
+                } else if (Math.abs(fraction - 0.875) < 0.001) {
+                    numerator = 7; denominator = 8;
+                } else {
+                    // Should not happen with proper rounding, but just in case
+                    return cups.toFixed(2) + ' cups';
+                }
+                
+                // Format the result
+                if (whole > 0) {
+                    return `${whole} ${numerator}/${denominator} cup${whole !== 1 || numerator > 1 ? 's' : ''}`;
+                } else {
+                    return `${numerator}/${denominator} cup${numerator > 1 ? 's' : ''}`;
+                }
+            }
+            
+            // Create meal schedule based on feeding frequency and cups per day
+            function createMealSchedule() {
+                // Clear existing schedule
+                mealSchedule.innerHTML = '';
+                
+                const frequency = parseInt(feedingFrequencySelect.value);
+                const mealSize = calculatedCupsPerDay / frequency;
+                const mealSizeFormatted = formatCupMeasurement(mealSize);
+                
+                // Set feeding recommendation text
+                feedingRecommendation.textContent = `Feed ${frequency} times daily`;
+                
+                // Create meal elements
+                if (frequency === 2) {
+                    mealSchedule.innerHTML = `
+                        <div class="meal">
+                            <div class="meal-time">Morning</div>
+                            <div class="meal-amount">${mealSizeFormatted}</div>
+                        </div>
+                        <div class="meal">
+                            <div class="meal-time">Evening</div>
+                            <div class="meal-amount">${mealSizeFormatted}</div>
+                        </div>
+                    `;
+                } else if (frequency === 3) {
+                    mealSchedule.innerHTML = `
+                        <div class="meal">
+                            <div class="meal-time">Morning</div>
+                            <div class="meal-amount">${mealSizeFormatted}</div>
+                        </div>
+                        <div class="meal">
+                            <div class="meal-time">Noon</div>
+                            <div class="meal-amount">${mealSizeFormatted}</div>
+                        </div>
+                        <div class="meal">
+                            <div class="meal-time">Evening</div>
+                            <div class="meal-amount">${mealSizeFormatted}</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Update the treat allowance based on the slider percentage
+            function updateTreatAllowance() {
+                const treatPercentage = parseFloat(treatPercentSlider.value);
+                const maxTreatCalories = calculatedDER * (treatPercentage / 100);
+                treatCaloriesAllowed.textContent = Math.round(maxTreatCalories) + ' kcal';
+            }
+            
+            // Recalculate food amount when treats change
+            function recalculateFoodAmount() {
+                // Don't proceed if we don't have base calculations
+                if (calculatedDER <= 0) return;
+                
+                const foodCalories = parseFloat(foodCaloriesInput.value);
+                if (isNaN(foodCalories) || foodCalories <= 0) return;
+                
+                // Get the treat percentage from slider
+                const treatPercentage = parseFloat(treatPercentSlider.value);
+                const treatCalories = calculatedDER * (treatPercentage / 100);
+                
+                // Calculate food amount
+                const foodCaloriesNeeded = calculatedDER - treatCalories;
+                calculatedCupsPerDay = foodCaloriesNeeded / foodCalories;
+                
+                // Update UI
+                const cupsFormatted = formatCupMeasurement(calculatedCupsPerDay);
+                foodAmountEl.textContent = cupsFormatted;
+                treatsPercentageEl.textContent = treatPercentage + '%';
+                
+                // Update meal schedule
+                createMealSchedule();
+                
+                // Highlight result boxes
+                resultBoxes.forEach(box => {
+                    box.classList.remove('highlight');
+                    void box.offsetWidth; // Trigger reflow
+                    box.classList.add('highlight');
+                });
+            }
+            
+            // Initialize treat percentage slider
+            treatPercentSlider.addEventListener('input', function() {
+                const percentage = this.value;
+                treatPercentValue.textContent = percentage + '%';
+                
+                // If we have calculated daily calories, update treat allowance
+                if (calculatedDER > 0) {
+                    updateTreatAllowance();
+                    recalculateFoodAmount();
+                }
+            });
+            
+            // Update feeding schedule when feeding frequency changes
+            feedingFrequencySelect.addEventListener('change', function() {
+                if (calculatedDER > 0) {
+                    createMealSchedule();
+                }
+            });
+
+            // Calculate button click event
+            calculateBtn.addEventListener('click', calculateDogFood);
+
+            function calculateDogFood() {
+                // Get input values
+                const weight = parseFloat(weightInput.value);
+                const foodCalories = parseFloat(foodCaloriesInput.value);
+                const activityLevel = activityLevelSelect.value;
+
+                // Validate inputs
+                if (isNaN(weight) || isNaN(foodCalories) || weight <= 0 || foodCalories <= 0) {
+                    alert('Please enter valid weight and food calorie values.');
+                    return;
+                }
+
+                // Calculate Resting Energy Requirement (RER)
+                // Formula: 70 * (weight in kg)^0.75
+                const weightInKg = weight / 2.2;
+                const rer = 70 * Math.pow(weightInKg, 0.75);
+
+                // Calculate Daily Energy Requirement (DER) based on activity level
+                switch(activityLevel) {
+                    case 'low':
+                        calculatedDER = rer * 1.2; // Inactive or senior dogs
+                        break;
+                    case 'moderate':
+                        calculatedDER = rer * 1.4; // Normal adult dogs
+                        break;
+                    case 'high':
+                        calculatedDER = rer * 1.8; // Very active or working dogs
+                        break;
+                    case 'puppy':
+                        calculatedDER = rer * 2.5; // Puppies (under 1 year)
+                        break;
+                    default:
+                        calculatedDER = rer * 1.4; // Default to normal adult
+                }
+
+                // Update the UI with daily calorie needs
+                dailyCaloriesEl.textContent = Math.round(calculatedDER) + ' kcal';
+                
+                // Reset treat slider to 0
+                treatPercentSlider.value = 0;
+                treatPercentValue.textContent = '0%';
+                
+                // Show the treat slider
+                treatSliderContainer.style.display = 'block';
+                
+                // Update the treat allowance based on the slider percentage
+                updateTreatAllowance();
+                
+                // Calculate food amount based on current treat slider value (0%)
+                recalculateFoodAmount();
+            }
+        });
+    </script>
+</body>
+</html>
