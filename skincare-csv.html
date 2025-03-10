@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✿ GlowGuide - Your Personalized Beauty Routine ✿</title>
+    <!-- Include PapaParse CSV parser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #e686b2; /* Pink */
+            --primary-light: #f8a5c9; /* Light pink */
+            --secondary-color: #fef2f7; /* Very light pink background */
+            --accent-color: #b36ad8; /* Purple */
+            --text-color: #4a3a4a; /* Soft dark text */
+            --light-text: #8a7389; /* Softer light text */
+            --white: #fff;
+            --shadow: 0 6px 10px rgba(230, 134, 178, 0.15);
+            --border-radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' fill-opacity='0.05'%3E%3Cpath fill='%23e686b2' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/svg%3E");
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--white);
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Decorative elements */
+        header:before, header:after {
+            content: "";
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff' opacity='0.2'%3E%3Cpath d='M12,2C7.6,2,4,5.6,4,10c0,3.9,7,12,8,12s8-8.1,8-12C20,5.6,16.4,2,12,2z M12,12c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S13.1,12,12,12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            opacity: 0.2;
+        }
+        
+        header:before {
+            top: 20px;
+            left: 20px;
+        }
+        
+        header:after {
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(180deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section, .results-section {
+            width: 100%;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .form-section:before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 50px;
+            height: 50px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e686b2' opacity='0.3'%3E%3Cpath d='M12 1.044c-1.424 0-4.289 3.7-5.542 3.7-.59 0-1.045-.477-1.045-1.045 0-1.424 5.999-3.7 5.999-3.7s.588 1.045.588 1.045zm1.045 3.7c1.424 0 4.289-3.7 5.542-3.7.59 0 1.045.478 1.045 1.045 0 1.424-5.999 3.7-5.999 3.7s-.588-1.045-.588-1.045zM2.349 8.637c0-1.424 5.999-3.7 5.999-3.7s.588 1.045.588 1.045c-1.424 0-4.289 3.7-5.542 3.7-.59 0-1.045-.477-1.045-1.045zm18.258 0c0 1.424-5.999 3.7-5.999 3.7s-.588-1.045-.588-1.045c1.424 0 4.289-3.7 5.542-3.7.59 0 1.045.478 1.045 1.045zM2.349 15.363c0 1.424 5.999 3.7 5.999 3.7s.588-1.045.588-1.045c-1.424 0-4.289-3.7-5.542-3.7-.59 0-1.045.478-1.045 1.045zm18.258 0c0-1.424-5.999-3.7-5.999-3.7s-.588 1.045-.588 1.045c1.424 0 4.289 3.7 5.542 3.7.59 0 1.045-.477 1.045-1.045zM7.76 22.956c-1.424 0-4.289-3.7-5.542-3.7-.59 0-1.045.478-1.045 1.045 0 1.424 5.999 3.7 5.999 3.7s.588-1.045.588-1.045zm8.48 0c1.424 0 4.289 3.7 5.542 3.7.59 0 1.045-.477 1.045-1.045 0-1.424-5.999-3.7-5.999-3.7s-.588 1.045-.588 1.045z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        h2 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        h2:after {
+            content: "✿"; /* Flower symbol */
+            position: absolute;
+            right: 0;
+            bottom: 5px;
+            color: var(--primary-color);
+            opacity: 0.4;
+            font-size: 1.2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--light-text);
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        /* Gray toggle buttons */
+        .concern-toggles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .toggle-btn {
+            background-color: #f2f2f2;
+            color: #666666;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .toggle-btn:hover {
+            background-color: #e8e8e8;
+            border-color: #d0d0d0;
+        }
+        
+        .toggle-btn.active {
+            background-color: #dddddd;
+            border-color: #cccccc;
+            color: #333333;
+            font-weight: 500;
+        }
+        
+        /* Pink submit button */
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+            color: var(--white);
+            border: none;
+            padding: 16px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(179, 106, 216, 0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #d05bbd, #e686b2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(179, 106, 216, 0.4);
+        }
+        
+        #results {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .routine-summary {
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+            color: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .climate-note {
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .routine-container {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .routine-step {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .step-icon {
+            width: 35px;
+            height: 35px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+        }
+        
+        .product {
+            border-left: 3px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 15px 0;
+            background-color: var(--white);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product:hover {
+            transform: translateX(5px);
+        }
+        
+        .product:before {
+            content: "❀";
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            color: var(--primary-color);
+            opacity: 0.1;
+            font-size: 1.5rem;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .product-description {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .product-price {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .product-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), #f8a5c9);
+            color: var(--white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-weight: 500;
+        }
+        
+        .product-link:hover {
+            background: linear-gradient(135deg, #e065a0, #f483b6);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-weight: 500;
+            color: var(--light-text);
+        }
+        
+        .status-message {
+            text-align: center;
+            padding: 20px;
+            font-weight: 500;
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .routine-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .concern-toggles {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✿ GlowGuide ✿</h1>
+            <p class="tagline">Your personalized skincare routine, tailored to your unique beauty needs</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="form-section">
+                <h2>Tell us about your skin</h2>
+                <div id="init-status" class="status-message">Loading product data...</div>
+                <form id="skincare-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="climate">Your Climate Type</label>
+                        <select id="climate" required>
+                            <option value="">Select climate type</option>
+                            <option value="dry">Dry/Arid</option>
+                            <option value="humid">Humid/Tropical</option>
+                            <option value="moderate">Moderate/Temperate</option>
+                            <option value="cold">Cold/Arctic</option>
+                            <option value="coastal">Coastal/Marine</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="season">Current Season</label>
+                        <select id="season" required>
+                            <option value="">Select season</option>
+                            <option value="winter">Winter</option>
+                            <option value="spring">Spring</option>
+                            <option value="summer">Summer</option>
+                            <option value="fall">Fall</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="skin-type">Your Skin Type</label>
+                        <select id="skin-type" required>
+                            <option value="">Select skin type</option>
+                            <option value="dry">Dry</option>
+                            <option value="oily">Oily</option>
+                            <option value="combination">Combination</option>
+                            <option value="normal">Normal</option>
+                            <option value="sensitive">Sensitive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Your Skin Concerns (Select all that apply)</label>
+                        <div class="concern-toggles">
+                            <button type="button" class="toggle-btn" data-concern="acne">Acne</button>
+                            <button type="button" class="toggle-btn" data-concern="aging">Anti-aging</button>
+                            <button type="button" class="toggle-btn" data-concern="pigmentation">Hyperpigmentation</button>
+                            <button type="button" class="toggle-btn" data-concern="redness">Redness</button>
+                            <button type="button" class="toggle-btn" data-concern="dullness">Dullness</button>
+                            <button type="button" class="toggle-btn" data-concern="dryness">Dryness</button>
+                            <button type="button" class="toggle-btn" data-concern="texture">Texture</button>
+                            <button type="button" class="toggle-btn" data-concern="pores">Large Pores</button>
+                        </div>
+                        <div id="selected-concerns" style="display: none;"></div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Get My Personalized Routine</button>
+                </form>
+            </section>
+            
+            <section class="results-section" id="results">
+                <h2>Your Personalized Skincare Routine</h2>
+                
+                <div class="routine-summary" id="routine-summary">
+                    <!-- Will be filled with JavaScript -->
+                </div>
+                
+                <div id="loading" class="loading">
+                    <p>Finding your perfect products...</p>
+                </div>
+                
+                <div class="routine-container" id="routine-container">
+                    <!-- Will be filled with JavaScript -->
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>© 2025 GlowGuide | Personalized beauty recommendations for your unique glow journey ✿</p>
+            <p>Note: Product recommendations are lovingly curated based on your skin profile and environmental factors.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Global variable to store product data
+        let productsData = [];
+        
+        // Initialize toggle buttons and load data
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            const selectedConcerns = document.getElementById('selected-concerns');
+            const initStatus = document.getElementById('init-status');
+            const skinCareForm = document.getElementById('skincare-form');
+            
+            // Hide loading initially
+            document.getElementById('loading').style.display = 'none';
+            
+            // Setup toggle button functionality
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    updateSelectedConcerns();
+                });
+            });
+            
+            function updateSelectedConcerns() {
+                // Clear previous selections
+                selectedConcerns.innerHTML = '';
+                
+                // Add hidden inputs for each selected concern
+                document.querySelectorAll('.toggle-btn.active').forEach(button => {
+                    const concern = button.getAttribute('data-concern');
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'concerns';
+                    input.value = concern;
+                    selectedConcerns.appendChild(input);
+                });
+            }
+            
+            // Load CSV data from external file
+            fetch('skincare_products.csv')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(csvText => {
+                    // Parse CSV data
+                    Papa.parse(csvText, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            productsData = results.data;
+                            console.log('Product data loaded:', productsData.length + ' products');
+                            
+                            // Show form when data is loaded
+                            initStatus.style.display = 'none';
+                            skinCareForm.style.display = 'block';
+                        },
+                        error: function(error) {
+                            console.error('Error parsing CSV:', error);
+                            initStatus.textContent = 'Error loading product data. Please try again later.';
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching CSV file:', error);
+                    initStatus.textContent = 'Error loading product data. Please try again later.';
+                });
+            
+            // Form submission
+            document.getElementById('skincare-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading indicator
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('routine-container').innerHTML = '';
+                
+                // Get form values
+                const climate = document.getElementById('climate').value;
+                const season = document.getElementById('season').value;
+                const skinType = document.getElementById('skin-type').value;
+                
+                // Get selected concerns
+                const concernInputs = document.querySelectorAll('#selected-concerns input');
+                const concerns = Array.from(concernInputs).map(input => input.value);
+                
+                // Scroll to results
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Add a small delay to simulate processing (can be removed in production)
+                setTimeout(() => {
+                    // Generate routine
+                    generateRoutine(climate, season, skinType, concerns, productsData);
+                    
+                    // Hide loading indicator
+                    document.getElementById('loading').style.display = 'none';
+                }, 800);
+            });
+        });
+        
+        function generateRoutine(climate, season, skinType, concerns, productsData) {
+            // Create summary
+            let summaryCopy = `Customized routine for ${skinType} skin`;
+            if (concerns.length > 0) {
+                summaryCopy += ` targeting ${concerns.join(', ')}`;
+            }
+            summaryCopy += ` during ${season} in a ${climate} climate.`;
+            
+            // Add climate note based on season and climate
+            let climateNote = '';
+            
+            if (climate === 'dry') {
+                climateNote = 'For dry climates, focus on deep hydration and moisture retention.';
+                if (season === 'winter') {
+                    climateNote += ' Extra protection is needed in winter months.';
+                }
+            } else if (climate === 'humid') {
+                climateNote = 'For humid climates, focus on oil control and non-comedogenic products.';
+                if (season === 'summer') {
+                    climateNote += ' Summer humidity requires lightweight, breathable formulas.';
+                }
+            } else if (climate === 'cold') {
+                climateNote = 'For cold climates, focus on barrier repair and protection against harsh elements.';
+                if (season === 'winter') {
+                    climateNote += ' Winter months need extra emollients and protection.';
+                }
+            } else if (climate === 'coastal') {
+                climateNote = 'For coastal areas, focus on protection against salt air and sun damage.';
+                if (season === 'summer') {
+                    climateNote += ' Increased SPF is recommended for summer months.';
+                }
+            } else {
+                if (season === 'winter') {
+                    climateNote = 'For winter months, focus on hydration and barrier protection.';
+                } else if (season === 'summer') {
+                    climateNote = 'For summer months, focus on oil control and sun protection.';
+                } else if (season === 'spring') {
+                    climateNote = 'For spring, focus on adapting to increasing humidity and temperature.';
+                } else if (season === 'fall') {
+                    climateNote = 'For fall, focus on repairing summer damage and preparing for drier conditions.';
+                }
+            }
+            
+            document.getElementById('routine-summary').innerHTML = `
+                <h3>Your Custom Routine</h3>
+                <p>${summaryCopy}</p>
+                <p class="climate-note">${climateNote}</p>
+            `;
+            
+            // Initialize routine container
+            const routineContainer = document.getElementById('routine-container');
+            routineContainer.innerHTML = '';
+            
+            // Generate morning routine
+            const morningRoutine = document.createElement('div');
+            morningRoutine.classList.add('routine-step');
+            morningRoutine.innerHTML = `
+                <div class="step-title">
+                    <div class="step-icon">AM</div>
+                    Morning Routine
+                </div>
+            `;
+            
+            // Find appropriate products based on user's selections
+            
+            // Morning cleanser
+            const cleanser = findProduct(productsData, {
+                category: 'cleanser',
+                skinType: skinType,
+                climate: climate,
+                season: season,
+                timeOfDay: 'am'
+            });
+            
+            if (cleanser) {
+                morningRoutine.innerHTML += createProductHTML(cleanser);
+            }
+            
+            // Add toner if needed
+            if (concerns.includes('pores') || concerns.includes('dullness') || skinType === 'oily' || skinType === 'combination') {
+                const toner = findProduct(productsData, {
+                    category: 'toner',
+                    skinType: skinType,
+                    concerns: concerns,
+                    timeOfDay: 'am'
+                });
+                
+                if (toner) {
+                    morningRoutine.innerHTML += createProductHTML(toner);
+                }
+            }
+            
+            // Add serum based on concerns
+            if (concerns.length > 0) {
+                const serum = findProduct(productsData, {
+                    category: 'serum',
+                    skinType: skinType,
+                    concerns: concerns,
+                    timeOfDay: 'am'
+                });
+                
+                if (serum) {
+                    morningRoutine.innerHTML += createProductHTML(serum);
+                }
+            }
+            
+            // Add moisturizer
+            const moisturizer = findProduct(productsData, {
+                category: 'moisturizer',
+                skinType: skinType,
+                climate: climate,
+                season: season,
+                timeOfDay: 'am'
+            });
+            
+            if (moisturizer) {
+                morningRoutine.innerHTML += createProductHTML(moisturizer);
+            }
+            
+            // Add sunscreen
+            const sunscreen = findProduct(productsData, {
+                category: 'sunscreen',
+                skinType: skinType,
+                timeOfDay: 'am'
+            });
+            
+            if (sunscreen) {
+                morningRoutine.innerHTML += createProductHTML(sunscreen);
+            }
+            
+            routineContainer.appendChild(morningRoutine);
+            
+            // Generate evening routine
+            const eveningRoutine = document.createElement('div');
+            eveningRoutine.classList.add('routine-step');
+            eveningRoutine.innerHTML = `
+                <div class="step-title">
+                    <div class="step-icon">PM</div>
+                    Evening Routine
+                </div>
+            `;
+            
+            // Add makeup remover if needed (skip for sensitive skin)
+            if (skinType !== 'sensitive') {
+                const makeupRemover = findProduct(productsData, {
+                    category: 'makeup_remover',
+                    skinType: skinType,
+                    timeOfDay: 'pm'
+                });
+                
+                if (makeupRemover) {
+                    eveningRoutine.innerHTML += createProductHTML(makeupRemover);
+                }
+            }
+            
+            // Add cleanser (same as morning)
+            if (cleanser) {
+                eveningRoutine.innerHTML += createProductHTML(cleanser);
+            }
+            
+            // Add exfoliant if needed (only evening, 2-3 times per week)
+            if (skinType !== 'sensitive') {
+                const exfoliant = findProduct(productsData, {
+                    category: 'exfoliant',
+                    skinType: skinType,
+                    concerns: concerns,
+                    timeOfDay: 'pm'
+                });
+                
+                if (exfoliant) {
+                    const exfoliantWithNote = {
+                        ...exfoliant,
+                        description: exfoliant.description + " (Use 2-3 times per week)"
+                    };
+                    
+                    eveningRoutine.innerHTML += createProductHTML(exfoliantWithNote);
+                }
+            }
+            
+            // Add PM-specific serum based on concerns
+            if (concerns.length > 0) {
+                const pmSerum = findProduct(productsData, {
+                    category: 'serum',
+                    skinType: skinType,
+                    concerns: concerns,
+                    timeOfDay: 'pm'
+                });
+                
+                if (pmSerum) {
+                    eveningRoutine.innerHTML += createProductHTML(pmSerum);
+                }
+            }
+            
+            // Add night cream
+            const nightCream = findProduct(productsData, {
+                category: 'night_cream',
+                skinType: skinType,
+                concerns: concerns,
+                timeOfDay: 'pm'
+            });
+            
+            if (nightCream) {
+                eveningRoutine.innerHTML += createProductHTML(nightCream);
+            }
+            
+            // Add treatment for specific concerns
+            if (concerns.includes('acne') || concerns.includes('aging') || concerns.includes('pigmentation')) {
+                const primaryConcern = concerns[0]; // Take the first concern as primary
+                
+                const treatment = findProduct(productsData, {
+                    category: 'treatment',
+                    skinType: skinType,
+                    concerns: [primaryConcern],
+                    timeOfDay: 'pm'
+                });
+                
+                if (treatment) {
+                    eveningRoutine.innerHTML += createProductHTML(treatment);
+                }
+            }
+            
+            routineContainer.appendChild(eveningRoutine);
+            
+            // Add weekly treatments section
+            const weeklyRoutine = document.createElement('div');
+            weeklyRoutine.classList.add('routine-step');
+            weeklyRoutine.innerHTML = `
+                <div class="step-title">
+                    <div class="step-icon">W</div>
+                    Weekly Treatments
+                </div>
+            `;
+            
+            // Add mask based on skin type and concerns
+            const mask = findProduct(productsData, {
+                category: 'mask',
+                skinType: skinType,
+                concerns: concerns,
+                timeOfDay: 'weekly'
+            });
+            
+            if (mask) {
+                weeklyRoutine.innerHTML += createProductHTML(mask);
+            }
+            
+            routineContainer.appendChild(weeklyRoutine);
+        }
+        
+        // Helper function to find products from the CSV data based on criteria
+        function findProduct(products, criteria) {
+            // Helper function to check if a value is in a comma-separated list
+            function isInList(list, value) {
+                if (list === 'all') return true;
+                return list.split(',').includes(value);
+            }
+            
+            // Filter products based on criteria
+            let matches = products.filter(product => {
+                // Match category
+                if (product.category !== criteria.category) return false;
+                
+                // Match skin type (either specific or "all")
+                let skinTypeMatch = isInList(product.skin_types, criteria.skinType) || 
+                                    product.skin_types === 'all';
+                if (!skinTypeMatch) return false;
+                
+                // Match time of day
+                let timeMatch = isInList(product.time_of_day, criteria.timeOfDay);
+                if (!timeMatch) return false;
+                
+                // Match climate if specified
+                if (criteria.climate && criteria.climate !== 'moderate') {
+                    let climateMatch = isInList(product.climates, criteria.climate) || 
+                                      product.climates === 'all';
+                    if (!climateMatch) return false;
+                }
+                
+                // Match season if specified
+                if (criteria.season) {
+                    let seasonMatch = isInList(product.seasons, criteria.season) || 
+                                      product.seasons === 'all';
+                    if (!seasonMatch) return false;
+                }
+                
+                // Match concerns if specified
+                if (criteria.concerns && criteria.concerns.length > 0) {
+                    // For simplicity, match if any concern matches
+                    let concernMatch = false;
+                    for (let concern of criteria.concerns) {
+                        if (isInList(product.concerns, concern) || product.concerns === 'all') {
+                            concernMatch = true;
+                            break;
+                        }
+                    }
+                    if (!concernMatch) return false;
+                }
+                
+                return true;
+            });
+            
+            // Sort matches by relevance (could be enhanced with more sophisticated scoring)
+            // For now, just return the first match
+            return matches.length > 0 ? matches[0] : null;
+        }
+        
+        // Helper function to create HTML for a product
+        function createProductHTML(product) {
+            return `
+                <div class="product">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-price">${product.price}</div>
+                    <a href="${product.link}" class="product-link">Shop Now</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
