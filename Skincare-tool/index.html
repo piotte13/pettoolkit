@@ -299,6 +299,22 @@
             transition: transform 0.3s;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .product-content {
+            flex: 1;
         }
         
         .product:hover {
@@ -313,6 +329,7 @@
             color: var(--primary-color);
             opacity: 0.1;
             font-size: 1.5rem;
+            z-index: 1;
         }
         
         .product-name {
@@ -381,6 +398,18 @@
             
             .concern-toggles {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .product {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+            
+            .product-image {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -1013,12 +1042,18 @@
         
         // Helper function to create HTML for a product
         function createProductHTML(product) {
+            // Use a default image if product doesn't have one
+            const imageUrl = product.image || `/api/placeholder/200/200?text=${encodeURIComponent(product.name)}`;
+            
             return `
                 <div class="product">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-description">${product.description}</div>
-                    <div class="product-price">${product.price}</div>
-                    <a href="${product.link}" class="product-link">Shop Now</a>
+                    <img src="${imageUrl}" alt="${product.name}" class="product-image">
+                    <div class="product-content">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">${product.price}</div>
+                        <a href="${product.link}" class="product-link">Shop Now</a>
+                    </div>
                 </div>
             `;
         }
