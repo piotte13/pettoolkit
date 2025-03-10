@@ -235,12 +235,18 @@
             box-shadow: var(--shadow);
         }
         
-        .climate-note {
+        .climate-note, .age-note {
             font-style: italic;
             margin-top: 10px;
             font-size: 0.95rem;
             line-height: 1.5;
             opacity: 0.9;
+        }
+        
+        .age-note {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 10px;
+            margin-top: 12px;
         }
         
         .routine-container {
@@ -427,6 +433,18 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="age">Your Age</label>
+                        <select id="age" required>
+                            <option value="">Select age range</option>
+                            <option value="teens">Teens (13-19)</option>
+                            <option value="twenties">Twenties (20-29)</option>
+                            <option value="thirties">Thirties (30-39)</option>
+                            <option value="forties">Forties (40-49)</option>
+                            <option value="fifties">Fifties (50+)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
                         <label>Your Skin Concerns (Select all that apply)</label>
                         <div class="concern-toggles">
                             <button type="button" class="toggle-btn" data-concern="acne">Acne</button>
@@ -550,6 +568,7 @@
                 const climate = document.getElementById('climate').value;
                 const season = document.getElementById('season').value;
                 const skinType = document.getElementById('skin-type').value;
+                const age = document.getElementById('age').value;
                 
                 // Get selected concerns
                 const concernInputs = document.querySelectorAll('#selected-concerns input');
@@ -561,7 +580,7 @@
                 // Add a small delay to simulate processing (can be removed in production)
                 setTimeout(() => {
                     // Generate routine
-                    generateRoutine(climate, season, skinType, concerns, productsData);
+                    generateRoutine(climate, season, skinType, age, concerns, productsData);
                     
                     // Hide loading indicator
                     document.getElementById('loading').style.display = 'none';
@@ -569,9 +588,9 @@
             });
         });
         
-        function generateRoutine(climate, season, skinType, concerns, productsData) {
+        function generateRoutine(climate, season, skinType, age, concerns, productsData) {
             // Create summary
-            let summaryCopy = `Customized routine for ${skinType} skin`;
+            let summaryCopy = `Customized routine for ${age} with ${skinType} skin`;
             if (concerns.length > 0) {
                 summaryCopy += ` targeting ${concerns.join(', ')}`;
             }
@@ -612,10 +631,26 @@
                 }
             }
             
+            // Add age-specific tips
+            let ageNote = '';
+            
+            if (age === 'teens') {
+                ageNote = 'For teens: Focus on gentle, non-irritating products that help manage oil production and breakouts. Establish a consistent cleansing routine and always use a lightweight, non-comedogenic moisturizer and sunscreen.';
+            } else if (age === 'twenties') {
+                ageNote = 'For your twenties: Now is the time to establish preventative skincare habits. Focus on sun protection, antioxidants, and gentle exfoliation. Start incorporating vitamin C in the morning and consider adding a lightweight retinol at night to prevent early signs of aging.';
+            } else if (age === 'thirties') {
+                ageNote = 'For your thirties: Combat the first visible signs of aging with more potent antioxidants and consistent use of retinol or retinoids. Add products with peptides and hyaluronic acid for improved elasticity and hydration.';
+            } else if (age === 'forties') {
+                ageNote = 'For your forties: Focus on boosting collagen production and skin firmness. Use products with a higher concentration of active ingredients like peptides, growth factors, and stronger retinoids as tolerated. Don\'t forget the neck and décolletage areas.';
+            } else if (age === 'fifties') {
+                ageNote = 'For mature skin: Prioritize rich moisturizers with ceramides and peptides to strengthen your skin barrier. Look for products that target elasticity, deep hydration, and brightness. Gentle exfoliation remains important but focus more on nourishment and repair.';
+            }
+            
             document.getElementById('routine-summary').innerHTML = `
                 <h3>Your Custom Routine</h3>
                 <p>${summaryCopy}</p>
                 <p class="climate-note">${climateNote}</p>
+                <p class="age-note">${ageNote}</p>
             `;
             
             // Initialize routine container
@@ -634,13 +669,29 @@
             
             // Find appropriate products based on user's selections
             
+            // Automatically add age-appropriate concerns
+            let ageAdjustedConcerns = [...concerns];
+            
+            // Add age-specific concerns if not already selected
+            if (age === 'teens' && !concerns.includes('acne')) {
+                ageAdjustedConcerns.push('acne'); // Teens often need acne control
+            } else if (age === 'thirties' && !concerns.includes('aging')) {
+                ageAdjustedConcerns.push('aging'); // Start anti-aging in thirties
+            } else if ((age === 'forties' || age === 'fifties') && !concerns.includes('aging')) {
+                ageAdjustedConcerns.push('aging'); // Prioritize anti-aging for 40s and 50s
+                if (!concerns.includes('dryness')) {
+                    ageAdjustedConcerns.push('dryness'); // Mature skin often needs extra hydration
+                }
+            }
+            
             // Morning cleanser
             const cleanser = findProduct(productsData, {
                 category: 'cleanser',
                 skinType: skinType,
                 climate: climate,
                 season: season,
-                timeOfDay: 'am'
+                timeOfDay: 'am',
+                age: age
             });
             
             if (cleanser) {
@@ -648,12 +699,13 @@
             }
             
             // Add toner if needed
-            if (concerns.includes('pores') || concerns.includes('dullness') || skinType === 'oily' || skinType === 'combination') {
+            if (ageAdjustedConcerns.includes('pores') || ageAdjustedConcerns.includes('dullness') || skinType === 'oily' || skinType === 'combination') {
                 const toner = findProduct(productsData, {
                     category: 'toner',
                     skinType: skinType,
-                    concerns: concerns,
-                    timeOfDay: 'am'
+                    concerns: ageAdjustedConcerns,
+                    timeOfDay: 'am',
+                    age: age
                 });
                 
                 if (toner) {
@@ -662,12 +714,13 @@
             }
             
             // Add serum based on concerns
-            if (concerns.length > 0) {
+            if (ageAdjustedConcerns.length > 0) {
                 const serum = findProduct(productsData, {
                     category: 'serum',
                     skinType: skinType,
-                    concerns: concerns,
-                    timeOfDay: 'am'
+                    concerns: ageAdjustedConcerns,
+                    timeOfDay: 'am',
+                    age: age
                 });
                 
                 if (serum) {
@@ -681,7 +734,9 @@
                 skinType: skinType,
                 climate: climate,
                 season: season,
-                timeOfDay: 'am'
+                timeOfDay: 'am',
+                age: age,
+                concerns: ageAdjustedConcerns
             });
             
             if (moisturizer) {
@@ -692,7 +747,8 @@
             const sunscreen = findProduct(productsData, {
                 category: 'sunscreen',
                 skinType: skinType,
-                timeOfDay: 'am'
+                timeOfDay: 'am',
+                age: age
             });
             
             if (sunscreen) {
@@ -716,7 +772,8 @@
                 const makeupRemover = findProduct(productsData, {
                     category: 'makeup_remover',
                     skinType: skinType,
-                    timeOfDay: 'pm'
+                    timeOfDay: 'pm',
+                    age: age
                 });
                 
                 if (makeupRemover) {
@@ -734,8 +791,9 @@
                 const exfoliant = findProduct(productsData, {
                     category: 'exfoliant',
                     skinType: skinType,
-                    concerns: concerns,
-                    timeOfDay: 'pm'
+                    concerns: ageAdjustedConcerns,
+                    timeOfDay: 'pm',
+                    age: age
                 });
                 
                 if (exfoliant) {
@@ -749,12 +807,13 @@
             }
             
             // Add PM-specific serum based on concerns
-            if (concerns.length > 0) {
+            if (ageAdjustedConcerns.length > 0) {
                 const pmSerum = findProduct(productsData, {
                     category: 'serum',
                     skinType: skinType,
-                    concerns: concerns,
-                    timeOfDay: 'pm'
+                    concerns: ageAdjustedConcerns,
+                    timeOfDay: 'pm',
+                    age: age
                 });
                 
                 if (pmSerum) {
@@ -766,8 +825,9 @@
             const nightCream = findProduct(productsData, {
                 category: 'night_cream',
                 skinType: skinType,
-                concerns: concerns,
-                timeOfDay: 'pm'
+                concerns: ageAdjustedConcerns,
+                timeOfDay: 'pm',
+                age: age
             });
             
             if (nightCream) {
@@ -775,14 +835,26 @@
             }
             
             // Add treatment for specific concerns
-            if (concerns.includes('acne') || concerns.includes('aging') || concerns.includes('pigmentation')) {
-                const primaryConcern = concerns[0]; // Take the first concern as primary
+            if (ageAdjustedConcerns.includes('acne') || ageAdjustedConcerns.includes('aging') || ageAdjustedConcerns.includes('pigmentation')) {
+                // Determine primary concern based on age and selected concerns
+                let primaryConcern;
+                
+                if (age === 'teens' && ageAdjustedConcerns.includes('acne')) {
+                    primaryConcern = 'acne';
+                } else if ((age === 'forties' || age === 'fifties') && ageAdjustedConcerns.includes('aging')) {
+                    primaryConcern = 'aging';
+                } else if (ageAdjustedConcerns.includes('pigmentation')) {
+                    primaryConcern = 'pigmentation';
+                } else {
+                    primaryConcern = ageAdjustedConcerns[0]; // Default to first concern
+                }
                 
                 const treatment = findProduct(productsData, {
                     category: 'treatment',
                     skinType: skinType,
                     concerns: [primaryConcern],
-                    timeOfDay: 'pm'
+                    timeOfDay: 'pm',
+                    age: age
                 });
                 
                 if (treatment) {
@@ -806,8 +878,9 @@
             const mask = findProduct(productsData, {
                 category: 'mask',
                 skinType: skinType,
-                concerns: concerns,
-                timeOfDay: 'weekly'
+                concerns: ageAdjustedConcerns,
+                timeOfDay: 'weekly',
+                age: age
             });
             
             if (mask) {
@@ -869,8 +942,72 @@
                 return true;
             });
             
-            // Sort matches by relevance (could be enhanced with more sophisticated scoring)
-            // For now, just return the first match
+            // Sort matches by relevance, considering age
+            if (matches.length > 1 && criteria.age) {
+                matches.sort((a, b) => {
+                    let scoreA = 0;
+                    let scoreB = 0;
+                    
+                    // Add age-appropriate scoring
+                    if (criteria.age === 'teens') {
+                        // For teens: prefer gentle, non-comedogenic, oil-free products
+                        if (a.description.toLowerCase().includes('gentle')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('gentle')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('oil-free')) scoreA += 1;
+                        if (b.description.toLowerCase().includes('oil-free')) scoreB += 1;
+                        if (a.description.toLowerCase().includes('non-comedogenic')) scoreA += 1;
+                        if (b.description.toLowerCase().includes('non-comedogenic')) scoreB += 1;
+                        // Teens should avoid heavy anti-aging products
+                        if (a.description.toLowerCase().includes('anti-aging')) scoreA -= 3;
+                        if (b.description.toLowerCase().includes('anti-aging')) scoreB -= 3;
+                    } 
+                    else if (criteria.age === 'twenties') {
+                        // For twenties: prefer preventative and protective products
+                        if (a.description.toLowerCase().includes('protect')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('protect')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('antioxidant')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('antioxidant')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('vitamin c')) scoreA += 1;
+                        if (b.description.toLowerCase().includes('vitamin c')) scoreB += 1;
+                    } 
+                    else if (criteria.age === 'thirties') {
+                        // For thirties: start focusing on anti-aging
+                        if (a.description.toLowerCase().includes('retinol')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('retinol')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('peptide')) scoreA += 1;
+                        if (b.description.toLowerCase().includes('peptide')) scoreB += 1;
+                        if (a.description.toLowerCase().includes('anti-aging')) scoreA += 1;
+                        if (b.description.toLowerCase().includes('anti-aging')) scoreB += 1;
+                    } 
+                    else if (criteria.age === 'forties') {
+                        // For forties: focus on anti-aging and hydration
+                        if (a.description.toLowerCase().includes('anti-aging')) scoreA += 3;
+                        if (b.description.toLowerCase().includes('anti-aging')) scoreB += 3;
+                        if (a.description.toLowerCase().includes('firm')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('firm')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('wrinkle')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('wrinkle')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('hydrat')) scoreA += 1;
+                        if (b.description.toLowerCase().includes('hydrat')) scoreB += 1;
+                    } 
+                    else if (criteria.age === 'fifties') {
+                        // For fifties+: focus on rich, hydrating, repairing products
+                        if (a.description.toLowerCase().includes('rich')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('rich')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('repair')) scoreA += 3;
+                        if (b.description.toLowerCase().includes('repair')) scoreB += 3;
+                        if (a.description.toLowerCase().includes('nourish')) scoreA += 2;
+                        if (b.description.toLowerCase().includes('nourish')) scoreB += 2;
+                        if (a.description.toLowerCase().includes('mature')) scoreA += 3;
+                        if (b.description.toLowerCase().includes('mature')) scoreB += 3;
+                    }
+                    
+                    // Return comparison based on scores
+                    return scoreB - scoreA;
+                });
+            }
+            
+            // Return the best match
             return matches.length > 0 ? matches[0] : null;
         }
         
