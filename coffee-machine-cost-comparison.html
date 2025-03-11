@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Cost Calculator: Pods vs Beans</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #6f4e37;
+            --secondary: #a67c52;
+            --light: #e6e0d4;
+            --dark: #392b1e;
+            --accent: #d4a76a;
+            --white: #ffffff;
+            --gray: #f0f0f0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+        
+        .input-section {
+            background-color: var(--gray);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .input-group-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+        
+        input, select {
+            width: 200px;
+            padding: 12px;
+            border: 2px solid var(--secondary);
+            border-radius: 5px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 5px rgba(111, 78, 55, 0.5);
+        }
+        
+        .primary-btn {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .primary-btn:hover {
+            background-color: var(--dark);
+        }
+        
+        .secondary-btn {
+            background-color: #d5d5d5;
+            color: #555555;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #c0c0c0;
+        }
+        
+        .results-section {
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            margin: 30px 0;
+            height: 400px;
+        }
+        
+        .cost-summary {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .cost-card {
+            flex: 1;
+            min-width: 250px;
+            margin: 10px;
+            padding: 20px;
+            background-color: var(--gray);
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .cost-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .cost-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .cost-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 10px 0;
+        }
+        
+        .savings {
+            font-weight: bold;
+            color: #2e7d32;
+            font-size: 1.2rem;
+        }
+        
+        .advanced-toggle {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .advanced-options {
+            display: none;
+            background-color: var(--gray);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .advanced-options.visible {
+            display: block;
+        }
+        
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .input-field {
+            margin-bottom: 15px;
+        }
+        
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .input-field input {
+            width: 100%;
+            padding: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .time-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .time-btn {
+            background-color: var(--gray);
+            color: var(--dark);
+            border: 1px solid var(--secondary);
+            padding: 8px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .time-btn.active {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+        
+        .info-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 16px;
+            font-size: 12px;
+            cursor: help;
+            margin-left: 5px;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: var(--white);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+            
+            .advanced-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Coffee Cost Calculator</h1>
+            <p class="subtitle">Compare the costs of pod-based vs traditional bean coffee machines over time</p>
+        </header>
+        
+        <div class="input-section">
+            <div class="input-group-container">
+                <div class="input-group">
+                    <label for="podMachineCost">
+                        Pod Machine Price ($)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Initial purchase price of the pod-based machine</span>
+                        </span>
+                    </label>
+                    <input type="number" id="podMachineCost" value="150" min="1" step="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="beanMachineCost">
+                        Bean Machine Price ($)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Initial purchase price of the bean-based machine</span>
+                        </span>
+                    </label>
+                    <input type="number" id="beanMachineCost" value="300" min="1" step="1">
+                </div>
+            </div>
+            
+            <div class="input-group-container">
+                <div class="input-group">
+                    <label for="podsPrice">
+                        Cost per Pod ($)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Average cost of a single coffee pod</span>
+                        </span>
+                    </label>
+                    <input type="number" id="podsPrice" value="0.75" min="0.1" step="0.01">
+                </div>
+                
+                <div class="input-group">
+                    <label for="beanCost">
+                        Cost of Coffee Beans per kg ($)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Enter the price you typically pay for 1 kilogram of coffee beans</span>
+                        </span>
+                    </label>
+                    <input type="number" id="beanCost" value="25" min="1" step="0.01">
+                </div>
+            </div>
+            
+            <div class="input-group-container">
+                <div class="input-group">
+                    <label for="coffeePerDay">
+                        Coffees per Day
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Average number of coffees consumed daily</span>
+                        </span>
+                    </label>
+                    <input type="number" id="coffeePerDay" value="2" min="1" max="20" step="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="coffeeType">
+                        Coffee Type
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Type of coffee you typically make</span>
+                        </span>
+                    </label>
+                    <select id="coffeeType">
+                        <option value="espresso">Espresso Shot (7g)</option>
+                        <option value="doubleEspresso">Double Espresso (14g)</option>
+                        <option value="standard" selected>Standard Coffee (12g)</option>
+                        <option value="large">Large Coffee (18g)</option>
+                        <option value="americano">Americano (8g)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="calculateBtn" class="primary-btn">Calculate Cost Comparison</button>
+        </div>
+        
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <div class="time-selector">
+                <button class="time-btn active" data-months="12">1 Year</button>
+                <button class="time-btn" data-months="24">2 Years</button>
+                <button class="time-btn" data-months="60">5 Years</button>
+                <button class="time-btn" data-months="120">10 Years</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="costChart"></canvas>
+            </div>
+            
+            <div class="cost-summary">
+                <div class="cost-card">
+                    <h3>Pod Machine</h3>
+                    <p>Total cost after <span id="timeframeText">1 year</span></p>
+                    <div class="cost-value" id="podTotalCost">$0</div>
+                    <p>Average cost per cup: <span id="podCostPerCup">$0</span></p>
+                </div>
+                
+                <div class="cost-card">
+                    <h3>Bean Machine</h3>
+                    <p>Total cost after <span id="timeframeTextBean">1 year</span></p>
+                    <div class="cost-value" id="beanTotalCost">$0</div>
+                    <p>Average cost per cup: <span id="beanCostPerCup">$0</span></p>
+                </div>
+            </div>
+            
+            <div id="costSummaryBox" class="savings-container" style="text-align: center; margin: 20px 0; padding: 20px; background-color: #f5f5f5; border-radius: 10px; border-left: 5px solid #2e7d32;">
+                <div id="savingsText" class="savings-message" style="font-size: 1.4rem; font-weight: bold; color: #2e7d32; margin-bottom: 10px;"></div>
+                <div id="breakEvenText" style="color: #555; font-size: 1.1rem;"></div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="breakdownChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="advanced-toggle">
+            <button id="advancedToggleBtn" class="secondary-btn">Show Advanced Options</button>
+        </div>
+        
+        <div class="advanced-options" id="advancedOptions">
+            <h3 style="text-align: center; margin-bottom: 20px;">Advanced Options</h3>
+            
+            <div class="advanced-grid">
+                <div class="input-field">
+                    <label for="gramsPerCoffee">
+                        Grams of beans per coffee
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Amount of beans used for one cup of coffee</span>
+                        </span>
+                    </label>
+                    <input type="number" id="gramsPerCoffee" value="12" min="1" step="1">
+                </div>
+                
+                <div class="input-field">
+                    <label for="beanWaste">
+                        Bean waste percentage (%)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Estimated percentage of beans wasted during preparation</span>
+                        </span>
+                    </label>
+                    <input type="number" id="beanWaste" value="5" min="0" max="50" step="1">
+                </div>
+                
+                <div class="input-field">
+                    <label for="podLifespan">
+                        Pod machine lifespan (years)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Expected years of use before replacement</span>
+                        </span>
+                    </label>
+                    <input type="number" id="podLifespan" value="5" min="1" max="20" step="1">
+                </div>
+                
+                <div class="input-field">
+                    <label for="beanLifespan">
+                        Bean machine lifespan (years)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Expected years of use before replacement</span>
+                        </span>
+                    </label>
+                    <input type="number" id="beanLifespan" value="8" min="1" max="20" step="1">
+                </div>
+                
+                <div class="input-field">
+                    <label for="grinderCost">
+                        Coffee grinder cost ($)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Cost of a separate coffee grinder if needed</span>
+                        </span>
+                    </label>
+                    <input type="number" id="grinderCost" value="0" min="0" step="1">
+                </div>
+                
+                <div class="input-field">
+                    <label for="grinderLifespan">
+                        Grinder lifespan (years)
+                        <span class="tooltip info-icon">i
+                            <span class="tooltip-text">Expected years of use before replacement</span>
+                        </span>
+                    </label>
+                    <input type="number" id="grinderLifespan" value="10" min="1" max="20" step="1">
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="resetDefaultsBtn" class="secondary-btn">Reset to Defaults</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>This calculator provides estimates based on average consumption and costs. Actual costs may vary.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const calculateBtn = document.getElementById('calculateBtn');
+        const advancedToggleBtn = document.getElementById('advancedToggleBtn');
+        const resetDefaultsBtn = document.getElementById('resetDefaultsBtn');
+        const advancedOptions = document.getElementById('advancedOptions');
+        const resultsSection = document.getElementById('resultsSection');
+        const timeButtons = document.querySelectorAll('.time-btn');
+        const coffeeTypeSelect = document.getElementById('coffeeType');
+        
+        // Charts
+        let costChart = null;
+        let breakdownChart = null;
+        
+        // Default values
+        const defaultValues = {
+            beanCost: 25,
+            podsPrice: 0.75,
+            podMachineCost: 150,
+            beanMachineCost: 300,
+            coffeePerDay: 2,
+            gramsPerCoffee: 12,
+            beanWaste: 5,
+            podLifespan: 5,
+            beanLifespan: 8,
+            grinderCost: 0,
+            grinderLifespan: 10
+        };
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial values based on coffee type
+            updateGramsPerCoffee();
+        });
+        
+        calculateBtn.addEventListener('click', calculateAndDisplay);
+        advancedToggleBtn.addEventListener('click', toggleAdvancedOptions);
+        resetDefaultsBtn.addEventListener('click', resetToDefaults);
+        coffeeTypeSelect.addEventListener('change', updateGramsPerCoffee);
+        
+        timeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                timeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                calculateAndDisplay();
+            });
+        });
+        
+        // Functions
+        function updateGramsPerCoffee() {
+            const gramsPerCoffeeInput = document.getElementById('gramsPerCoffee');
+            const coffeeType = coffeeTypeSelect.value;
+            
+            // Set appropriate grams per coffee based on type
+            switch(coffeeType) {
+                case 'espresso':
+                    gramsPerCoffeeInput.value = 7;
+                    break;
+                case 'doubleEspresso':
+                    gramsPerCoffeeInput.value = 14;
+                    break;
+                case 'standard':
+                    gramsPerCoffeeInput.value = 12;
+                    break;
+                case 'large':
+                    gramsPerCoffeeInput.value = 18;
+                    break;
+                case 'americano':
+                    gramsPerCoffeeInput.value = 8;
+                    break;
+                default:
+                    gramsPerCoffeeInput.value = 12;
+            }
+        }
+        
+        function toggleAdvancedOptions() {
+            advancedOptions.classList.toggle('visible');
+            advancedToggleBtn.textContent = advancedOptions.classList.contains('visible') ? 
+                'Hide Advanced Options' : 'Show Advanced Options';
+        }
+        
+        function resetToDefaults() {
+            Object.keys(defaultValues).forEach(key => {
+                const input = document.getElementById(key);
+                if (input) {
+                    input.value = defaultValues[key];
+                }
+            });
+            
+            // Reset coffee type dropdown to standard
+            const coffeeTypeSelect = document.getElementById('coffeeType');
+            if (coffeeTypeSelect) {
+                coffeeTypeSelect.value = 'standard';
+            }
+            
+            // Update grams per coffee based on coffee type
+            updateGramsPerCoffee();
+            
+            calculateAndDisplay();
+        }
+        
+        function getActiveTimeframe() {
+            const activeBtn = document.querySelector('.time-btn.active');
+            return parseInt(activeBtn.dataset.months);
+        }
+        
+        function formatCurrency(value) {
+            return '$' + value.toFixed(2);
+        }
+        
+        function calculateAndDisplay() {
+            // Get input values
+            const inputs = {};
+            Object.keys(defaultValues).forEach(key => {
+                const input = document.getElementById(key);
+                inputs[key] = input ? parseFloat(input.value) : defaultValues[key];
+            });
+            
+            // Update gramsPerCoffee based on coffee type if needed
+            updateGramsPerCoffee();
+            inputs.gramsPerCoffee = parseFloat(document.getElementById('gramsPerCoffee').value);
+            
+            // Get timeframe
+            const months = getActiveTimeframe();
+            
+            // Calculate costs
+            const results = calculateCosts(inputs, months);
+            
+            // Display results
+            displayResults(results, months);
+            
+            // Show results section
+            resultsSection.style.display = 'block';
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function calculateCosts(inputs, months) {
+            // Calculate basic values
+            const daysInPeriod = months * 30.4; // Average days per month
+            const coffeesInPeriod = inputs.coffeePerDay * daysInPeriod;
+            const yearsInPeriod = months / 12;
+            
+            // Calculate machine replacement costs based on lifespan
+            const podMachineReplacements = Math.max(0, Math.floor(yearsInPeriod / inputs.podLifespan));
+            const beanMachineReplacements = Math.max(0, Math.floor(yearsInPeriod / inputs.beanLifespan));
+            const grinderReplacements = Math.max(0, Math.floor(yearsInPeriod / inputs.grinderLifespan));
+            
+            // Pod machine costs
+            const podMachineCost = inputs.podMachineCost * (1 + podMachineReplacements);
+            const podConsumableCost = inputs.podsPrice * coffeesInPeriod;
+            const podTotalCost = podMachineCost + podConsumableCost;
+            const podCostPerCup = podTotalCost / coffeesInPeriod;
+            
+            // Bean machine costs
+            const beanMachineCost = inputs.beanMachineCost * (1 + beanMachineReplacements);
+            const grinderTotalCost = inputs.grinderCost > 0 ? inputs.grinderCost * (1 + grinderReplacements) : 0;
+            
+            const beansPerCoffeeKg = (inputs.gramsPerCoffee / 1000);
+            const wasteMultiplier = 1 + (inputs.beanWaste / 100);
+            const beanConsumableCost = inputs.beanCost * beansPerCoffeeKg * coffeesInPeriod * wasteMultiplier;
+            
+            const beanTotalCost = beanMachineCost + beanConsumableCost + grinderTotalCost;
+            const beanCostPerCup = beanTotalCost / coffeesInPeriod;
+            
+            // Monthly costs for chart
+            const monthlyCosts = [];
+            for (let i = 0; i <= months; i++) {
+                const coffeesPerMonth = inputs.coffeePerDay * 30.4;
+                
+                // Calculate machine costs with replacements
+                let podMachineCostAtMonth = inputs.podMachineCost;
+                let beanMachineCostAtMonth = inputs.beanMachineCost;
+                let grinderCostAtMonth = inputs.grinderCost;
+                
+                // Add replacement costs if needed
+                if (i > 0) {
+                    const yearsAtMonth = i / 12;
+                    podMachineCostAtMonth += inputs.podMachineCost * Math.floor(yearsAtMonth / inputs.podLifespan);
+                    beanMachineCostAtMonth += inputs.beanMachineCost * Math.floor(yearsAtMonth / inputs.beanLifespan);
+                    if (inputs.grinderCost > 0) {
+                        grinderCostAtMonth += inputs.grinderCost * Math.floor(yearsAtMonth / inputs.grinderLifespan);
+                    }
+                }
+                
+                // Pod costs
+                let podMonthlyConsumables = i === 0 ? 0 : inputs.podsPrice * coffeesPerMonth;
+                
+                // Bean costs
+                let beanMonthlyConsumables = i === 0 ? 0 : inputs.beanCost * beansPerCoffeeKg * coffeesPerMonth * wasteMultiplier;
+                
+                // Cumulative costs
+                let podCumulative = i === 0 ? 
+                    podMachineCostAtMonth : 
+                    monthlyCosts[i-1].podCumulative + podMonthlyConsumables;
+                
+                let beanCumulative = i === 0 ? 
+                    beanMachineCostAtMonth + grinderCostAtMonth : 
+                    monthlyCosts[i-1].beanCumulative + beanMonthlyConsumables;
+                
+                // Check for machine replacements
+                if (i > 0 && i % (inputs.podLifespan * 12) === 0) {
+                    podCumulative += inputs.podMachineCost;
+                }
+                
+                if (i > 0 && i % (inputs.beanLifespan * 12) === 0) {
+                    beanCumulative += inputs.beanMachineCost;
+                }
+                
+                if (inputs.grinderCost > 0 && i > 0 && i % (inputs.grinderLifespan * 12) === 0) {
+                    beanCumulative += inputs.grinderCost;
+                }
+                
+                monthlyCosts.push({
+                    month: i,
+                    podCumulative,
+                    beanCumulative
+                });
+            }
+            
+            // Cost breakdown for pie charts
+            const podBreakdown = {
+                machine: podMachineCost,
+                consumables: podConsumableCost
+            };
+            
+            const beanBreakdown = {
+                machine: beanMachineCost,
+                grinder: grinderTotalCost,
+                consumables: beanConsumableCost
+            };
+            
+            // Find intersection point (break-even month)
+            let intersectionMonth = null;
+            for (let i = 1; i < monthlyCosts.length; i++) {
+                const prevPod = monthlyCosts[i-1].podCumulative;
+                const prevBean = monthlyCosts[i-1].beanCumulative;
+                const currPod = monthlyCosts[i].podCumulative;
+                const currBean = monthlyCosts[i].beanCumulative;
+                
+                if ((prevPod <= prevBean && currPod >= currBean) ||
+                    (prevPod >= prevBean && currPod <= currBean)) {
+                    intersectionMonth = i;
+                    break;
+                }
+            }
+            
+            return {
+                podTotalCost,
+                podCostPerCup,
+                beanTotalCost,
+                beanCostPerCup,
+                monthlyCosts,
+                podBreakdown,
+                beanBreakdown,
+                savings: Math.abs(podTotalCost - beanTotalCost),
+                cheaperOption: podTotalCost < beanTotalCost ? 'pod' : 'bean',
+                breakEvenMonth: intersectionMonth
+            };
+        }
+        
+        function displayResults(results, months) {
+            // Update text displays
+            document.getElementById('podTotalCost').textContent = formatCurrency(results.podTotalCost);
+            document.getElementById('podCostPerCup').textContent = formatCurrency(results.podCostPerCup);
+            document.getElementById('beanTotalCost').textContent = formatCurrency(results.beanTotalCost);
+            document.getElementById('beanCostPerCup').textContent = formatCurrency(results.beanCostPerCup);
+            
+            const timeframeText = months === 12 ? '1 year' : 
+                              (months === 24 ? '2 years' : 
+                              (months === 60 ? '5 years' : '10 years'));
+            document.querySelectorAll('#timeframeText, #timeframeTextBean').forEach(
+                el => el.textContent = timeframeText
+            );
+            
+            // Update summary box
+            const savingsText = document.getElementById('savingsText');
+            const breakEvenText = document.getElementById('breakEvenText');
+            const costSummaryBox = document.getElementById('costSummaryBox');
+            
+            // Set the color of the summary box border based on which option is cheaper
+            if (results.cheaperOption === 'pod') {
+                costSummaryBox.style.borderLeft = '5px solid #a67c52';
+                savingsText.style.color = '#a67c52';
+            } else {
+                costSummaryBox.style.borderLeft = '5px solid #2e7d32';
+                savingsText.style.color = '#2e7d32';
+            }
+            
+            // Update savings text
+            if (results.cheaperOption === 'pod') {
+                savingsText.textContent = `You'll save ${formatCurrency(results.savings)} over ${timeframeText} by using a pod machine.`;
+            } else {
+                savingsText.textContent = `You'll save ${formatCurrency(results.savings)} over ${timeframeText} by using a bean machine.`;
+            }
+            
+            // Update break-even text
+            if (results.breakEvenMonth) {
+                const years = Math.floor(results.breakEvenMonth / 12);
+                const remainingMonths = results.breakEvenMonth % 12;
+                let timeText = '';
+                
+                if (years > 0 && remainingMonths > 0) {
+                    timeText = `${years} year${years > 1 ? 's' : ''} and ${remainingMonths} month${remainingMonths > 1 ? 's' : ''}`;
+                } else if (years > 0) {
+                    timeText = `${years} year${years > 1 ? 's' : ''}`;
+                } else {
+                    timeText = `${remainingMonths} month${remainingMonths > 1 ? 's' : ''}`;
+                }
+                
+                if (results.beanTotalCost < results.podTotalCost) {
+                    breakEvenText.textContent = `Break-even point: The bean machine becomes cheaper than pods after ${timeText}.`;
+                } else if (results.podTotalCost < results.beanTotalCost) {
+                    breakEvenText.textContent = `Break-even point: The pod machine becomes cheaper than beans after ${timeText}.`;
+                } else {
+                    breakEvenText.textContent = '';
+                }
+            } else {
+                if (results.beanTotalCost < results.podTotalCost) {
+                    breakEvenText.textContent = 'The bean machine is immediately cheaper than pods.';
+                } else if (results.podTotalCost < results.beanTotalCost) {
+                    breakEvenText.textContent = 'With these settings, the pod machine is always cheaper than the bean machine.';
+                } else {
+                    breakEvenText.textContent = '';
+                }
+            }
+            
+            // Update line chart
+            updateCostChart(results.monthlyCosts);
+            
+            // Update breakdown chart
+            updateBreakdownChart(results.podBreakdown, results.beanBreakdown);
+        }
+        
+        function updateCostChart(monthlyCosts) {
+            const ctx = document.getElementById('costChart').getContext('2d');
+            
+            // Prepare data
+            const labels = monthlyCosts.map(data => `Month ${data.month}`);
+            const podData = monthlyCosts.map(data => data.podCumulative);
+            const beanData = monthlyCosts.map(data => data.beanCumulative);
+            
+            // Filter data to avoid overcrowding the chart
+            const filteredLabels = labels.filter((_, i) => i % Math.ceil(labels.length / 20) === 0 || i === labels.length - 1);
+            const filteredPodData = podData.filter((_, i) => i % Math.ceil(podData.length / 20) === 0 || i === podData.length - 1);
+            const filteredBeanData = beanData.filter((_, i) => i % Math.ceil(beanData.length / 20) === 0 || i === beanData.length - 1);
+            
+            // Datasets for the chart
+            const datasets = [
+                {
+                    label: 'Pod Machine',
+                    data: filteredPodData,
+                    borderColor: '#a67c52',
+                    backgroundColor: 'rgba(166, 124, 82, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Bean Machine',
+                    data: filteredBeanData,
+                    borderColor: '#6f4e37',
+                    backgroundColor: 'rgba(111, 78, 55, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }
+            ];
+            
+            // Find intersection point
+            let intersectionMonth = null;
+            for (let i = 1; i < monthlyCosts.length; i++) {
+                if ((monthlyCosts[i-1].podCumulative <= monthlyCosts[i-1].beanCumulative && 
+                     monthlyCosts[i].podCumulative >= monthlyCosts[i].beanCumulative) ||
+                    (monthlyCosts[i-1].podCumulative >= monthlyCosts[i-1].beanCumulative && 
+                     monthlyCosts[i].podCumulative <= monthlyCosts[i].beanCumulative)) {
+                    intersectionMonth = i;
+                    
+                    // Add a vertical line at the break-even point
+                    const breakEvenData = labels.map((_, index) => {
+                        if (index === Math.ceil(intersectionMonth / Math.ceil(labels.length / 20))) {
+                            // Find the y-value at intersection by averaging the two points
+                            return (podData[Math.ceil(intersectionMonth / Math.ceil(podData.length / 20))] + 
+                                   beanData[Math.ceil(intersectionMonth / Math.ceil(beanData.length / 20))]) / 2;
+                        }
+                        return null;
+                    });
+                    
+                    datasets.push({
+                        label: 'Break-even Point',
+                        data: breakEvenData,
+                        borderColor: '#FF5722',
+                        backgroundColor: '#FF5722',
+                        borderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointStyle: 'circle',
+                        fill: false
+                    });
+                    
+                    break;
+                }
+            }
+            
+            // Destroy previous chart if it exists
+            if (costChart) {
+                costChart.destroy();
+            }
+            
+            // Create new chart
+            costChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filteredLabels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Cumulative Cost Over Time',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(context.raw);
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cost ($)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateBreakdownChart(podBreakdown, beanBreakdown) {
+            const ctx = document.getElementById('breakdownChart').getContext('2d');
+            
+            // Destroy previous chart if it exists
+            if (breakdownChart) {
+                breakdownChart.destroy();
+            }
+            
+            // Prepare datasets
+            const podDataset = [podBreakdown.machine, podBreakdown.consumables];
+            const beanDataset = [beanBreakdown.machine, beanBreakdown.consumables];
+            
+            // Add grinder cost to bean dataset if applicable
+            if (beanBreakdown.grinder > 0) {
+                beanDataset.splice(1, 0, beanBreakdown.grinder);
+            }
+            
+            // Labels for the chart
+            const chartLabels = ['Machine Cost', 'Consumables (Pods/Beans)'];
+            if (beanBreakdown.grinder > 0) {
+                chartLabels.splice(1, 0, 'Grinder Cost');
+            }
+            
+            // Create new chart
+            breakdownChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [
+                        {
+                            label: 'Pod Machine',
+                            data: podDataset,
+                            backgroundColor: 'rgba(166, 124, 82, 0.7)'
+                        },
+                        {
+                            label: 'Bean Machine',
+                            data: beanDataset,
+                            backgroundColor: 'rgba(111, 78, 55, 0.7)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Cost Breakdown',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(context.raw);
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cost ($)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
