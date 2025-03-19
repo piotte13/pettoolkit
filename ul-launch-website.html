@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Learner Launch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Rajdhani', 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #0A1128, #1C1E4A);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(66, 54, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(37, 211, 102, 0.07) 0%, transparent 20%);
+            pointer-events: none;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            padding: 2.5rem;
+            background: rgba(14, 14, 36, 0.6);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(111, 123, 247, 0.3);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(224, 224, 224, 0.4);
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ffffffe8;
+            position: relative;
+        }
+        
+        p {
+            font-size: 1.5rem;
+            margin-bottom: 3.5rem;
+            color: #BCBCBC;
+            letter-spacing: 1px;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+        
+        .email-container {
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            justify-content: center;
+        }
+        
+        #emailInput {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid rgba(110, 123, 242, 0.5);
+            background-color: rgba(14, 14, 36, 0.7);
+            color: white;
+            font-size: 1.2rem;
+            outline: none;
+            transition: all 0.3s;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.2);
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        #emailInput:focus {
+            border-color: #25D366;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        #emailInput::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .launch-button {
+            font-size: 2rem;
+            padding: 1.5rem 5rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.4);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+        }
+        
+        .launch-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.7);
+            background: linear-gradient(135deg, #2EE075, #17A592);
+        }
+        
+        .launch-button:active {
+            transform: scale(0.98);
+        }
+        
+        .launch-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .unity-logo {
+            width: 160px;
+            margin-bottom: 3rem;
+            filter: drop-shadow(0 0 15px rgba(110, 123, 242, 0.3));
+            transition: transform 0.3s, filter 0.3s;
+            transform-origin: center center;
+        }
+        
+        .unity-logo:hover {
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 18px rgba(37, 211, 102, 0.4));
+        }
+        
+        .deployed-message {
+            font-size: 2.5rem;
+            margin-top: 2rem;
+            color: #4DFA7B;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(77, 250, 123, 0.5);
+            border-bottom: 2px solid rgba(77, 250, 123, 0.5);
+            padding-bottom: 0.5rem;
+            transform: translateY(20px);
+        }
+        
+        .progress-container {
+            width: 80%;
+            max-width: 500px;
+            height: 12px;
+            background-color: rgba(14, 14, 36, 0.6);
+            border-radius: 6px;
+            margin: 3rem auto 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.5s;
+            left: 0;
+            right: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) inset;
+            border: 1px solid rgba(110, 123, 242, 0.3);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #25D366, #4DFA7B);
+            border-radius: 6px;
+            transition: width 0.1s;
+            box-shadow: 0 0 15px rgba(77, 250, 123, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            animation: progressShine 1.5s linear infinite;
+        }
+        
+        @keyframes progressShine {
+            100% { transform: translateX(100%); }
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: starMove 15s linear infinite;
+        }
+        
+        @keyframes starMove {
+            0% {
+                transform: translateY(100vh);
+            }
+            100% {
+                transform: translateY(-100vh);
+            }
+        }
+        
+        .on-call-message {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            color: #FF5370;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(255, 83, 112, 0.7);
+            background-color: rgba(20, 10, 20, 0.7);
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            border-left: 4px solid #FF5370;
+            transform: scale(0.9);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(255, 83, 112, 0.2);
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 0% 100%);
+        }
+        
+        /* Removed confetti effect */
+        
+        /* Add hexagon grid background effect */
+        .hexagon-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: 60px 60px;
+            background-image: 
+                linear-gradient(to right, rgba(37, 211, 102, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 211, 102, 0.05) 1px, transparent 1px);
+            opacity: 0.3;
+            z-index: 0;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center center;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="hexagon-grid"></div>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <svg class="unity-logo" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
+            <path d="M482.333 358.4V119.467L275.399 0v91.733l81.068 46.934c3.2 2.132 3.2 6.4 0 7.467l-96 55.467c-3.2 2.132-6.4 1.066-8.534 0l-96-55.467c-3.2-1.067-3.2-6.4 0-7.467L237 91.733V0L29 119.467V358.4v-1.067 1.067l78.933-45.867v-93.867c0-3.2 4.267-5.332 6.4-4.266l96 55.467c3.2 2.133 4.267 4.267 4.267 7.467v110.932c0 3.2-4.267 5.335-6.4 4.267L127.134 345.6 48.2 391.467 255.133 512l206.934-119.467-78.934-45.867-81.066 46.935c-3.2 2.132-6.4 0-6.4-4.268V278.4c0-3.2 2.132-6.4 4.266-7.467l96.001-55.467c3.199-2.132 6.399 0 6.399 4.267V313.6l80 44.8z" fill="#E0E0E0" fill-rule="nonzero"/>
+            <path d="M255.133 512l206.934-119.467-78.934-45.867-81.066 46.935c-3.2 2.132-6.4 0-6.4-4.268V278.4c0-3.2 2.132-6.4 4.266-7.467l96.001-55.467c3.199-2.132 6.399 0 6.399 4.267V313.6l78.933 45.867v-240l-226.133 131.2V512z" fill="#999999" fill-rule="nonzero"/>
+            <path d="M275.4 0v91.733l81.067 46.934c3.2 2.132 3.2 6.4 0 7.467l-96 55.467c-3.2 2.132-6.4 1.066-8.534 0l-96-55.467c-3.2-1.067-3.2-6.4 0-7.467L237 91.733V0L29 119.467l226.133 131.2 226.133-131.2L275.4 0z" fill="#FFFFFF" fill-rule="nonzero"/>
+            <path d="M209.267 393.6l-81.068-46.934-78.933 45.867L256.2 512V250.667L29 119.467V358.4v-1.067 1.067l78.933-45.867v-93.867c0-3.2 4.267-5.332 6.4-4.266l96 55.467c3.2 2.133 4.267 4.267 4.267 7.467v110.932c1.067 4.267-2.133 7.467-5.333 5.335z" fill="#BCBCBC" fill-rule="nonzero"/>
+        </svg>
+        
+        <h1>Unified Learner</h1>
+        <p>Unity's Next-Gen Ads Prediction Model</p>
+        
+        <div class="email-container">
+            <input type="email" id="emailInput" placeholder="Enter your email address" required>
+        </div>
+        
+        <button class="launch-button" id="launchButton" disabled>DEPLOY !</button>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="deployed-message" id="deployedMessage">
+            UNIFIED LEARNER DEPLOYED SUCCESSFULLY!
+        </div>
+        
+        <div class="on-call-message" id="onCallMessage">
+            You are now On-Call
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const launchButton = document.getElementById('launchButton');
+            const emailInput = document.getElementById('emailInput');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const deployedMessage = document.getElementById('deployedMessage');
+            const particles = document.getElementById('particles');
+            
+            // Email validation and name extraction
+            let userName = '';
+            emailInput.addEventListener('input', function() {
+                const email = this.value.trim();
+                const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                
+                // Extract name from email (part before @)
+                if (isValid) {
+                    userName = email.split('@')[0];
+                    // Capitalize first letter of each word and replace dots/underscores with spaces
+                    userName = userName
+                        .replace(/[._]/g, ' ')
+                        .split(' ')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ');
+                }
+                
+                launchButton.disabled = !isValid;
+                launchButton.style.opacity = isValid ? '1' : '0.7';
+            });
+            
+            // Create background stars
+            for (let i = 0; i < 100; i++) {
+                createStar();
+            }
+            
+            function createStar() {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.opacity = Math.random() * 0.5 + 0.3;
+                
+                // Slower animation durations
+                const duration = Math.random() * 25 + 20;
+                const delay = Math.random() * 10;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `-${delay}s`;
+                
+                particles.appendChild(star);
+            }
+            
+            // Handle launch button click
+            launchButton.addEventListener('click', function() {
+                // Disable button and input
+                this.disabled = true;
+                this.style.opacity = '0.7';
+                emailInput.disabled = true;
+                emailInput.style.opacity = '0.7';
+                
+                // Show progress bar
+                progressContainer.style.opacity = '1';
+                
+                // Speed up stars
+                document.querySelectorAll('.star').forEach(star => {
+                    const currentDuration = parseFloat(star.style.animationDuration);
+                    star.style.animationDuration = `${currentDuration / 2}s`;
+                });
+                
+                // Add more faster stars
+                for (let i = 0; i < 50; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.width = `${Math.random() * 4 + 2}px`;
+                    star.style.height = star.style.width;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100 + 100}%`;
+                    star.style.opacity = Math.random() * 0.7 + 0.5;
+                    star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                    star.style.animationDelay = `0s`;
+                    
+                    particles.appendChild(star);
+                }
+                
+                // Progress animation
+                let progress = 0;
+                const progressInterval = setInterval(function() {
+                    progress += Math.random() * 5;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(progressInterval);
+                        
+                        // When progress is complete, show deployed message and celebrate
+                        setTimeout(() => {
+                            // Hide other elements
+                            document.querySelector('h1').style.display = 'none'; // Hide title
+                            document.querySelector('p').style.display = 'none'; // Hide subtitle
+                            launchButton.style.display = 'none'; // Hide button
+                            emailInput.style.display = 'none'; // Hide email input
+                            document.querySelector('.email-container').style.display = 'none'; // Hide email container
+                            progressContainer.style.display = 'none'; // Hide progress bar
+                            
+                            // Show success message and on-call text
+                            const deployMsg = document.getElementById('deployedMessage');
+                            deployMsg.style.opacity = '1';
+                            deployMsg.style.transform = 'translateY(0)';
+                            
+                            const onCallMsg = document.getElementById('onCallMessage');
+                            // Set the name in the on-call message
+                            onCallMsg.textContent = `${userName}: You are now On-Call`;
+                            onCallMsg.style.opacity = '1';
+                            onCallMsg.style.transform = 'scale(1.05)';
+                        }, 300);
+                    }
+                    progressBar.style.width = `${progress}%`;
+                }, 100);
+            });
+            
+            // Remove confetti function
+        });
+    </script>
+</body>
+</html>
