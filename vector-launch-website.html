@@ -111,7 +111,6 @@
             font-size: 2.5rem;
             margin-top: 2rem;
             color: #4DFA7B;
-            opacity: 0;
             transition: opacity 0.5s, transform 0.5s;
             font-weight: 700;
             letter-spacing: 2px;
@@ -119,6 +118,7 @@
             border-bottom: 2px solid rgba(77, 250, 123, 0.5);
             padding-bottom: 0.5rem;
             transform: translateY(20px);
+            display: none;
         }
 
         .celebration-gif {
@@ -234,6 +234,92 @@
             transform-origin: center center;
             pointer-events: none;
         }
+
+        /* Code execution terminal styles */
+        .code-terminal {
+            width: 100%;
+            max-width: 500px;
+            height: 200px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            margin: 1rem auto;
+            overflow: hidden;
+            font-family: monospace;
+            color: #4DFA7B;
+            text-align: left;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.2);
+            display: none;
+            position: relative;
+        }
+
+        .code-terminal::before {
+            content: '$ Vector Deployment Terminal';
+            display: block;
+            color: #BCBCBC;
+            border-bottom: 1px solid rgba(37, 211, 102, 0.3);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .code-content {
+            height: calc(100% - 30px);
+            overflow-y: auto;
+            font-size: 14px;
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        .blink {
+            animation: blink-animation 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        .cursor::after {
+            content: '_';
+            animation: blink-animation 0.8s steps(2, start) infinite;
+        }
+        
+        /* On-call page styles */
+        .on-call-page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .on-call-page h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #FFFFFF;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .on-call-page p {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: #BCBCBC;
+        }
+        
+        .on-call-info {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #25D366;
+            text-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            border-radius: 8px;
+            background-color: rgba(37, 211, 102, 0.05);
+        }
     </style>
 </head>
 <body>
@@ -253,6 +339,11 @@
         
         <button class="launch-button" id="launchButton">DEPLOY !</button>
         
+        <!-- Code terminal for execution animation -->
+        <div class="code-terminal" id="codeTerminal">
+            <div class="code-content" id="codeContent"></div>
+        </div>
+        
         <div class="progress-container" id="progressContainer">
             <div class="progress-bar" id="progressBar"></div>
         </div>
@@ -262,7 +353,7 @@
         </div>
         
         <div class="celebration-gif" id="celebrationGif">
-            <IMG SRC="https://bestanimations.com/media/fireworks/1863846322colorful-fireworks-gif.gif.pagespeed.ce.nr-npQn7in.gif">
+            <img src="https://bestanimations.com/media/fireworks/1863846322colorful-fireworks-gif.gif.pagespeed.ce.nr-npQn7in.gif" alt="celebration">
         </div> 
 
         <div class="coding-gif" id="codingGif" width="480" height="280">
@@ -270,12 +361,20 @@
         </div> 
 
         <div class="on-call-message" id="onCallMessage">
-            Congradulations to the Vector team!
+            Congratulations to the Vector team!
         </br>
         </br>
             First of many milestones, 
         </br>
             Tons more to come!
+        </div>
+        
+        <!-- On-Call page that appears after celebration -->
+        <div class="on-call-page" id="onCallPage">
+            <h2>In case something breaks </br> (because it definitely will):</h2>
+            <div class="on-call-info">
+                <strong>Matthew Bromberg</strong> will be on call
+            </div>
         </div>
     </div>
 
@@ -288,7 +387,10 @@
             const particles = document.getElementById('particles');
             const celebrationGif = document.getElementById('celebrationGif');
             const codingGif = document.getElementById('codingGif');
-
+            const codeTerminal = document.getElementById('codeTerminal');
+            const codeContent = document.getElementById('codeContent');
+            const onCallMessage = document.getElementById('onCallMessage');
+            const onCallPage = document.getElementById('onCallPage');
             
             // Create background stars
             for (let i = 0; i < 100; i++) {
@@ -312,16 +414,70 @@
                 
                 particles.appendChild(star);
             }
+
+            // Code execution animation
+            const codeLines = [
+                "Initializing Vector deployment...",
+                "Loading AI modules and dependency graph...",
+                "Setting up neural network infrastructure...",
+                "Configuring distributed computing resources...",
+                "Initializing model weights and parameters...",
+                "Validating Pytorch dependencies...",
+                "Starting Unity ML-Agents interfaces...",
+                "Connecting to cloud training services...",
+                "Allocating GPU resources...",
+                "Loading pre-trained model checkpoints...",
+                "Optimizing multi-threading performance...",
+                "Setting up distributed inference endpoints...",
+                "Deploying fallback systems and redundancies...",
+                "Initializing game agent communication layers...",
+                "Configuring real-time prediction services...",
+                "Setting up telemetry and monitoring...",
+                "Running compatibility tests...",
+                "Deploying to production endpoints...",
+                "Validating inference performance metrics...",
+                "Final authorization checks...",
+                "Launching Vector services..."
+            ];
+
+            function appendCodeLine(line) {
+                const lineElement = document.createElement('div');
+                lineElement.className = 'code-line';
+                lineElement.textContent = line;
+                codeContent.appendChild(lineElement);
+                codeContent.scrollTop = codeContent.scrollHeight;
+            }
+
+            function typeCodeLine(line, callback) {
+                let i = 0;
+                const lineElement = document.createElement('div');
+                lineElement.className = 'code-line cursor';
+                codeContent.appendChild(lineElement);
+                
+                const typeInterval = setInterval(() => {
+                    if (i < line.length) {
+                        lineElement.textContent = line.substring(0, i + 1);
+                        i++;
+                    } else {
+                        clearInterval(typeInterval);
+                        lineElement.classList.remove('cursor');
+                        codeContent.scrollTop = codeContent.scrollHeight;
+                        if (callback) callback();
+                    }
+                }, 15);
+            }
             
             // Handle launch button click
             launchButton.addEventListener('click', function() {
                 // Disable button
                 this.disabled = true;
                 this.style.opacity = '0.7';
+                // Hide the button immediately
+                this.style.display = 'none';
                 
-                // Show progress bar
+                // Show progress bar and code terminal
                 progressContainer.style.display = 'block';
-                codingGif.style.display = 'block';
+                codeTerminal.style.display = 'block';
                 
                 // Speed up stars
                 document.querySelectorAll('.star').forEach(star => {
@@ -343,6 +499,36 @@
                     
                     particles.appendChild(star);
                 }
+
+                // Start code animation
+                let lineIndex = 0;
+                let completed = false;
+                
+                function animateNextCodeLine() {
+                    if (lineIndex < codeLines.length && !completed) {
+                        typeCodeLine(codeLines[lineIndex], () => {
+                            lineIndex++;
+                            setTimeout(animateNextCodeLine, 200 + Math.random() * 800);
+                        });
+                    } else if (!completed) {
+                        // When all predefined lines are shown, start showing random status messages
+                        const statusMessages = [
+                            "Running final checks...",
+                            "Validating deployment integrity...",
+                            "Optimizing resources...",
+                            "Scaling services...",
+                            "Finalizing deployment...",
+                            "Syncing distributed nodes..."
+                        ];
+                        
+                        const randomMessage = statusMessages[Math.floor(Math.random() * statusMessages.length)];
+                        typeCodeLine(randomMessage, () => {
+                            setTimeout(animateNextCodeLine, 1500 + Math.random() * 1000);
+                        });
+                    }
+                }
+                
+                animateNextCodeLine();
                 
                 // Progress animation
                 let progress = 0;
@@ -351,27 +537,49 @@
                     if (progress >= 100) {
                         progress = 100;
                         clearInterval(progressInterval);
+                        completed = true;
                         
-                        // When progress is complete, show deployed message and celebrate
-                        setTimeout(() => {
-                            // Hide other elements
-                            document.querySelector('h1').style.display = 'none'; // Hide title
-                            document.querySelector('p').style.display = 'none'; // Hide subtitle
-                            launchButton.style.display = 'none'; // Hide button
-                            progressContainer.style.display = 'none'; // Hide progress bar
-                            codingGif.style.display = 'none';
-                            
-                            // Show success message and on-call text
-                            const deployMsg = document.getElementById('deployedMessage');
-                            deployMsg.style.opacity = '1';
-                            deployMsg.style.transform = 'translateY(0)';
-                            
-                            const onCallMsg = document.getElementById('onCallMessage');
-                            onCallMsg.style.display = 'block';
-                            onCallMsg.style.transform = 'scale(1.05)';
+                        // Add final success message to terminal
+                        typeCodeLine("✓ Vector deployment complete!", () => {
+                            setTimeout(() => {
+                                typeCodeLine("✓ All systems operational!", () => {
+                                    setTimeout(() => {
+                                        // When progress is complete, show deployed message and celebrate
+                                        // Hide other elements
+                                        document.querySelector('h1').style.display = 'none'; // Hide title
+                                        document.querySelector('p').style.display = 'none'; // Hide subtitle
+                                        launchButton.style.display = 'none'; // Hide button
+                                        progressContainer.style.display = 'none'; // Hide progress bar
+                                        codeTerminal.style.display = 'none'; // Hide code terminal
+                                        codingGif.style.display = 'none';
+                                        
+                                        // Show success message and on-call text
+                                        const deployMsg = document.getElementById('deployedMessage');
+                                        deployMsg.style.display = 'block';
+                                        deployMsg.style.transform = 'translateY(0)';
+                                        
+                                        onCallMessage.style.display = 'block';
+                                        onCallMessage.style.transform = 'scale(1.05)';
 
-                            celebrationGif.style.display = 'block';
-                        }, 300);
+                                        celebrationGif.style.display = 'block';
+                                        
+                                        // Set timeout to show on-call page after 10 seconds
+                                        setTimeout(() => {
+                                            // Hide celebration elements
+                                            deployMsg.style.display = 'none';
+                                            onCallMessage.style.display = 'none';
+                                            celebrationGif.style.display = 'none';
+                                            
+                                            // Show on-call page
+                                            onCallPage.style.display = 'block';
+                                            setTimeout(() => {
+                                                onCallPage.style.opacity = '1';
+                                            }, 100);
+                                        }, 10000); // 10 seconds
+                                    }, 1000);
+                                });
+                            }, 500);
+                        });
                     }
                     progressBar.style.width = `${progress}%`;
                 }, 200);
